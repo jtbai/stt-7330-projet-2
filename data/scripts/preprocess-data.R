@@ -24,9 +24,9 @@ data_imputed <- data_clean %>% drop_na()
 
 # One-hot categorical variables
 
-vec_categorical_variables <- c("winner_hand", "loser_hand", "round")
-data_imputed[, (vec_categorical_variables) := lapply(.SD, as.factor), .SDcol = vec_categorical_variables]
-data_imputed <- one_hot(data_imputed, cols = vec_categorical_variables)
+# vec_categorical_variables <- c("winner_hand", "loser_hand")
+# data_imputed[, (vec_categorical_variables) := lapply(.SD, as.factor), .SDcol = vec_categorical_variables]
+# data_imputed <- one_hot(data_imputed, cols = vec_categorical_variables)
 
 # Change the response variable to a factor
 data_imputed[, surface := as.factor(surface)]
