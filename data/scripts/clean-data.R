@@ -53,9 +53,11 @@ data_clean[, (c("winner_ht", "loser_ht")) := NULL]
 
 # Features engineering ----------------------------------------------------
 
+# We create ind for retired
+data_clean[, ind_retired := FALSE]
+data_clean[grep("RET", score), ind_retired := TRUE]
 
-# We drop abandonned games
-data_clean <- data_clean[!grep("RET", score),]
+# We drop walk over
 data_clean <- data_clean[!grep("W/O", score),]
 
 # We have to do something with the "score" variable
@@ -65,12 +67,10 @@ data_clean[, loser_score := str_extract_all(score, "(?<=-)\\d+")]
 # I do replace missing set by 0 instead of NA (ce sont les sets qui n'ont pas été joués)
 for (set in 1:5){
   data_clean[, paste0("winner_score_", set) := unlist(lapply(.I, function(i){
-    ifelse(is.na(unlist(winner_score[i])[set]), 0, as.numeric(unlist(winner_score[i])[set]))
+    ifelse(is.na(unlist(winner_score[i])[set]), NA, as.numeric(unlist(winner_score[i])[set]))
   }))]
   data_clean[, paste0("loser_score_", set) := unlist(lapply(.I, function(i){
-    ifelse(is.na(unlist(loser_score[i])[set]), 0, as.numeric(unlist(loser_score[i])[set]))
+    ifelse(is.na(unlist(loser_score[i])[set]), NA, as.numeric(unlist(loser_score[i])[set]))
   }))]
 }
-data_clean[, (c("winner_score", "loser_score", "score")) := NULL]
-
-# data_clean[, score := NULL]
+data_clean[, (c("winner_score", "loser_score")) := NULL]
