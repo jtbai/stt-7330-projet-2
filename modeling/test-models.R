@@ -13,6 +13,8 @@ library(randomForest)
 library(rpart)
 library(MASS)
 library(nnet)
+library(tidyverse)
+library(caret)
 
 # Import data -------------------------------------------------------------
 
@@ -26,12 +28,45 @@ test_index <- sample(1:nrow(data_imputed), 0.2 * nrow(data_imputed))
 data_train <- data_imputed[-test_index,]
 data_test <- data_imputed[test_index,]
 
+#K-fold setup
+add_kfold_information_to_dataset <- function(dataset, number_of_k_fold){
+  number_of_data_point = nrow(dataset)
+  number_of_data_per_fold = floor(number_of_data_point/number_of_k_folds)
+  number_of_leftover_points = number_of_data_point %% number_of_k_folds
+  unrandomised_kfold_class = c(rep(1:number_of_k_folds, number_of_data_per_fold), sample(1:number_of_k_folds,size = number_of_leftover_points, replace = FALSE))
+  kfold = sample(unrandomised_kfold_class, number_of_data_point, replace=FALSE)
+  
+  return(cbind(dataset, kfold))
+}
+
+obtain_sub_train_test <- function(kfoldable_dataset, fold){
+  sub_train <- kfoldable_dataset %>% filter(kfold != fold)
+  sub_test <- kfoldable_dataset  %>% filter(kfold == fold)
+  
+  return(list(train=sub_train, test=sub_test))
+}
+
+kfoldable_train <- add_kfold_information_to_dataset(data_train, 10)
+obtain_sub_train_test(kfoldable_train, 2)
+
 # Naive bayes
 model_bayes <-  naiveBayes(surface ~ ., data = data_train)
 out <- predict(model_bayes, data_test)
 sum(out == data_test[, surface]) / nrow(data_test)
 
 # Tree-based
+hyper_parameter_grid <- cross_df(list(minsplit = c(2, 5, 10, 20, 50),
+                      maxdepth = c(1, 3, 8, 15, 20)))
+number_of_hyper_parameter_sets = nrow(hyper_parameter_grid)
+results_by_hyper_parameters <- numeric(number_of_hyper_parameter_sets)
+for(hyper_parameter_index in 1:number_of_hyper_parameter_sets){
+  current_hyper_parameters  = hyper_parameter_grid[hyper_parameter_index, ]
+  model_tree <- rpart(surface ~ ., data = data_train,   control = current_hyper_parameters)
+  
+  current_result = sum(out == data_test[, surface]) / nrow(data_test)
+  results_by_hyper_parameters[hyper_parameter_index] = current_result  
+}
+
 model_tree <- rpart(surface ~ ., data = data_train)
 out <- predict(model_tree, data_test, type = "class")
 sum(out == data_test[, surface]) / nrow(data_test)
