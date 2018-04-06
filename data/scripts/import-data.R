@@ -21,7 +21,6 @@ year_to <- 2017
 
 import_games <- function(year_from, year_to){
   
-  list_data <- list()
   list_data <- lapply(year_from:year_to, function(year){
     temp <- getURL(paste0("https://raw.githubusercontent.com/JeffSackmann/tennis_atp/master/atp_matches_", year, ".csv"))
     fread(temp, header = TRUE, sep = ",")
