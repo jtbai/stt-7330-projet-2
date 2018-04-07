@@ -1,0 +1,47 @@
+\section{Annexe : Preuve du PCA avec noyau}
+
+On s'inspire de la preuve en \cite{scholkopf1997kernel} pour dériver les équations de l'ACP avec noyau. Soit les données $\Phi(\textbf{x}_1), \dots, \Phi(\textbf{x}_N)$ et que ces données sont centrées, i.e. que $\sum_{i = 1}^{N}\Phi(\textbf{x}_i) = 0.$ Soit la matrice de covariance des données transformées sur le nouvel espace 
+\begin{equation}\label{eq:covphi}
+\overline{C} = \frac{1}{N} \sum_{i = 1}^{N} \Phi(\textbf{x}_i)\Phi(\textbf{x}_i)^T.
+\end{equation}
+
+On doit trouver les valeurs propres $\lambda$ et les vecteurs propres $V$ qui satisfait 
+
+\begin{equation*}
+\lambda V = \overline{C} V. 
+\end{equation*}
+
+On peut présenter les vecteurs propres selon une combinaison linéaire des attributs
+$$V = \sum_{i = 1}^N\alpha_i \Phi(\textbf{x}_i).$$ On obtient ensuite 
+
+
+\begin{align*}
+\frac{1}{N} \sum_{i = 1}^{N} \Phi(\textbf{x}_i)\Phi(\textbf{x}_i)^T \left(\sum_{j = 1}^{N}\alpha_{ij}\Phi(\textbf{x}_i)\right) &= \lambda_i \sum_{j = 1}^N \alpha_{ij}\Phi(\textbf{x}_j)\\
+\frac{1}{N} \sum_{i = 1}^{N} \Phi(\textbf{x}_i) \left(\sum_{j = 1}^{N}\alpha_{ij}k(\textbf{x}_i, \textbf{x}_j)\right) &= \lambda_i \sum_{j = 1}^N \alpha_{ij}\Phi(\textbf{x}_j).
+\end{align*}
+
+Ensuite, en multipliant les deux côtés de l'équation par $\Phi(\textbf{x}_l)$, on obtient
+
+\begin{align*}
+\frac{1}{N} \sum_{i = 1}^{N} \Phi(\textbf{x}_l)^T\Phi(\textbf{x}_i) \left(\sum_{j = 1}^{N}\alpha_{ij}k(\textbf{x}_i, \textbf{x}_j)\right) &= \lambda_i \sum_{j = 1}^N \alpha_{ij}\Phi(\textbf{x}_l)^T\Phi(\textbf{x}_j)\\
+\frac{1}{N} \sum_{i = 1}^{N} k(\textbf{x}_i, \textbf{x}_j)^T \left(\sum_{j = 1}^{N}\alpha_{ij}k(\textbf{x}_i, \textbf{x}_j)\right) &= \lambda_i \sum_{j = 1}^N \alpha_{ij}k(\textbf{x}_i, \textbf{x}_j)^T\\
+ K^2 \alpha_{i} &= N \lambda_iK\alpha_{i}\\
+  K \alpha_{i} &= N \lambda_i\alpha_{i}.
+\end{align*}
+
+Avec la condition que $v_j^Tv_j = 1$, on a 
+
+$$\sum_{i = 1}^N \sum_{l = 1}^N \alpha_{jl}\alpha_{ji} \Phi(\textbf{x}_l)^T\Phi(\textbf{x}_ i) = 1,$$
+qui devient
+$$\alpha_j^T K \alpha_j = 1.$$
+
+En appliquant la condition précédente et en multipliant par $\alpha_j$, on obtient
+
+$$\lambda_j N \alpha_{i}^T \alpha_i = 1.$$
+
+Pour obtenir la projection d'un nouveau point, on applique
+
+$$\Phi(\textbf{x})^Tv_j = \sum_{i = 1}^{N}\alpha_{ji}\Phi(\textbf{x})^T\Phi(\textbf{x}_i) = \sum_{i = 1}^{N}\alpha_{ji}k(\textbf{x}, \textbf{x}_i).$$
+
+
+
