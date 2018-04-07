@@ -18,8 +18,10 @@ library(caret)
 
 # Import data -------------------------------------------------------------
 
-data_prepared <- fread("data/data_modeling_classical_methods.csv")
+source("data/scripts/clean-data.R")
+source("data/scripts/preprocess-data.R")
 
+data_prepared <-  data_imputed
 # Model -------------------------------------------------------------------
 
 # Split train/test
