@@ -22,4 +22,11 @@ create_features_of_neural_net <- function(dt){
   
   data_with_features_neural_net[, score := NULL]
   
+  # One hot categorical vairables
+  variables_to_one_hot <- c("winner_hand", "loser_hand", "winner_ioc", "loser_ioc")
+  data_with_features_neural_net[, (variables_to_one_hot) := lapply(.SD, as.factor), .SDcol = variables_to_one_hot]
+  data_with_features_neural_net <- one_hot(data_with_features_neural_net, cols = variables_to_one_hot)
+  
+  return(data_with_features_neural_net)
+  
 }
