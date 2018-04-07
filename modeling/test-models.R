@@ -123,9 +123,7 @@ for(hyper_parameter_index in 1:number_of_hyper_parameter_sets){
 
 
 best_hyper_parameters = hyper_parameter_grid[min(which(results_by_hyper_parameters == max(results_by_hyper_parameters))), ]
-
-
-model_rf <- randomForest(surface ~ ., data =sub_data_train,   control = best_hyper_parameters)
+model_rf <- randomForest(surface ~ ., data =data_train,   control = best_hyper_parameters)
 out <- predict(model_rf, data_test)
 sum(out == data_test[, surface]) / nrow(data_test)
 varImpPlot(model_rf)
