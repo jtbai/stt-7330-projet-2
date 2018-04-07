@@ -17,7 +17,7 @@ clean_data_from_raw <- function(dt){
   data_clean[, (col_linked_to_match) := NULL]
   
   # Remove unrelevant variables
-  col_unrelevant <- c("winner_id", "winner_name", "loser_id", "loser_name", "winner_entry", "loser_entry", "winner_rank", "winner_rank_points", "loser_rank_points", "loser_rank", "winner_ht", "loser_ht")
+  col_unrelevant <- c("winner_id", "winner_name", "loser_id", "loser_name", "winner_entry", "loser_entry", "winner_rank_points", "loser_rank_points", "winner_ht", "loser_ht")
   data_clean[, (col_unrelevant) := NULL]
 
   # Features engineering ----------------------------------------------------
