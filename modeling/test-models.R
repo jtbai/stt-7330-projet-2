@@ -62,17 +62,21 @@ for(hyper_parameter_index in 1:number_of_hyper_parameter_sets){
   current_hyper_parameters  = hyper_parameter_grid[hyper_parameter_index, ]
   fold_results <- numeric(number_of_k_folds)
   for(current_fold in 1:number_of_k_folds){
-    sub_data_train = obtain_sub_train_test(kfoldable_train_data, current_fold)
-    train_data = sub_data_train$train
-    model_tree <- rpart(surface ~ ., data = train_data,   control = current_hyper_parameters)
-    current_result <- sum(out == sub_data_train$test[, surface]) / nrow(sub_data_train$test)
+    sub_data <-  obtain_sub_train_test(kfoldable_train_data, current_fold)
+    sub_data_train <- sub_data$train
+    sub_data_test = sub_data$test
+    model_tree <- rpart(surface ~ ., data = sub_data_train,   control = current_hyper_parameters)
+    out = predict(model_tree, sub_data_test, type = "class") 
+    current_result <- sum(out == sub_data_test$surface) / nrow(sub_data_test)
     fold_results[current_fold] <- current_result
-    print(paste0("Params ",current_hyper_parameters," - ","fold ",current_fold))
+    print(paste0("Params ",paste(current_hyper_parameters, collapse = "-")," - ","fold ",current_fold, ": accuracy = ", current_result))
   }
   results_by_hyper_parameters[hyper_parameter_index] = mean(fold_results)
 }
 
-model_tree <- rpart(surface ~ ., data = data_train)
+best_hyper_parameters = hyper_parameter_grid[min(which(results_by_hyper_parameters == max(results_by_hyper_parameters))), ]
+
+model_tree <- rpart(surface ~ ., data = kfoldable_train_data, control = best_hyper_parameters)
 out <- predict(model_tree, data_test, type = "class")
 sum(out == data_test[, surface]) / nrow(data_test)
 
