@@ -18,15 +18,14 @@ library(caret)
 
 # Import data -------------------------------------------------------------
 
-source("data/scripts/clean-data.R")
-source("data/scripts/preprocess-data.R")
+data_prepared <- fread("data/data_modeling_classical_methods.csv")
 
 # Model -------------------------------------------------------------------
 
 # Split train/test
-test_index <- sample(1:nrow(data_imputed), 0.2 * nrow(data_imputed))
-data_train <- data_imputed[-test_index,]
-data_test <- data_imputed[test_index,]
+test_index <- sample(1:nrow(data_prepared), 0.2 * nrow(data_prepared))
+data_train <- data_prepared[-test_index,]
+data_test <- data_prepared[test_index,]
 
 #K-fold setup
 add_kfold_information_to_dataset <- function(dataset, number_of_k_fold){
