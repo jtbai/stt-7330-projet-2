@@ -53,11 +53,14 @@ create_features_of_classical_modeling <- function(dt){
   data_featured[, loser_break_pts := (w_bpFaced - w_bpSaved)]
   
   # Create diff between scores of each sets
-  data_featured[, difference_score_set_1 := ifelse(is.na(winner_score_1) & is.na(loser_score_1), 0, winner_score_1 - loser_score_1)]
-  data_featured[, difference_score_set_2 := ifelse(is.na(winner_score_2) & is.na(loser_score_2), 0, winner_score_2 - loser_score_2)]
-  data_featured[, difference_score_set_3 := ifelse(is.na(winner_score_3) & is.na(loser_score_3), 0, winner_score_3 - loser_score_3)]
-  data_featured[, difference_score_set_4 := ifelse(is.na(winner_score_4) & is.na(loser_score_4), 0, winner_score_4 - loser_score_4)]
-  data_featured[, difference_score_set_5 := ifelse(is.na(winner_score_5) & is.na(loser_score_5), 0, winner_score_5 - loser_score_5)]
+  data_featured[, difference_score_set_1 := ifelse(is.na(winner_score_1) | is.na(loser_score_1), 0, winner_score_1 - loser_score_1)]
+  data_featured[, difference_score_set_2 := ifelse(is.na(winner_score_2) | is.na(loser_score_2), 0, winner_score_2 - loser_score_2)]
+  data_featured[, difference_score_set_3 := ifelse(is.na(winner_score_3) | is.na(loser_score_3), 0, winner_score_3 - loser_score_3)]
+  data_featured[, difference_score_set_4 := ifelse(is.na(winner_score_4) | is.na(loser_score_4), 0, winner_score_4 - loser_score_4)]
+  data_featured[, difference_score_set_5 := ifelse(is.na(winner_score_5) | is.na(loser_score_5), 0, winner_score_5 - loser_score_5)]
+  
+  variables_scores <- c(paste0("winner_score_", seq(1, 5)), paste0("loser_score_", seq(1, 5)))
+  data_featured[, (variables_scores) := NULL]
   
   # Missing data imputation -------------------------------------------------
   
@@ -66,6 +69,8 @@ create_features_of_classical_modeling <- function(dt){
   data_featured[l_1stIn == 0, loser_1stwon_1stin := 0]
   data_featured[(w_1stWon + w_2ndWon) == 0, winner_1stwon_servewon := 0]
   data_featured[(l_1stWon + l_2ndWon) == 0, loser_1stwon_servewon := 0]
+  data_featured[w_svpt == 0, (c("winner_ace_svpt", "winner_1stin_svpt", "winner_df_svpt", "winner_min_svpt", "winner_serve_won")) := 0]
+  data_featured[l_svpt == 0, (c("loser_ace_svpt", "loser_1stin_svpt", "loser_df_svpt", "loser_min_svpt", "loser_serve_won")) := 0]
   
   return(data_featured)
   
