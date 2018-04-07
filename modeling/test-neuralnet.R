@@ -68,4 +68,4 @@ predict_proba <- model_neural_net %>% predict(data_features)
 predict_class <- apply(predict_proba, 1, which.max)
 
 write.csv(predict_proba, "prediction/predict-proba-nn.csv")
-write.csv(predict_proba, "prediction/predict-nn.csv")
+write.csv(class, "prediction/predict-nn.csv")
