@@ -33,9 +33,9 @@ data_test <- data_prepared[test_index,]
 #K-fold setup
 add_kfold_information_to_dataset <- function(dataset, number_of_k_fold){
   number_of_data_point = nrow(dataset)
-  number_of_data_per_fold = floor(number_of_data_point/number_of_k_folds)
-  number_of_leftover_points = number_of_data_point %% number_of_k_folds
-  unrandomised_kfold_class = c(rep(1:number_of_k_folds, number_of_data_per_fold), sample(1:number_of_k_folds,size = number_of_leftover_points, replace = FALSE))
+  number_of_data_per_fold = floor(number_of_data_point/number_of_k_fold)
+  number_of_leftover_points = number_of_data_point %% number_of_k_fold
+  unrandomised_kfold_class = c(rep(1:number_of_k_fold, number_of_data_per_fold), sample(1:number_of_k_fold,size = number_of_leftover_points, replace = FALSE))
   kfold = sample(unrandomised_kfold_class, number_of_data_point, replace=FALSE)
   
   return(cbind(dataset, kfold))
