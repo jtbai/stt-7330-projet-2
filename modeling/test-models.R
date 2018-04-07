@@ -45,8 +45,8 @@ obtain_sub_train_test <- function(kfoldable_dataset, fold){
   return(list(train=sub_train, test=sub_test))
 }
 
-kfoldable_train <- add_kfold_information_to_dataset(data_train, 10)
-obtain_sub_train_test(kfoldable_train, 2)
+kfoldable_train_data <- add_kfold_information_to_dataset(data_train, 10)
+
 
 # Naive bayes
 model_bayes <-  naiveBayes(surface ~ ., data = data_train)
@@ -60,10 +60,16 @@ number_of_hyper_parameter_sets = nrow(hyper_parameter_grid)
 results_by_hyper_parameters <- numeric(number_of_hyper_parameter_sets)
 for(hyper_parameter_index in 1:number_of_hyper_parameter_sets){
   current_hyper_parameters  = hyper_parameter_grid[hyper_parameter_index, ]
-  model_tree <- rpart(surface ~ ., data = data_train,   control = current_hyper_parameters)
-  
-  current_result = sum(out == data_test[, surface]) / nrow(data_test)
-  results_by_hyper_parameters[hyper_parameter_index] = current_result  
+  fold_results <- numeric(number_of_k_folds)
+  for(current_fold in 1:number_of_k_folds){
+    sub_data_train = obtain_sub_train_test(kfoldable_train_data, current_fold)
+    train_data = sub_data_train$train
+    model_tree <- rpart(surface ~ ., data = train_data,   control = current_hyper_parameters)
+    current_result <- sum(out == sub_data_train$test[, surface]) / nrow(sub_data_train$test)
+    fold_results[current_fold] <- current_result
+    print(paste0("Params ",current_hyper_parameters," - ","fold ",current_fold))
+  }
+  results_by_hyper_parameters[hyper_parameter_index] = mean(fold_results)
 }
 
 model_tree <- rpart(surface ~ ., data = data_train)
