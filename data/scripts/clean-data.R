@@ -44,6 +44,9 @@ clean_data_from_raw <- function(dt){
   }
   data_clean[, (c("winner_score", "loser_score")) := NULL]
   
+  # Change the response variable to a factor
+  data_clean[, surface := as.factor(surface)]
+  
   return(data_clean)
 }
 
