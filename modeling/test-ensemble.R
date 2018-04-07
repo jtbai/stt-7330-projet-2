@@ -7,23 +7,26 @@
 
 # Load packages -----------------------------------------------------------
 
-library(e1071)
-library(randomForest)
-library(rpart)
-library(MASS)
-library(nnet)
+library(data.table)
 
 # Import data -------------------------------------------------------------
 
 data_prepared <- fread("data/data_modeling_neural_net.csv")
+predict_nn <- fread("prediction/predict-nn.csv")
 
-predict_matrix <- matrix(sample(1:3, 5 * 1000, replace = TRUE), nrow = 1000, ncol = 5)
-true_response <- sample(1:3, 1000, replace = TRUE)
+# Train test split --------------------------------------------------------
+
+train_groups <- c(1)
+test_groups <- c(2)
+
+split123 <- data_prepared[, split_group]
+
+predict_matrix <- cbind(predict_nn) # add more classifiers here
+true_response <- data_prepared[split123 %in% train_groups, surface]
 
 # Functions ---------------------------------------------------------------
 
-getVoter <- function(predict_matrix, true_response, method) {
-  
+calculateVoterWeights <- function(predict_matrix, true_response, method) {
   if(method == "majority") {
     weights <- rep(1 / ncol(predict_matrix), ncol(predict_matrix))
   } else if(method == "accuracy") {
@@ -35,6 +38,11 @@ getVoter <- function(predict_matrix, true_response, method) {
     print("Wrong weight method. Must be majority or accuracy")
   }
   
+  return(weights)
+}
+
+getVoter <- function(predict_matrix, weight) {
+  
   weight_matrix <- matrix(rep(weights, each = nrow(predict_matrix)), nrow = nrow(predict_matrix), byrow = FALSE)
   
   score1 <- rowSums(weight_matrix * (predict_matrix == 1))
@@ -44,4 +52,3 @@ getVoter <- function(predict_matrix, true_response, method) {
   
   ensemble_predict <- apply(score_matrix, 1, which.max)
 }
-

@@ -20,16 +20,19 @@ data_prepared <- fread("data/data_modeling_neural_net.csv")
 
 # Train test split --------------------------------------------------------
 
-data_response <- to_categorical(as.integer(as.factor(data_prepared[, surface])))[, -1]
-data_features <- as.matrix(data_prepared[, -1, with = FALSE])
+train_groups <- c(1)
+test_groups <- c(2)
 
-test_idx <- sample(1:nrow(data_features), floor(nrow(data_features) * 0.1), replace = FALSE)
+split123 <- data_prepared[, split_group]
 
-X_train <- data_features[-test_idx, ]
-X_test <- data_features[test_idx, ]
+data_response <- to_categorical(data_prepared[, surface])[, -1]
+data_features <- as.matrix(data_prepared[, -c("surface", "split_group")])
 
-y_train <- data_response[-test_idx, ]
-y_test <- data_response[test_idx, ]
+X_train <- data_features[split123 %in% train_groups, ]
+X_test <- data_features[split123 %in% test_groups, ]
+
+y_train <- data_response[split123 %in% train_groups, ]
+y_test <- data_response[split123 %in% test_groups, ]
 
 # Model -------------------------------------------------------------------
 
@@ -60,3 +63,9 @@ history <- model_neural_net %>% fit(
 plot(history)
 
 model_neural_net %>% evaluate(X_test, y_test)
+
+predict_proba <- model_neural_net %>% predict(data_features)
+predict_class <- apply(predict_proba, 1, which.max)
+
+write.csv(predict_proba, "prediction/predict-proba-nn.csv")
+write.csv(predict_proba, "prediction/predict-nn.csv")
