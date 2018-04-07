@@ -10,7 +10,7 @@
 create_features_of_classical_modeling <- function(dt){
   
   # Number of tie break
-  data_featured[, nb_tie_break := str_count(score, "7")]
+  data_featured <- dt[, nb_tie_break := str_count(score, "7")]
   
   # Indicator game played to the limit of sets
   data_featured[, ind_max_sets := ifelse((5 - (is.na(winner_score_1) + is.na(winner_score_2) + is.na(winner_score_3) + is.na(winner_score_4) + is.na(winner_score_5))) == best_of, TRUE, FALSE)]
@@ -52,6 +52,12 @@ create_features_of_classical_modeling <- function(dt){
   data_featured[, winner_break_pts := (l_bpFaced - l_bpSaved)]
   data_featured[, loser_break_pts := (w_bpFaced - w_bpSaved)]
   
+  # Create diff between scores of each sets
+  data_featured[, difference_score_set_1 := ifelse(is.na(winner_score_1) & is.na(loser_score_1), 0, winner_score_1 - loser_score_1)]
+  data_featured[, difference_score_set_2 := ifelse(is.na(winner_score_2) & is.na(loser_score_2), 0, winner_score_2 - loser_score_2)]
+  data_featured[, difference_score_set_3 := ifelse(is.na(winner_score_3) & is.na(loser_score_3), 0, winner_score_3 - loser_score_3)]
+  data_featured[, difference_score_set_4 := ifelse(is.na(winner_score_4) & is.na(loser_score_4), 0, winner_score_4 - loser_score_4)]
+  data_featured[, difference_score_set_5 := ifelse(is.na(winner_score_5) & is.na(loser_score_5), 0, winner_score_5 - loser_score_5)]
   
   # Missing data imputation -------------------------------------------------
   
