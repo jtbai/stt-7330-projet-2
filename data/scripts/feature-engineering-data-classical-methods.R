@@ -10,7 +10,7 @@
 create_features_of_classical_modeling <- function(dt){
   
   # Number of tie break
-  data_featured <- dt[, nb_tie_break := str_count(score, "7")]
+  data_featured <- copy(dt)[, nb_tie_break := str_count(score, "7")]
   
   # Indicator game played to the limit of sets
   data_featured[, ind_max_sets := ifelse((5 - (is.na(winner_score_1) + is.na(winner_score_2) + is.na(winner_score_3) + is.na(winner_score_4) + is.na(winner_score_5))) == best_of, TRUE, FALSE)]
