@@ -46,3 +46,9 @@ data_neural_net_with_features <- create_features_of_neural_net(dt = data_clean)
 
 data_modeling_classical_methods <- do_missing_data_imputation(dt = data_classical_methods_with_features)
 data_modeling_neural_net <- do_missing_data_imputation(dt = data_neural_net_with_features)
+
+
+# Save data for modeling --------------------------------------------------
+
+fwrite(data_modeling_classical_methods, file = "data/data_modeling_classical_methods.csv")
+fwrite(data_modeling_neural_net, file = "data/data_modeling_neural_net.csv")
