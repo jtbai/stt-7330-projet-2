@@ -1,4 +1,7 @@
-library(parallel)
+library(doParallel)
+library(foreach)
+
+
 add_kfold_information_to_dataset <- function(dataset, number_of_k_fold){
   set.seed(1337)
   number_of_data_point = nrow(dataset)
@@ -77,17 +80,19 @@ get_best_hyper_parameters <- function(dataset, model_name, number_of_kfolds, par
   
   hyper_parameter_grid <- cross_df(parameter_list_to_grid)
   number_of_hyper_parameter_sets = nrow(hyper_parameter_grid)
-  results_by_hyper_parameters <- numeric(number_of_hyper_parameter_sets)
-  
+
   model_function = get_model_function(model_name) 
   calculations_to_do = get_calculations_to_do(number_of_hyper_parameter_sets, number_of_kfolds)
   
-  for(calculation in 1:nrow(calculations_to_do)){
-   indices_to_use = calculations_to_do[calculation, ]
-   job_result = calculate_job(indices_to_use, model_function, kfoldable_train_data, hyper_parameter_grid)
-   calculations_to_do[calculation, 3] = job_result$result
-   print(paste0("hyper-parameters: ",paste(job_result$hyper_parameter, collapse = "-")," kfold: ",job_result$kfold," - Result :", job_result$result))
+  
+  
+  for(calculation in 1:nrow(calculations_to_do)) {
+    indices_to_use = calculations_to_do[calculation, ]
+    job_result = calculate_job(indices_to_use, model_function, kfoldable_train_data, hyper_parameter_grid)
+    calculations_to_do[calculation, 3] = job_result$result
+    print(paste0("hyper-parameters: ",paste(job_result$hyper_parameter, collapse = "-")," kfold: ",job_result$kfold," - Result :", job_result$result))
   }
+  
   
   best_hyper_parameter_index = get_best_hyper_parameter_index(calculations_to_do)
   
