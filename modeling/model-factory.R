@@ -2,8 +2,12 @@ library(randomForest)
 library(rpart)
 library(e1071)
 
-classification_svm <- function(control, ...){
+classification_svm_gaussien <- function(control, ...){
   classification <- svm(type="C-classification", kernel="sigmoid", epsilon=control$epsilon, cost=control$cost, ...=...)
+}
+
+classification_svm_poly3 <- function(control, ...){
+  classification <- svm(type="polynomial", kernel="sigmoid", epsilon=control$epsilon, cost=control$cost, ...=...)
 }
 
 get_model_function <- function(model_name){
@@ -20,8 +24,13 @@ get_model_function <- function(model_name){
     prediction_type = "class"
   }
   
-  if(model_name=="svm"){
-    model_function = classification_svm
+  if(model_name=="svm_gaussien"){
+    model_function = classification_svm_gaussien
+    prediction_type = "decision"
+  }
+
+  if(model_name=="svm_poly3"){
+    model_function = classification_svm_poly3
     prediction_type = "decision"
   }
   

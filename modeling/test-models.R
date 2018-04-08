@@ -32,8 +32,6 @@ data_train <- data_prepared[-test_index,]
 data_test <- data_prepared[test_index,]
 
 
-
-
 # Naive bayes
 model_bayes <-  naiveBayes(surface ~ ., data = data_train)
 out <- predict(model_bayes, data_test)
@@ -42,8 +40,12 @@ sum(out == data_test[, surface]) / nrow(data_test)
 # Tree-based
 hyper_parameter <- list(minsplit = c(2, 5, 10, 20), maxdepth = c(1, 3, 5, 8, 10))
 best_hyper_parameters = get_best_hyper_parameters(data_train, "tree_based", 10, hyper_parameter)
+model_function = get_model_function("tree_based")
+model <- model_function$model_function(surface ~ ., data =data_train,   control = best_hyper_parameters)
+out <- predict(model, data_test)
+
 model = get_model_function("tree_based")
-model_tree <- model(surface ~ ., data = data_train, control = best_hyper_parameters)
+model_tree <- model$model_function(surface ~ ., data = data_train, control = best_hyper_parameters)
 out <- predict(model_tree, data_test, type = "class")
 sum(out == data_test[, surface]) / nrow(data_test)
 
@@ -63,15 +65,23 @@ sum(out == data_test[, surface]) / nrow(data_test)
 # Random Forrest
 hyper_parameter <-   list(mtry = seq(4,16,4), ntree = c(700, 1000,2000))
 best_hyper_parameters = get_best_hyper_parameters(data_train, "random_forest", 10, hyper_parameter)
-model_rf <- randomForest(surface ~ ., data =data_train,   control = best_hyper_parameters)
-out <- predict(model_rf, data_test)
+model_function = get_model_function("random_forest")
+model <- model_function$model_function(surface ~ ., data =data_train,   control = best_hyper_parameters)
+out <- predict(model, data_test)
 sum(out == data_test[, surface]) / nrow(data_test)
 varImpPlot(model_rf)
 
-# SVM
+# SVM - gaussien
 hyper_parameter <-   list(epsilon = c(0.1,0.01,0.001), cost = c(0.90, 0.95, 0.99, 1))
-best_hyper_parameters = get_best_hyper_parameters(data_test, "svm", 10, hyper_parameter)
-model_function = get_model_function("svm")
+best_hyper_parameters = get_best_hyper_parameters(data_train, "svm_gaussien", 10, hyper_parameter)
+model_function = model_function$model_function("svm_gaussien")
+model <- model_function(surface ~ ., data =data_train,   control = best_hyper_parameters)
+out <- predict(model, data_test)
+
+# SVM - polynomial
+hyper_parameter <-   list(epsilon = c(0.1,0.01,0.001), cost = c(0.90, 0.95, 0.99, 1))
+best_hyper_parameters = get_best_hyper_parameters(data_train, "svm_poly3", 10, hyper_parameter)
+model_function = model_function$model_function("svm_poly3")
 model <- model_function(surface ~ ., data =data_train,   control = best_hyper_parameters)
 out <- predict(model, data_test)
 
