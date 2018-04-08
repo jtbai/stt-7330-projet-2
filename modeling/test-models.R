@@ -11,7 +11,6 @@
 library(e1071)
 library(MASS)
 library(nnet)
-library(tidyverse)
 library(caret)
 library(doParallel)
 
@@ -63,14 +62,14 @@ sum(out == data_test[, surface]) / nrow(data_test)
 
 # Random Forrest
 hyper_parameter <-   list(mtry = seq(4,16,4), ntree = c(700, 1000,2000))
-best_hyper_parameters = get_best_hyper_parameters(data_test, "random_forest", 10, hyper_parameter)
+best_hyper_parameters = get_best_hyper_parameters(data_train, "random_forest", 10, hyper_parameter)
 model_rf <- randomForest(surface ~ ., data =data_train,   control = best_hyper_parameters)
 out <- predict(model_rf, data_test)
 sum(out == data_test[, surface]) / nrow(data_test)
 varImpPlot(model_rf)
 
 # SVM
-hyper_parameter <-   list(C = seq(1,2,3), nu = c(0.1, 0.2, 0.3))
+hyper_parameter <-   list(epsilon = c(0.1,0.01,0.001), cost = c(0.90, 0.95, 0.99, 1))
 best_hyper_parameters = get_best_hyper_parameters(data_test, "svm", 10, hyper_parameter)
 model_function = get_model_function("svm")
 model <- model_function(surface ~ ., data =data_train,   control = best_hyper_parameters)

@@ -2,8 +2,8 @@ library(randomForest)
 library(rpart)
 library(e1071)
 
-classification_svm <- function(...){
-  classification <- svm(type="C-classification", ...=...)
+classification_svm <- function(control, ...){
+  classification <- svm(type="C-classification", kernel="sigmoid", epsilon=control$epsilon, cost=control$cost, ...=...)
 }
 
 get_model_function <- function(model_name){
