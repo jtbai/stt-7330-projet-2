@@ -53,7 +53,8 @@ data_modeling_classical_methods <- do_missing_data_imputation(dt = data_classica
 data_modeling_neural_net <- do_missing_data_imputation(dt = data_neural_net_splitted)
 
 # Drop some variables
-var_to_keep <- c("surface", "ind_retired", "nb_tie_break", "ind_max_sets", "ind_min_sets", "winner_ace_svpt", "winner_1stwon_1stin", "winner_1stin_svpt", "winner_df_svpt", "winner_min_svpt", "winner_1stwon_servewon", "winner_serve_won", "winner_break_pts", "loser_ace_svpt", "loser_1stwon_1stin", "loser_1stin_svpt", "loser_df_svpt", "loser_min_svpt", "loser_1stwon_servewon", "loser_serve_won", "loser_break_pts", paste0("difference_score_set_", seq(1, 5)), "split_group")
+# var_to_keep <- c("surface", "ind_retired", "nb_tie_break", "ind_max_sets", "ind_min_sets", "winner_ace_svpt", "winner_1stwon_1stin", "winner_1stin_svpt", "winner_df_svpt", "winner_min_svpt", "winner_1stwon_servewon", "winner_serve_won", "winner_break_pts", "loser_ace_svpt", "loser_1stwon_1stin", "loser_1stin_svpt", "loser_df_svpt", "loser_min_svpt", "loser_1stwon_servewon", "loser_serve_won", "loser_break_pts", paste0("difference_score_set_", seq(1, 5)), "split_group")
+var_to_keep <- c("surface", "ind_retired", "nb_tie_break", "ind_max_sets", "ind_min_sets", "ace_by_svpt", "first_won_by_first_in", "first_in_by_svpt", "df_by_svpt", "min_by_svpt", "first_won_by_serve_won", "serve_won_by_serve_pts", "nb_break_pts", "split_group")
 data_modeling_classical_methods <- data_modeling_classical_methods[, (var_to_keep), with = FALSE]
 
 

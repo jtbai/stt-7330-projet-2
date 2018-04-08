@@ -44,6 +44,9 @@ clean_data_from_raw <- function(dt){
   }
   data_clean[, (c("winner_score", "loser_score")) := NULL]
   
+  # Remove match with less than 2 sets
+  data_clean <- data_clean[!(is.na(winner_score_2) | is.na(loser_score_2)),]
+  
   # Change the response variable to a factor
   data_clean[, surface := ifelse(surface == "Hard", 1, ifelse(surface == "Clay", 2, 3))]
   
