@@ -42,9 +42,9 @@ sum(out == data_test[, surface]) / nrow(data_test)
 
 # Tree-based
 hyper_parameter <- list(minsplit = c(2, 5, 10, 20), maxdepth = c(1, 3, 5, 8, 10))
-best_hyper_parameters = get_best_hyper_parameters(data_test, "tree_based", 10, hyper_parameter)
-
-model_tree <- rpart(surface ~ ., data = data_train, control = best_hyper_parameters)
+best_hyper_parameters = get_best_hyper_parameters(data_train, "tree_based", 10, hyper_parameter)
+model = get_model_function("tree_based")
+model_tree <- model(surface ~ ., data = data_train, control = best_hyper_parameters)
 out <- predict(model_tree, data_test, type = "class")
 sum(out == data_test[, surface]) / nrow(data_test)
 
@@ -69,13 +69,18 @@ out <- predict(model_rf, data_test)
 sum(out == data_test[, surface]) / nrow(data_test)
 varImpPlot(model_rf)
 
+# SVM
+hyper_parameter <-   list(C = seq(1,2,3), nu = c(0.1, 0.2, 0.3))
+best_hyper_parameters = get_best_hyper_parameters(data_test, "svm", 10, hyper_parameter)
+model_function = get_model_function("svm")
+model <- model_function(surface ~ ., data =data_train,   control = best_hyper_parameters)
+out <- predict(model, data_test)
+
+
 # Model logistic
 model_multi <- multinom(surface ~ ., data = data_train)
 out <- predict(model_multi, data_test)
 sum(out == data_test[, surface]) / nrow(data_test)
-
-# SVM
-
 
 
 # Hasard

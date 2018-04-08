@@ -46,19 +46,19 @@ get_calculation_inputs <- function(hyper_parameter_grid, hyper_parameter_to_use,
   return(calculation_input)
 }
 
-calculate_fold_result <- function(model_function, train_data, test_data, hyper_parameter){
+calculate_fold_result <- function(model_function, prediction_type, train_data, test_data, hyper_parameter){
   model <- model_function(surface ~ ., data = train_data,   control = hyper_parameter)
-  out = predict(model, test_data, type = "class") 
+  out = predict(model, test_data, type = prediction_type) 
   current_result <- sum(out == test_data$surface) / nrow(test_data)
   
   return(current_result)
 }
 
-calculate_job <- function(hyper_parameter_and_fold_index_as_vector, model_function, kfoldable_dataset, hyper_parameter_grid){
+calculate_job <- function(hyper_parameter_and_fold_index_as_vector, model_function, prediction_type,  kfoldable_dataset, hyper_parameter_grid){
   hyper_parameter_index = hyper_parameter_and_fold_index_as_vector[1]
   kfold_index = hyper_parameter_and_fold_index_as_vector[2]
   calculation_input = get_calculation_inputs(hyper_parameter_grid, hyper_parameter_index, kfoldable_dataset, kfold_index)
-  current_result = calculate_fold_result(model_function,calculation_input$train, calculation_input$test, calculation_input$hyper_parameters)
+  current_result = calculate_fold_result(model_function, prediction_type,calculation_input$train, calculation_input$test, calculation_input$hyper_parameters)
 
   return(list(kfold=kfold_index, hyper_parameter =calculation_input$hyper_parameters, result = current_result))
 }
@@ -77,23 +77,19 @@ get_best_hyper_parameter_index <- function(result_as_matrix){
 get_best_hyper_parameters <- function(dataset, model_name, number_of_kfolds, parameter_list_to_grid){
   
   kfoldable_train_data <- add_kfold_information_to_dataset(dataset, number_of_kfolds)
-  
   hyper_parameter_grid <- cross_df(parameter_list_to_grid)
   number_of_hyper_parameter_sets = nrow(hyper_parameter_grid)
-
-  model_function = get_model_function(model_name) 
+  model = get_model_function(model_name) 
+  model_function = model$model_function
+  model_prediction_type = model$prediction_type
   calculations_to_do = get_calculations_to_do(number_of_hyper_parameter_sets, number_of_kfolds)
-  
-  
   
   for(calculation in 1:nrow(calculations_to_do)) {
     indices_to_use = calculations_to_do[calculation, ]
-    job_result = calculate_job(indices_to_use, model_function, kfoldable_train_data, hyper_parameter_grid)
+    job_result = calculate_job(indices_to_use, model_function, model_prediction_type, kfoldable_train_data, hyper_parameter_grid)
     calculations_to_do[calculation, 3] = job_result$result
     print(paste0("hyper-parameters: ",paste(job_result$hyper_parameter, collapse = "-")," kfold: ",job_result$kfold," - Result :", job_result$result))
   }
-  
-  
   best_hyper_parameter_index = get_best_hyper_parameter_index(calculations_to_do)
   
   return(hyper_parameter_grid[best_hyper_parameter_index, ])
