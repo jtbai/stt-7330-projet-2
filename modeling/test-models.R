@@ -73,6 +73,7 @@ best_hyper_parameters = get_best_hyper_parameters(data_train, "svm_gaussien", 10
 model_function = get_model_function("svm_gaussien")$model_function
 model <- model_function(surface ~ ., data =data_train, control= best_hyper_parameters)
 out <- predict(model, data_test)
+sum(out == data_test[, surface]) / nrow(data_test)
 
 # SVM - polynomial
 hyper_parameter <-   list(epsilon = c(0.1,0.01,0.001), cost = c(0.90, 0.95, 0.99, 1))
@@ -80,6 +81,7 @@ best_hyper_parameters = get_best_hyper_parameters(data_train, "svm_poly3", 10, h
 model_function = get_model_function("svm_poly3")$model_function
 model <- model_function(surface ~ ., data =data_train, control= best_hyper_parameters)
 out <- predict(model, data_test)
+sum(out == data_test[, surface]) / nrow(data_test)
 
 
 # Model logistic
