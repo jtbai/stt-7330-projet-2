@@ -7,7 +7,7 @@ classification_svm_gaussien <- function(control, ...){
 }
 
 classification_svm_poly3 <- function(control, ...){
-  classification <- svm(type="polynomial", kernel="sigmoid", epsilon=control$epsilon, cost=control$cost, ...=...)
+  classification <- svm(type="C-classification", kernel="polynomial", epsilon=control$epsilon, cost=control$cost, ...=...)
 }
 
 get_model_function <- function(model_name){

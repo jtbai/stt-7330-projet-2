@@ -1,5 +1,3 @@
-library(doParallel)
-library(foreach)
 library(tidyverse)
 
 
@@ -79,16 +77,16 @@ get_best_hyper_parameters <- function(dataset, model_name, number_of_kfolds, par
   
   kfoldable_train_data <- add_kfold_information_to_dataset(dataset, number_of_kfolds)
   hyper_parameter_grid <- cross_df(parameter_list_to_grid)
-  number_of_hyper_parameter_sets = nrow(hyper_parameter_grid)
-  model = get_model_function(model_name) 
-  model_function = model$model_function
-  model_prediction_type = model$prediction_type
-  calculations_to_do = get_calculations_to_do(number_of_hyper_parameter_sets, number_of_kfolds)
+  number_of_hyper_parameter_sets <- nrow(hyper_parameter_grid)
+  model <- get_model_function(model_name) 
+  model_function <- model$model_function
+  model_prediction_type <- model$prediction_type
+  calculations_to_do <- get_calculations_to_do(number_of_hyper_parameter_sets, number_of_kfolds)
   
   for(calculation in 1:nrow(calculations_to_do)) {
-    indices_to_use = calculations_to_do[calculation, ]
-    job_result = calculate_job(indices_to_use, model_function, model_prediction_type, kfoldable_train_data, hyper_parameter_grid)
-    calculations_to_do[calculation, 3] = job_result$result
+    indices_to_use <- calculations_to_do[calculation, ]
+    job_result <- calculate_job(indices_to_use, model_function, model_prediction_type, kfoldable_train_data, hyper_parameter_grid)
+    calculations_to_do[calculation, 3] <- job_result$result
     print(paste0("hyper-parameters: ",paste(job_result$hyper_parameter, collapse = "-")," kfold: ",job_result$kfold," - Result :", job_result$result))
   }
   best_hyper_parameter_index = get_best_hyper_parameter_index(calculations_to_do)
