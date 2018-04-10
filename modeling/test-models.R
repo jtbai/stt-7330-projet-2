@@ -65,20 +65,20 @@ model_function = get_model_function("random_forest")$model_function
 model <- model_function(surface ~ ., data =data_train,   control = best_hyper_parameters)
 out <- predict(model, data_test)
 sum(out == data_test[, surface]) / nrow(data_test)
-varImpPlot(model_rf)
+varImpPlot(model)
 
 # SVM - gaussien
 hyper_parameter <-   list(epsilon = c(0.1,0.01,0.001), cost = c(0.90, 0.95, 0.99, 1))
 best_hyper_parameters = get_best_hyper_parameters(data_train, "svm_gaussien", 10, hyper_parameter)
 model_function = get_model_function("svm_gaussien")$model_function
-model <- model_function(surface ~ ., data =data_train, cost= best_hyper_parameters$cost, epsilon=best_hyper_parameters$epsilon)
+model <- model_function(surface ~ ., data =data_train, control= best_hyper_parameters)
 out <- predict(model, data_test)
 
 # SVM - polynomial
 hyper_parameter <-   list(epsilon = c(0.1,0.01,0.001), cost = c(0.90, 0.95, 0.99, 1))
 best_hyper_parameters = get_best_hyper_parameters(data_train, "svm_poly3", 10, hyper_parameter)
 model_function = get_model_function("svm_poly3")$model_function
-model <- model_function(surface ~ ., data =data_train, cost= best_hyper_parameters$cost, epsilon=best_hyper_parameters$epsilon)
+model <- model_function(surface ~ ., data =data_train, control= best_hyper_parameters)
 out <- predict(model, data_test)
 
 
