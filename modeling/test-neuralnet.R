@@ -59,4 +59,4 @@ predict_proba_all <- model_neural_net %>% predict(as.matrix(data_prepared[, -(c(
 
 predict_neural_network <- apply(predict_proba_all, 1, which.max)
 
-fwrite(predict_neural_network, file = "raw-data/predict_neural_net.csv")
+write.csv(predict_neural_network, "modeling/predict-nn.csv")
