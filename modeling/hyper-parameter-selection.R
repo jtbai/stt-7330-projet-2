@@ -1,6 +1,5 @@
 library(tidyverse)
 
-
 add_kfold_information_to_dataset <- function(dataset, number_of_k_fold){
   set.seed(1337)
   number_of_data_point = nrow(dataset)

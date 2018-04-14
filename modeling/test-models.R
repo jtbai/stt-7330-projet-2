@@ -13,22 +13,20 @@ library(MASS)
 library(nnet)
 
 source("modeling/model-factory.R")
+source("modeling/hyper-parameter-selection.R")
 
 # Import data -------------------------------------------------------------
 
-source("data/scripts/clean-data.R")
-source("data/scripts/preprocess-data.R")
+data_prepared <- fread("data/data_modeling_classical_methods.csv")
+data_prepared$surface = as.factor(data_prepared$surface)
 
-source("modeling/hyper-parameter-selection.R")
-
-data_prepared <-  data_imputed
 # Model -------------------------------------------------------------------
 
 # Split train/test
-test_index <- sample(1:nrow(data_prepared), 0.2 * nrow(data_prepared))
-data_train <- data_prepared[-test_index,]
-data_test <- data_prepared[test_index,]
 
+
+data_train <-  data_prepared[split_group==1, -c("split_group"), with=FALSE]
+data_test <- data_prepared[split_group==2, -c("split_group"), with=FALSE]
 
 # Naive bayes
 model_bayes <-  naiveBayes(surface ~ ., data = data_train)
@@ -81,12 +79,10 @@ model <- model_function(surface ~ ., data =data_train, control= best_hyper_param
 out <- predict(model, data_test)
 sum(out == data_test[, surface]) / nrow(data_test)
 
-
 # Model logistic
 model_multi <- multinom(surface ~ ., data = data_train)
 out <- predict(model_multi, data_test)
 sum(out == data_test[, surface]) / nrow(data_test)
-
 
 # Hasard
 props <- tabulate(as.numeric(data_test$surface), nbins = 3) / nrow(data_test)
