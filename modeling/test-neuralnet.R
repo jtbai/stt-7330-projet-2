@@ -58,3 +58,5 @@ history <- model_neural_net %>% fit(
 predict_proba_all <- model_neural_net %>% predict(as.matrix(data_prepared[, -(c("split_group", "surface")), with = FALSE]))
 
 predict_neural_network <- apply(predict_proba_all, 1, which.max)
+
+fwrite(predict_neural_network, file = "raw-data/predict_neural_net.csv")
