@@ -11,8 +11,6 @@
 library(e1071)
 library(MASS)
 library(nnet)
-library(caret)
-library(doParallel)
 
 source("modeling/model-factory.R")
 
@@ -38,8 +36,8 @@ out <- predict(model_bayes, data_test)
 sum(out == data_test[, surface]) / nrow(data_test)
 
 # Tree-based
-hyper_parameter <- list(minsplit = c(2, 5), maxdepth = c(1, 3))
-best_hyper_parameters = get_best_hyper_parameters(data_train, "tree_based", 2, hyper_parameter)
+hyper_parameter <- list(minsplit = c(2, 5, 8, 10, 15, 20), maxdepth = c(1, 3, 5, 10))
+best_hyper_parameters = get_best_hyper_parameters(data_train, "tree_based", 10, hyper_parameter)
 model_function = get_model_function("tree_based")$model_function
 model <- model_function(surface ~ ., data =data_train,   control = best_hyper_parameters)
 out <- predict(model, data_test, type = "class")
