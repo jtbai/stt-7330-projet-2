@@ -1,9 +1,10 @@
 # -------------------------------------------------------------------------
 # Title: clean-data
-# Goal: This script is aimed to functionnalize the cleaning operations on raw dataset
+# Goal: Clean raw data and do some features engineering for modeling
 # Date: April 2018
 # Author: Stéphane Caron
 # -------------------------------------------------------------------------
+
 
 clean_data_from_raw <- function(dt){
   
@@ -17,7 +18,7 @@ clean_data_from_raw <- function(dt){
   data_clean[, (col_linked_to_match) := NULL]
   
   # Remove unrelevant variables
-  col_unrelevant <- c("winner_id", "winner_name", "loser_id", "loser_name", "winner_entry", "loser_entry", "winner_rank", "winner_rank_points", "loser_rank_points", "loser_rank", "winner_ht", "loser_ht")
+  col_unrelevant <- c("winner_id", "winner_name", "loser_id", "loser_name", "winner_entry", "loser_entry", "winner_rank_points", "loser_rank_points", "winner_ht", "loser_ht")
   data_clean[, (col_unrelevant) := NULL]
 
   # Features engineering ----------------------------------------------------
@@ -44,10 +45,11 @@ clean_data_from_raw <- function(dt){
   }
   data_clean[, (c("winner_score", "loser_score")) := NULL]
   
+  # Remove match with less than 2 sets
+  data_clean <- data_clean[!(is.na(winner_score_2) | is.na(loser_score_2)),]
+  
   # Change the response variable to a factor
   data_clean[, surface := ifelse(surface == "Hard", 1, ifelse(surface == "Clay", 2, 3))]
   
   return(data_clean)
 }
-
-
