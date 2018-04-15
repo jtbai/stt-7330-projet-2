@@ -1,6 +1,9 @@
-library(randomForest)
-library(rpart)
-library(e1071)
+# -------------------------------------------------------------------------
+# Title: model-factory
+# Goal: Create interface fucntions for each model
+# Date: April 2018
+# Author: JT Baillargeon
+# -------------------------------------------------------------------------
 
 classification_svm_gaussien <- function(control, ...){
   classification <- svm(type="C-classification", kernel="sigmoid", epsilon=control$epsilon, cost=control$cost, ...=...)
@@ -32,6 +35,26 @@ get_model_function <- function(model_name){
   if(model_name=="svm_poly3"){
     model_function = classification_svm_poly3
     prediction_type = "decision"
+  }
+  
+  if(model_name=="bayes"){
+    model_function = naiveBayes
+    prediction_type = "raw"
+  }
+  
+  if(model_name=="lda"){
+    model_function = lda
+    prediction_type = "class"
+  }
+  
+  if(model_name=="qda"){
+    model_function = qda
+    prediction_type = "class"
+  }
+  
+  if(model_name=="multinomial"){
+    model_function = multinom
+    prediction_type = NA
   }
   
   return(

@@ -3,10 +3,9 @@
 # Date: April 2018
 # -------------------------------------------------------------------------
 
-source("modeling/test-models.R")
-
-
-#------------------------------------------------------------------------
+predict_models <- function(models, new_data) {
+  
+}
 
 predict_model <- function ( model_name, validation_data ){
    output_predict = predict(model_name,newdata = validation_data)
