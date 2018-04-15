@@ -8,7 +8,7 @@
 
 train_model <- function(models, data_train, path_models, nb_of_kfolds = 10){
   
-  for (i in 1:seq_along(models)) {
+  for (i in 1:3) {
     
     if (models[[i]]$ind_grid_search) {
       hyper_parameter <- models[[i]]$grid_search_params

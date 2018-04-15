@@ -23,7 +23,7 @@ source("modeling/model-factory.R")
 source("modeling/hyper-parameter-selection.R")
 source("modeling/import-data-modeling.R")
 source("modeling/train-models.R")
-# source("modeling/output_predict.R")
+source("modeling/output_predict.R")
 
 
 # Define global configuration ---------------------------------------------
@@ -32,7 +32,7 @@ source("modeling/train-models.R")
 model_inputs <- fromJSON("modeling/inputs/input_models.json")
 
 # Do grid search or not
-ind_train_model <- FALSE
+ind_train_model <- TRUE
 
 train_groups <- 1L
 test_groups <- 2L
@@ -60,7 +60,7 @@ if (ind_train_model) {
 }
 
 # Make predictions
-
+predict_models(model_inputs, new_data = data_test, path_models = "modeling/models/", path_preds = "data/predictions/")
 
 
 
