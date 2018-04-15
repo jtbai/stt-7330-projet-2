@@ -17,17 +17,22 @@ library(keras)
 # Import data -------------------------------------------------------------
 
 data_prepared <- fread("data/data_modeling_neural_net.csv")
-data_prepared[, surface := as.factor(surface)]
 
-# Model -------------------------------------------------------------------
+# Train test split --------------------------------------------------------
 
-# Split train/test
+train_groups <- c(1)
+test_groups <- c(2)
 
-X_train <- as.matrix(data_prepared[split_group == 1, -(c("split_group", "surface")), with = FALSE])
-X_test <- as.matrix(data_prepared[split_group == 2, -(c("split_group", "surface")), with = FALSE])
+split123 <- data_prepared[, split_group]
 
-y_train <- to_categorical(as.matrix(data_prepared[split_group == 1, c("surface"), with = FALSE]))[, -1]
-y_test <- to_categorical(as.matrix(data_prepared[split_group == 2, c("surface"), with = FALSE]))[, -1]
+data_response <- to_categorical(data_prepared[, surface])[, -1]
+data_features <- as.matrix(data_prepared[, -c("surface", "split_group")])
+
+X_train <- data_features[split123 %in% train_groups, ]
+X_test <- data_features[split123 %in% test_groups, ]
+
+y_train <- data_response[split123 %in% train_groups, ]
+y_test <- data_response[split123 %in% test_groups, ]
 
 # Model -------------------------------------------------------------------
 
@@ -55,8 +60,7 @@ history <- model_neural_net %>% fit(
   validation_split = 0.2
 )
 
-predict_proba_all <- model_neural_net %>% predict(as.matrix(data_prepared[, -(c("split_group", "surface")), with = FALSE]))
+predict_proba <- model_neural_net %>% predict(data_features)
+predictions <- apply(predict_proba, 1, which.max)
 
-predict_neural_network <- apply(predict_proba_all, 1, which.max)
-
-write.csv(predict_neural_network, "modeling/predict-nn.csv")
+fwrite(data.frame(preds = predictions), file = "data/predictions/preds_model_neuralnet.csv")
