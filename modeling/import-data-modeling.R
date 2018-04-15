@@ -5,21 +5,17 @@
 # Author: Stéphane Caron
 # -------------------------------------------------------------------------
 
-
-# Load packages -----------------------------------------------------------
-
-library(data.table)
-
-
-# Import data -------------------------------------------------------------
-
-data_modeling_classical_methods <- fread("data/data_modeling_classical_methods.csv")
-data_modeling_classical_methods[, surface := as.factor(surface)]
-
-
-# Split train and test ----------------------------------------------------
-
-data_modeling_classical_methods_train <- data_modeling_classical_methods[split_group == 1, -(c("split_group")), with = FALSE]
-data_modeling_classical_methods_validation <- data_modeling_classical_methods[split_group == 2, -(c("split_group")), with = FALSE]
-
-
+import_data_modeling <- function(path, ind_train, ind_test) {
+  
+  data_modeling_classical_methods <- fread(path)
+  data_modeling_classical_methods[, surface := as.factor(surface)]
+  
+  data_train <- data_modeling_classical_methods[split_group %in% ind_train, -(c("split_group")), with = FALSE]
+  data_test <- data_modeling_classical_methods[split_group %in% ind_test, -(c("split_group")), with = FALSE]
+  
+  list(
+    data_train = data_train,
+    data_test = data_test
+  )
+  
+}
