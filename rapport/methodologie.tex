@@ -1,23 +1,15 @@
 \section{Méthodologie}
 
 \subsection{Présentation du jeu de données}
-Une étape essentièlle pour construire une image complète sur la base de données et ses variables explicatives dans le but de nous permettre par la suite d'identifier et la prioriser des propriétées potentiels qu'on utilisera dans le modèle. 
-Le jeu de données utilisé dans ce travail est distribué par Jeff Sackmann via github. Il comprend différentes statistiques sur les match de officiels de l'association des professionnels de tennis depuis 1968. Le jeu de données comprend premièrement la variable que la machine apprenante devra prédire, soit la surface sur laquelle un match de tennis est joué. Cette variable peut prendre 3 valeurs soit: Clay, Hard, Carpet. Les autres variables sont utilisées comme variables explicatives, ces derniers peuvent être diviser en deux catégories ceux qui concernent le tournoi, et ceux qui concernent le joueur(gagnant et perdant et leurs statistique de service, de retour,des points).
-- le tournoi (identifiant, nom sraw-size, niveau, date, le match(numero, série))
-- le joueur (identifiant, seed, entrée, nom, main, "ht","ioc", age, rang, les points, score, Aces, Double Fault, serve point, first serve points won, Break points saved, service games played ).
+Le jeu de données utilisé dans ce travail est composés de différentes statistiques sur les match officiels de l'association des professionnels de tennis depuis 1968. Il est distribuées par Jeff Sackmann via github. 
 
-
-
-
-
-
-
-Le but de ce document est de prédire la surface où jouent les joueurs de tenis (3 classes: ) et son effet sur les performances des joueurs. Pour cela, on importe la base de donnée à partir de Github "..." qui contient 50 variables environ. Dans ce qui suit, on essayera de trouver des caractéristiques qui va nous permettent d'avoir des modèles et les tendances potentiels en faisant du feature engineering. Aprés avoir obtenus nos nouvelles variables explicatives, on réduira la dimension de la base de donnée en effectuant une ACP. Premièrement, on appliquera les méthodes classiques de classification supervisée (le classifieur naif de bayes, Classifieur par arbre, classifieur régression logistique, Analyse discriminante linéaire, Analyse discriminante quadratique, Classifieur forêt aléatoire). Deuxièment, On applique les réseaux de neuronnes. Pour enfin, appliquer la méthode d'ensemble qui  utilisent les différents algorithmes d'apprentissages vus auparavant ce qui a comme but d'avoir une performance predictive plus élevés de ce qu'on pourrait avoir si on utilise une seule méthode d'apprentissage.
+Le jeu de données comprend la surface sur laquelle un match de tennis a été joué. C'est cette variable que la machine apprenante devra prédire.  Il s'agit d'une variable catégorielle pouvant prendre 3 valeurs  soit: Clay, Hard et Carpet. Il y a environ 50 autres variables qui sont utilisées pour tenter d'expliquer la variable à prédire. Ces valeurs représentent soit des caractéristiques sur le tournois (Niveau, endoit), sur les joueurs (age, pays d'orgine, main forte) ou sur la partie (score final, nombre de ACE pour le gagnant, longueur de la partie en minute).
 
 
 \subsection{Prétraîtement des données}
-Dû à la grande taille du jeu de données actuel, les données brutes sont généralement de faible qualité et l'application directe des algorithmes de l'apprentissage sur de  telles données complexifie l'aprentiisage et nuit à la performance et la fiabilité des modèles.
-D'où la necessité d'améliorer la qualité du jeu de donnée se présente. Pour ce, on procède comme suit: le nettoyage des données, l'identification et le traitement des valeurs manquantes, intégration et transformation des variables, et enfin la réduction de la dimensionnalité.
+L'information contenue dans le jeu de données étaient très clairsemée, de telle sorte que l'apprentissage se faisait de façon sous optimale. Les modèles finaux peuvent ne pas être optimaux ou fiable. Afin de palier à ce problème nous avons décidé d'améliorer la qualité du jeu de données. Les différentes étapes ont été de nettoyager des données, l'identification et le traitement des valeurs manquantes, intégration et transformation des variables, et enfin la réduction de la dimensionnalité.
+
+- Nettoyage des données
 
 - Traitement des valeurs manquantes
 
@@ -27,8 +19,6 @@ En fait, on a crée  11 variables qui sont sous forme de proportion:
 
 - Réduction de la dimensionalité
 Vu que la fouille de donnnées peut être très longue sur les données "l'analyse des composantes principales (PCA)", celle-ci permet d'obtenir une représentation réduite du jeu de données, plus petit volume mais qui produit les mêmes (ou presque) résultats analytiques. L'ACP a réduit le nombre des variables et \italic{features} utilisées à 7 variables tout en maintenant une quatité de variance expliquée de 80 \%. 
-
-Maintenant que nous avons réglé le problème des valeurs manquantes, et identifié les variables qui sont potentiellement significatives dans la prédiction du type de la surface, on procède maintenant à appliquer les algorithmes d'apprentissage superviséé pour prédire la classe de lavariable réponse "surface".
 
 \subsection{Classifieurs utilisés}
 
@@ -55,7 +45,9 @@ Finalement, la troisième catégorie d'algoritme sont les plus complexe et deman
 
 font parti de cette troisième catégorie. L'utilisation et l'architecture de ces modèles seront présentés dans une section ultérieure
 
-\subsection{}
+\subsection{Ajustement des hyper-paramètres}
+
+L'ajustement des hyper-paramètre a été faite par une recherche exhaustive. La technique de recherche par quadrillage (grid-search) 
 
 
 \subsection{}
