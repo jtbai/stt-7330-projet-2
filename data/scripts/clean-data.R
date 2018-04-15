@@ -1,9 +1,10 @@
 # -------------------------------------------------------------------------
 # Title: clean-data
-# Goal: This script is aimed to functionnalize the cleaning operations on raw dataset
+# Goal: Clean raw data and do some features engineering for modeling
 # Date: April 2018
 # Author: Stéphane Caron
 # -------------------------------------------------------------------------
+
 
 clean_data_from_raw <- function(dt){
   
@@ -52,5 +53,3 @@ clean_data_from_raw <- function(dt){
   
   return(data_clean)
 }
-
-

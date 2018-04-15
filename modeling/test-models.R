@@ -9,22 +9,24 @@
 # Load packages -----------------------------------------------------------
 
 library(e1071)
-library(randomForest)
-library(rpart)
 library(MASS)
 library(nnet)
 
+source("modeling/model-factory.R")
+source("modeling/hyper-parameter-selection.R")
+
 # Import data -------------------------------------------------------------
 
-source("data/scripts/clean-data.R")
-source("data/scripts/preprocess-data.R")
+data_prepared <- fread("data/data_modeling_classical_methods.csv")
+data_prepared$surface = as.factor(data_prepared$surface)
 
 # Model -------------------------------------------------------------------
 
 # Split train/test
-test_index <- sample(1:nrow(data_imputed), 0.2 * nrow(data_imputed))
-data_train <- data_imputed[-test_index,]
-data_test <- data_imputed[test_index,]
+
+
+data_train <-  data_prepared[split_group==1, -c("split_group"), with=FALSE]
+data_test <- data_prepared[split_group==2, -c("split_group"), with=FALSE]
 
 # Naive bayes
 model_bayes <-  naiveBayes(surface ~ ., data = data_train)
@@ -32,12 +34,15 @@ out <- predict(model_bayes, data_test)
 sum(out == data_test[, surface]) / nrow(data_test)
 
 # Tree-based
-model_tree <- rpart(surface ~ ., data = data_train)
-out <- predict(model_tree, data_test, type = "class")
+hyper_parameter <- list(minsplit = c(2, 5, 8, 10, 15, 20), maxdepth = c(1, 3, 5, 10))
+best_hyper_parameters = get_best_hyper_parameters(data_train, "tree_based", 10, hyper_parameter)
+model_function = get_model_function("tree_based")$model_function
+model <- model_function(surface ~ ., data =data_train,   control = best_hyper_parameters)
+out <- predict(model, data_test, type = "class")
 sum(out == data_test[, surface]) / nrow(data_test)
 
-plot(model_tree, margin = 0.1)
-text(model_tree, use.n = T, cex = 0.8)
+plot(model, margin = 0.1)
+text(model, use.n = T, cex = 0.8)
 
 # LDA
 model_lda <- lda(surface ~ ., data = data_train)
@@ -50,10 +55,29 @@ out <- predict(model_qda, data_test)$class
 sum(out == data_test[, surface]) / nrow(data_test)
 
 # Random Forrest
-model_rf <- randomForest(surface ~ ., data = data_train)
-out <- predict(model_rf, data_test)
+hyper_parameter <-   list(mtry = seq(4,16,4), ntree = c(700, 1000,2000))
+best_hyper_parameters = get_best_hyper_parameters(data_train, "random_forest", 10, hyper_parameter)
+model_function = get_model_function("random_forest")$model_function
+model <- model_function(surface ~ ., data =data_train,   control = best_hyper_parameters)
+out <- predict(model, data_test)
 sum(out == data_test[, surface]) / nrow(data_test)
-varImpPlot(model_rf)
+varImpPlot(model)
+
+# SVM - gaussien
+hyper_parameter <-   list(epsilon = c(0.1,0.01,0.001), cost = c(0.90, 0.95, 0.99, 1))
+best_hyper_parameters = get_best_hyper_parameters(data_train, "svm_gaussien", 10, hyper_parameter)
+model_function = get_model_function("svm_gaussien")$model_function
+model <- model_function(surface ~ ., data =data_train, control= best_hyper_parameters)
+out <- predict(model, data_test)
+sum(out == data_test[, surface]) / nrow(data_test)
+
+# SVM - polynomial
+hyper_parameter <-   list(epsilon = c(0.1,0.01,0.001), cost = c(0.90, 0.95, 0.99, 1))
+best_hyper_parameters = get_best_hyper_parameters(data_train, "svm_poly3", 10, hyper_parameter)
+model_function = get_model_function("svm_poly3")$model_function
+model <- model_function(surface ~ ., data =data_train, control= best_hyper_parameters)
+out <- predict(model, data_test)
+sum(out == data_test[, surface]) / nrow(data_test)
 
 # Model logistic
 model_multi <- multinom(surface ~ ., data = data_train)
