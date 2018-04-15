@@ -7,7 +7,7 @@
 
 predict_models <- function(models, new_data, path_models, path_preds) {
   
-  for (i in 1:3) {
+  for (i in 1:seq_along(models)) {
     
     model <- readRDS(paste0(path_models, "model_", models[[i]]$model, ".rds"))
 
