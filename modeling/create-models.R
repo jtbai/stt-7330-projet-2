@@ -15,6 +15,8 @@ library(data.table)
 library(rpart)
 library(jsonlite)
 library(stringr)
+library(dplyr)
+library(randomForest)
 
 
 # Source functions --------------------------------------------------------
