@@ -41,7 +41,7 @@ number_of_features <- ncol(X_train)
 model_neural_net <- keras_model_sequential()
 
 model_neural_net %>% 
-  layer_dense(units = 15, activation = 'sigmoid', input_shape = c(number_of_features)) %>% 
+  layer_dense(units = 25, activation = 'sigmoid', input_shape = c(number_of_features)) %>% 
   layer_dropout(rate = 0.1) %>% 
   layer_dense(units = 10, activation = 'sigmoid') %>%
   layer_dropout(rate = 0.05) %>%
@@ -55,17 +55,12 @@ model_neural_net %>% compile(
 
 history <- model_neural_net %>% fit(
   X_train, y_train, 
-  epochs = 100, batch_size = 128, 
+  epochs = 200, batch_size = 128, 
   verbose = 1,
   validation_split = 0.2
 )
 
-plot(history)
-
-model_neural_net %>% evaluate(X_test, y_test)
-
 predict_proba <- model_neural_net %>% predict(data_features)
-predict_class <- apply(predict_proba, 1, which.max)
+predictions <- apply(predict_proba, 1, which.max)
 
-write.csv(predict_proba, "prediction/predict-proba-nn.csv")
-write.csv(predict_class, "prediction/predict-nn.csv")
+fwrite(data.frame(preds = predictions), file = "data/predictions/preds_model_neuralnet.csv")
