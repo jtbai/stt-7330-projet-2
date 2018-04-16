@@ -36,7 +36,7 @@ source("modeling/create-predictions-matrix.R")
 model_inputs <- fromJSON("modeling/inputs/input_models.json")
 
 # Do grid search or not
-ind_train_model <- TRUE
+ind_train_model <- FALSE
 
 train_groups <- 1L
 test_groups <- 2L
@@ -69,6 +69,8 @@ predict_models(model_inputs, new_data = data_test, path_models = "modeling/model
 # Create prediction matrix
 predict_matrix <- create_predictions_matrix("data/predictions/", model_inputs)
 
+# Run ensemble model
+true_response_test <- import_data_modeling("data/data_modeling_classical_methods.csv", selected_group = test_groups)$surface
 
 
 
