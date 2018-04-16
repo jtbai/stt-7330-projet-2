@@ -10,6 +10,8 @@
 
 library(e1071)
 library(MASS)
+library(mltools)
+library(tidyr)
 library(nnet)
 library(data.table)
 library(rpart)
@@ -45,6 +47,20 @@ test_groups <- 2L
 
 # Create models -----------------------------------------------------------
 
+# Look in input_file if include neural net or not
+input_neural_net <- which(unlist(lapply(seq_along(model_inputs), function(x){model_inputs[[x]]$model})) == "neural_net")
+if (length(input_neural_net) != 0) {
+  data_train_nn <- import_data_modeling("data/data_modeling_neural_net.csv", selected_group = train_groups)
+  data_test_nn <- import_data_modeling("data/data_modeling_neural_net.csv", selected_group = test_groups)
+  if (ind_train_model) {
+    source("modeling/train-neural-net.R")
+    train_and_predict_neural_net(model_inputs[[input_neural_net]], data_train_nn, data_test_nn, "modeling/models//")
+  }
+  source("modeling/predict-neural-net.R")
+  predict_neural_net(model_inputs[[input_neural_net]], data_test_nn, "modeling/models/",  "data/predictions/")
+  model_inputs_without_neural_net <- model_inputs[-input_neural_net]
+}
+
 # Import datasets
 data_train <- import_data_modeling("data/data_modeling_classical_methods.csv", selected_group = train_groups)
 data_test <- import_data_modeling("data/data_modeling_classical_methods.csv", selected_group = test_groups)
@@ -65,7 +81,7 @@ if (ind_train_model) {
 }
 
 # Make predictions on test set
-predict_models(model_inputs, new_data = data_test, path_models = "modeling/models/", path_preds = "data/predictions/")
+predict_models(model_inputs_without_neural_net, new_data = data_test, path_models = "modeling/models/", path_preds = "data/predictions/")
 
 # Create prediction matrix
 predict_matrix <- create_predictions_matrix("data/predictions/", model_inputs)
@@ -73,5 +89,4 @@ predict_matrix <- create_predictions_matrix("data/predictions/", model_inputs)
 # Run ensemble model
 true_response_test <- import_data_modeling("data/data_modeling_classical_methods.csv", selected_group = test_groups)$surface
 train_model_ensemble(predict_matrix, true_response_test, "accuracy", "data/predictions/")
-
 
