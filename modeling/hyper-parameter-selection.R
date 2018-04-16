@@ -1,4 +1,9 @@
-library(tidyverse)
+# -------------------------------------------------------------------------
+# Title: hyper-parameter-selection.R
+# Goal: Create functions to select hyperparameters through a grid search
+# Date: April 2018
+# Author: JT Baillargeon
+# -------------------------------------------------------------------------
 
 add_kfold_information_to_dataset <- function(dataset, number_of_k_fold){
   set.seed(1337)

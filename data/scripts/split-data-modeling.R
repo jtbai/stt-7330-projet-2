@@ -7,6 +7,8 @@
 
 split_data_for_modeling <- function(dt, split_percentage = 0.9){
   
+  set.seed(666) # Number of the beast
+  
   # Shuffle the data
   data_shuffled <- copy(dt)[sample(nrow(dt)),]
   
