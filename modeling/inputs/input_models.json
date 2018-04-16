@@ -34,16 +34,16 @@
     "model"  : "svm_gaussien",
     "ind_grid_search"  : true,
     "grid_search_params"    : {
-      "epsilon"  : [0.1, 0.01, 0.001],
-      "cost"  : [0.9, 0.95, 0.99, 1]
+      "epsilon"  : [1e-4, 1e-3, 1e-2, 1e-1, 1e0, 1e1, 1e2, 1e3, 1e4],
+      "cost"  : [1, 10, 100, 1000, 10000]
     }
   },
   "svm_ploy3" : {
     "model"  : "svm_poly3",
     "ind_grid_search"  : true,
     "grid_search_params"    : {
-      "epsilon"  : [0.1, 0.01, 0.001],
-      "cost"  : [0.9, 0.95, 0.99, 1]
+      "epsilon"  : [1e-4, 1e-3, 1e-2, 1e-1, 1e0, 1e1, 1e2, 1e3, 1e4],
+      "cost"  : [1, 10, 100, 1000, 10000]
     }
   },
   "multinomial" : {
