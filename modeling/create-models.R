@@ -28,6 +28,7 @@ source("modeling/import-data-modeling.R")
 source("modeling/train-models.R")
 source("modeling/output_predict.R")
 source("modeling/create-predictions-matrix.R")
+source("modeling/train-model-ensemble.R")
 
 
 # Define global configuration ---------------------------------------------
@@ -71,7 +72,6 @@ predict_matrix <- create_predictions_matrix("data/predictions/", model_inputs)
 
 # Run ensemble model
 true_response_test <- import_data_modeling("data/data_modeling_classical_methods.csv", selected_group = test_groups)$surface
-
-
+train_model_ensemble(predict_matrix, true_response_test, "accuracy", "data/predictions/")
 
 
