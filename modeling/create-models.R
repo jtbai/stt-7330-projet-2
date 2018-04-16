@@ -15,6 +15,7 @@ library(data.table)
 library(rpart)
 library(jsonlite)
 library(stringr)
+library(purrr)
 library(dplyr)
 library(randomForest)
 
@@ -26,6 +27,7 @@ source("modeling/hyper-parameter-selection.R")
 source("modeling/import-data-modeling.R")
 source("modeling/train-models.R")
 source("modeling/output_predict.R")
+source("modeling/create-predictions-matrix.R")
 
 
 # Define global configuration ---------------------------------------------
@@ -43,8 +45,8 @@ test_groups <- 2L
 # Create models -----------------------------------------------------------
 
 # Import datasets
-data_train <- import_data_modeling("data/data_modeling_classical_methods.csv", ind_train = train_groups, ind_test = test_groups)$data_train
-data_test <- import_data_modeling("data/data_modeling_classical_methods.csv", ind_train = train_groups, ind_test = test_groups)$data_test
+data_train <- import_data_modeling("data/data_modeling_classical_methods.csv", selected_group = train_groups)
+data_test <- import_data_modeling("data/data_modeling_classical_methods.csv", selected_group = test_groups)
 
 # Train models and verify none are missing
 if (ind_train_model) {
@@ -61,8 +63,12 @@ if (ind_train_model) {
   }
 }
 
-# Make predictions
+# Make predictions on test set
 predict_models(model_inputs, new_data = data_test, path_models = "modeling/models/", path_preds = "data/predictions/")
+
+# Create prediction matrix
+predict_matrix <- create_predictions_matrix("data/predictions/", model_inputs)
+
 
 
 
