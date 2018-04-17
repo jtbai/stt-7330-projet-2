@@ -5,7 +5,7 @@
 # Author: Christopher Blier-Wong
 # -------------------------------------------------------------------------
 
-train_and_predict_neural_net <- function(model, data_train, data_test, path_to_model) {
+train_and_predict_neural_net <- function(model, data_train, path_to_model) {
   
   # Load packages
   library(keras)
@@ -14,9 +14,6 @@ train_and_predict_neural_net <- function(model, data_train, data_test, path_to_m
   # Create predictors and response variables
   x_train <- as.matrix(data_train[, -c("surface")])
   y_train <- to_categorical(data_train[, surface])[, -1]
-  
-  x_test <- as.matrix(data_test[, -c("surface")])
-  y_test <- to_categorical(data_test[, surface])[, -1]
 
   # Define the model
   number_of_features <- ncol(x_train)
