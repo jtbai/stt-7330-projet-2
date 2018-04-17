@@ -13,6 +13,7 @@ library(RCurl)
 library(stringr)
 library(mltools)
 library(tidyr)
+library(stats)
 
 
 # Define import parameters ------------------------------------------------
@@ -26,6 +27,9 @@ year_to <- 2017
 # FALSE: Stats summarized (summed up) for the winner and loser
 ind_split_variables <- FALSE
 
+# Whether to do or nor the PCA on the classical data
+ind_do_pca <- FALSE
+
 
 # Source the functions needed for the pipeline ----------------------------
 
@@ -35,6 +39,7 @@ source("data/scripts/feature-engineering-data-classical-methods.R")
 source("data/scripts/features-engineering-data-neural-net.R")
 source("data/scripts/imputation-data.R")
 source("data/scripts/split-data-modeling.R")
+source("data/scripts/principal-components-analysis.R")
 
 
 # Create datasets ---------------------------------------------------------
@@ -55,13 +60,17 @@ data_neural_net_splitted <- split_data_for_modeling(data_neural_net_with_feature
 data_modeling_classical_methods <- do_missing_data_imputation(dt = data_classical_methods_splitted)
 data_modeling_neural_net <- do_missing_data_imputation(dt = data_neural_net_splitted)
 
-# Drop some variablesç
+# Drop some variables
 if (ind_split_variables) {
   var_to_keep <- c("surface", "ind_retired", "nb_tie_break", "ind_max_sets", "ind_min_sets", "winner_ace_svpt", "winner_1stwon_1stin", "winner_1stin_svpt", "winner_df_svpt", "winner_min_svpt", "winner_1stwon_servewon", "winner_serve_won", "winner_break_pts", "loser_ace_svpt", "loser_1stwon_1stin", "loser_1stin_svpt", "loser_df_svpt", "loser_min_svpt", "loser_1stwon_servewon", "loser_serve_won", "loser_break_pts", "split_group")
 } else {
   var_to_keep <- c("surface", "ind_retired", "nb_tie_break", "ind_max_sets", "ind_min_sets", "ace_by_svpt", "first_won_by_first_in", "first_in_by_svpt", "df_by_svpt", "min_by_svpt", "first_won_by_serve_won", "serve_won_by_serve_pts", "nb_break_pts", "split_group") 
 }
 data_modeling_classical_methods <- data_modeling_classical_methods[, (var_to_keep), with = FALSE]
+
+if (ind_do_pca) {
+  data_modeling_classical_methods <- do_pca(data_modeling_classical_methods, 0.8)
+}
 
 
 # Save data for modeling --------------------------------------------------
