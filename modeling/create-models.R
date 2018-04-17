@@ -59,7 +59,9 @@ if (length(input_neural_net) != 0) {
   }
   source("modeling/predict-neural-net.R")
   predict_neural_net(model_inputs[[input_neural_net]], data_test_nn, "modeling/models/",  "data/predictions/")
-  model_inputs_without_neural_net <- model_inputs[-input_neural_net]
+  model_inputs_classical <- model_inputs[-input_neural_net]
+} else {
+  model_inputs_classical <- model_inputs
 }
 
 # Import datasets
@@ -71,11 +73,16 @@ index_test <- fread("data/data_modeling_classical_methods.csv")$split_group == t
 index_validation <- fread("data/data_modeling_classical_methods.csv")$split_group == validation_groups
 
 # Train models and verify none are missing
+input_model_ensemble <- which(unlist(lapply(seq_along(model_inputs_classical), function(x){model_inputs_classical[[x]]$model})) == "ensemble")
+if (length(input_model_ensemble) != 0) {
+  model_inputs_classical <- model_inputs_classical[-input_model_ensemble]
+}
 if (ind_train_model) {
-  train_model(model_inputs_without_neural_net, data_train, "modeling/models/", 10)
+  train_model(model_inputs_classical, data_train, "modeling/models/", 10)
 } else {
   actual_models <- list.files("modeling/models/")
-  modeles_to_verify <- paste0("model_", as.character(unlist(lapply(model_inputs, function(x){x$model}))))
+  input_model_ensemble <- which(unlist(lapply(seq_along(model_inputs), function(x){model_inputs[[x]]$model})) == "ensemble")
+  modeles_to_verify <- paste0("model_", as.character(unlist(lapply(model_inputs[-input_model_ensemble], function(x){x$model}))))
   test <- sapply(modeles_to_verify, function(model) {
     any(str_detect(actual_models, model))
   })
@@ -86,12 +93,14 @@ if (ind_train_model) {
 }
 
 # Make predictions on test set
-predict_models(model_inputs_without_neural_net, new_data = data_test, path_models = "modeling/models/", path_preds = "data/predictions/")
+predict_models(model_inputs_classical, new_data = data_test, path_models = "modeling/models/", path_preds = "data/predictions/")
 
 # Create prediction matrix
-predict_matrix <- create_predictions_matrix("data/predictions/", model_inputs)
+predict_matrix <- create_predictions_matrix("data/predictions/", model_inputs_classical)
 
 # Run ensemble model
-true_response <- import_data_modeling("data/data_modeling_classical_methods.csv", selected_group = c(train_groups, test_groups, validation_groups))$surface
-train_model_ensemble(predict_matrix, true_response, "accuracy", "data/predictions/", index_train, index_test)
+if (length(input_model_ensemble) != 0) {
+  true_response <- import_data_modeling("data/data_modeling_classical_methods.csv", selected_group = c(train_groups, test_groups, validation_groups))$surface
+  train_model_ensemble(predict_matrix, true_response, "accuracy", "data/predictions/", index_train, index_test)
+}
 

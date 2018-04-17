@@ -55,5 +55,10 @@
     "model"  : "neural_net",
     "ind_grid_search"  : false,
     "grid_search_params"    : null
+  },
+  "ensemble" : {
+    "model"  : "ensemble",
+    "ind_grid_search"  : false,
+    "grid_search_params"    : null
   }
 }
