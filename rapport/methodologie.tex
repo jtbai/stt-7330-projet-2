@@ -85,3 +85,7 @@ L'hyper-paramètre epsilon controle (........_). Nous avons considéré les vale
 
 \subsubsection{Réseau de neuronnes}
 
+Finalement, nous avons fait la classification en entraînant un réseau de neurones profonds. Étant donné que le but premier de ce projet n'est pas de construire un réseau de neurones en soi, nous avons choisi une architecture relativement simple. Nous avons donc choisi un réseau à propagation avant avec 2 couches cachées et une couche de sortie à 3 neurones (un pour chacune des réponses). Puisque c'est un problème de classification à multiple classes, nous avons choisi comme mesure de perte la \textit{categorical-crossentropy} et comme métrique à optimiser la précision. La librairie utilisée est celle de \texttt{keras}.
+
+Considérant la nature de ce type de méthode, il est important de mentionner le fait que nous n'avons pas structuré les données de la même façon pour ce type de modèle. En effet, celui-ci est mieux adapté pour trouver des interactions et faire une sélection de variables. Ainsi, nous n'avons pas construit de variables précises (comme dans la méthode classiques), nous avons plutôt donné en entrée les données brutes au modèle.
+
