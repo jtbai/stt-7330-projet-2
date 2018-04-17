@@ -5,7 +5,7 @@
 # Author: Stéphane Caron
 # -------------------------------------------------------------------------
 
-create_predictions_matrix <- function(path_to_preds, models, index) {
+create_predictions_matrix <- function(path_to_preds, models) {
   
   predictions <- lapply(seq_along(models), function(model) {
     models[[model]]$model = fread(paste0(path_to_preds, "preds_model_", models[[model]]$model, ".csv"))
@@ -16,6 +16,6 @@ create_predictions_matrix <- function(path_to_preds, models, index) {
     models[[model]]$model
   })
   
-  return(predictions_matrix[index, ])
+  return(predictions_matrix)
   
 }

@@ -87,7 +87,7 @@ train_model_ensemble <- function(prediction_matrix, true_response, method, path_
   best_predictions <- getVoter(best_predict_matrix, best_weight)
   
   fwrite(data.frame(preds = best_predictions), file = paste0(path_to_preds, "preds_model_ensemble.csv"))
-  print(best_voters)
+
 }
 
 
