@@ -92,7 +92,6 @@ predict_models(model_inputs_without_neural_net, new_data = data_test, path_model
 predict_matrix <- create_predictions_matrix("data/predictions/", model_inputs)
 
 # Run ensemble model
-true_response_test <- import_data_modeling("data/data_modeling_classical_methods.csv", selected_group = c(train_groups, test_groups, validation_groups))$surface
-train_model_ensemble(predict_matrix[index_train], true_response_test[index_train], "accuracy", "data/predictions/")
-
+true_response <- import_data_modeling("data/data_modeling_classical_methods.csv", selected_group = c(train_groups, test_groups, validation_groups))$surface
+train_model_ensemble(predict_matrix, true_response, "accuracy", "data/predictions/", index_train, index_test)
 

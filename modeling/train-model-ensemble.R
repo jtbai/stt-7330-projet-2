@@ -44,15 +44,15 @@ getVoter <- function(predict_matrix, weight) {
   
 }
 
-train_model_ensemble <- function(prediction_matrix, true_response, method, path_to_preds) {
+train_model_ensemble <- function(prediction_matrix, true_response, method, path_to_preds, index_to_train, index_to_test) {
   
   total_number_of_voters <- ncol(prediction_matrix)
   
   # Calculate weights
-  current_weight <- calculateVoterWeights(prediction_matrix, true_response, method)
+  current_weight <- calculateVoterWeights(prediction_matrix[index_to_train], true_response[index_to_train], method)
   predictions <- getVoter(prediction_matrix, current_weight)
   
-  best_accuracy <- mean(predictions == true_response)
+  best_accuracy <- mean(predictions[index_to_test] == true_response[index_to_test])
   best_voters <- 1:total_number_of_voters
   
   # All combinations of voters
@@ -64,10 +64,10 @@ train_model_ensemble <- function(prediction_matrix, true_response, method, path_
       current_voters <- voter_combinations[, j]
       
       current_predict_matrix <- as.matrix(prediction_matrix)[, current_voters]
-      current_weight <- calculateVoterWeights(current_predict_matrix, true_response, method)
+      current_weight <- calculateVoterWeights(current_predict_matrix[index_to_train, ], true_response[index_to_train], method)
       current_predictions <- getVoter(current_predict_matrix, current_weight)
-      current_accuracy <- mean(current_predictions == true_response)
-      
+      current_accuracy <- mean(current_predictions[index_to_test] == true_response[index_to_test])
+
       if (current_accuracy > best_accuracy) {
         best_accuracy <- current_accuracy
         best_voters <- current_voters
@@ -76,18 +76,18 @@ train_model_ensemble <- function(prediction_matrix, true_response, method, path_
   }
   
   # Unique voter
-  if (max(getAccuracy(prediction_matrix, true_response) > best_accuracy)) {
-    best_accuracy <- max(getAccuracy(prediction_matrix, true_response))
-    best_voters <- which.max(getAccuracy(prediction_matrix, true_response))
+  if (max(getAccuracy(prediction_matrix[index_to_test], true_response[index_to_test]) > best_accuracy)) {
+    best_accuracy <- max(getAccuracy(prediction_matrix[index_to_test, ], true_response[index_to_test]))
+    best_voters <- which.max(getAccuracy(prediction_matrix[index_to_test, ], true_response[index_to_test]))
   }
   
   # Output best voters
   best_predict_matrix <- as.matrix(prediction_matrix)[, best_voters]
-  best_weight <- calculateVoterWeights(best_predict_matrix, true_response, method)
+  best_weight <- calculateVoterWeights(best_predict_matrix[index_to_train | index_to_test, ], true_response[index_to_train | index_to_test], method)
   best_predictions <- getVoter(best_predict_matrix, best_weight)
   
   fwrite(data.frame(preds = best_predictions), file = paste0(path_to_preds, "preds_model_ensemble.csv"))
-  
+  print(best_voters)
 }
 
 
