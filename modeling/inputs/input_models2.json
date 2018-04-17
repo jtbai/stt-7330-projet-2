@@ -1,0 +1,40 @@
+{ 
+  "bayes" : {
+    "model"  : "bayes",
+    "ind_grid_search"  : false,
+    "grid_search_params"    : null
+  },
+  "lda" : {
+    "model"  : "lda",
+    "ind_grid_search"  : false,
+    "grid_search_params"    : null
+  },
+  "qda" : {
+    "model"  : "qda",
+    "ind_grid_search"  : false,
+    "grid_search_params"    : null
+  },
+  "tree_based" : {
+    "model"  : "tree_based",
+    "ind_grid_search"  : true,
+    "grid_search_params"    : {
+      "minsplit"  : [2, 5, 10],
+      "maxdepth"  : [1, 3, 5, 8]
+    }
+  },
+  "multinomial" : {
+    "model"  : "multinomial",
+    "ind_grid_search"  : false,
+    "grid_search_params"    : null
+  },
+  "neural_net" : {
+    "model"  : "neural_net",
+    "ind_grid_search"  : false,
+    "grid_search_params"    : null
+  },
+  "ensemble" : {
+    "model"  : "ensemble",
+    "ind_grid_search"  : false,
+    "grid_search_params"    : null
+  }
+}
