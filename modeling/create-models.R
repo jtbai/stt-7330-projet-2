@@ -67,7 +67,7 @@ data_test <- import_data_modeling("data/data_modeling_classical_methods.csv", se
 
 # Train models and verify none are missing
 if (ind_train_model) {
-  train_model(model_inputs, data_train, "modeling/models/", 10)
+  train_model(model_inputs_without_neural_net, data_train, "modeling/models/", 10)
 } else {
   actual_models <- list.files("modeling/models/")
   modeles_to_verify <- paste0("model_", as.character(unlist(lapply(model_inputs, function(x){x$model}))))
