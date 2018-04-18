@@ -1,15 +1,39 @@
 \section{Méthodologie}
 
 \subsection{Présentation du jeu de données}
-Le jeu de données utilisé dans ce travail est composés de différentes statistiques sur les match officiels de l'association des professionnels de tennis depuis 1968. Il est distribuées par Jeff Sackmann via github. 
 
-Le jeu de données comprend la surface sur laquelle un match de tennis a été joué. C'est cette variable que la machine apprenante devra prédire.  Il s'agit d'une variable catégorielle pouvant prendre 3 valeurs  soit: Clay, Hard et Grass. Il y a environ 50 autres variables qui sont utilisées pour tenter d'expliquer la variable à prédire. Ces valeurs représentent soit des caractéristiques sur le tournois (Niveau, endoit), sur les joueurs (age, pays d'orgine, main forte) ou sur la partie (score final, nombre de ACE pour le gagnant, longueur de la partie en minute).
+Le jeu de données utilisé dans ce travail est composés de différentes statistiques sur les match officiels de l'association des professionnels de tennis (ATP) depuis 1968. Les données sont distribuées par Jeff Sackmann via \textbf{GitHub} et accessible sous ce \href{https://github.com/JeffSackmann/tennis_atp}{lien}.\\
+
+Le jeu de données comprend entres autres la surface sur laquelle un match de tennis a été joué. C'est cette variable que la machine apprenante devra prédire. Il s'agit d'une variable catégorielle pouvant prendre 3 valeurs soit: \textit{clay} (terre battue), \textit{hard} (dur) et \textit{grass} (gazon). Il y a environ 50 autres variables qui sont utilisées pour tenter d'expliquer la variable à prédire. Ces valeurs représentent des caractéristiques se rapportant à 3 catégories:
+
+\begin{enumerate}
+  \item informations sur le match
+    \begin{enumerate}
+      \item nom du tournoi
+      \item ville du tournoi
+      \item ...
+    \end{enumerate}
+  \item informations sur les joueurs
+    \begin{enumerate}
+      \item nom du joueur
+      \item nationalité du joueur
+      \item ...
+    \end{enumerate}
+  \item statistiques de la partie
+    \begin{enumerate}
+      \item temps en minutes du match
+      \item nombre d'as réalisés par le gagnant
+      \item nombre d'as réalisés par le perdant
+      \item ...
+    \end{enumerate}
+\end{enumerate}
 
 
 \subsection{Prétraîtement des données}
-L'information contenue dans le jeu de données étaient très clairsemée. Ce fléau de la dimentionnalité implique que l'apprentissage se faisait de façon sous optimale. Les modèles finaux peuvent ne pas être optimaux ou fiable. Afin de palier à ce problème nous avons décidé d'améliorer la qualité du jeu de données. Les différentes étapes ont été de nettoyager des données, l'identification et le traitement des valeurs manquantes, intégration et transformation des variables, et enfin la réduction de la dimensionnalité.
 
-- Nettoyage des données
+L'information contenue dans le jeu de données était très clairsemée. Le fléau de la dimensionnalité rend l'apprentissage beaucoup plus difficile dans un tel contexte. L'entraînement de modèles basé sur de telles données augmente donc les chances d'obtenir des modèles non optimal ou peu fiables. Afin de palier à ce problème, nous avons décidé d'améliorer la qualité du jeu de données. Les différentes étapes ont été de nettoyer les données, d'identifier le traitement des valeurs manquantes, d"intégrer et transformer certaines variables et enfin de réduire la dimensionnalité.\\
+
+\textbf{Nettoyage des données}\\
 Afin d'obtenir des données pouvant être utilisées par nos algorithmes, nous avons effectuée quelques transformation du jeu de données de base. Premièrement, nous avons enlevée toutes les parties ayant comme surface "carpet" car il n'y avait en avait pas suffisament. Les données dépendantes de la surface du jeu ont aussi été enlevée. En effet, dans le cas où ces données auraient été conservées, la machine apprenante aurait pu tout simplement utiliser ces variables et le classification aurait été triviale. Finalement, les variables considérées non informatives (telles le nom du joueur, la date du match, le numéro du match) ont été enlevée.
 
 - intégration et transformation des variables (\textit{Feature engineering}) 
