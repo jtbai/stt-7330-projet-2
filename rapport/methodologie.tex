@@ -12,7 +12,7 @@ L'information contenue dans le jeu de données étaient très clairsemée. Ce fl
 - Nettoyage des données
 Afin d'obtenir des données pouvant être utilisées par nos algorithmes, nous avons effectuée quelques transformation du jeu de données de base. Premièrement, nous avons enlevée toutes les parties ayant comme surface "carpet" car il n'y avait en avait pas suffisament. Les données dépendantes de la surface du jeu ont aussi été enlevée. En effet, dans le cas où ces données auraient été conservées, la machine apprenante aurait pu tout simplement utiliser ces variables et le classification aurait été triviale. Finalement, les variables considérées non informatives (telles le nom du joueur, la date du match, le numéro du match) ont été enlevée.
 
-- intégration et transformation des variables (\italic{Feature engineering}) 
+- intégration et transformation des variables (\textit{Feature engineering}) 
 Cette étape est cruciale car elle permet de créer d'autres variables non linairement dépendantes aux autre permettant d'avoir des information additionnelle qui n'existaient pas à priori dans le jeu de données. Le choix de ces variables est basé sur l'expérience et l'intuition du domaine et du jeu de données.
 Les variables qui ont été créees sont des ratios entre différents éléments du jeu de données.
 
@@ -76,7 +76,7 @@ Pour le modèle de forêt aléatoire, les hyper-paramètres utilisés sont cost 
 
 L'hyper-paramètre cost controle le la fréquence et la sévérité des violation de la marge.  En terme du compromis biais variance, l'augmentation de cost causera un biais plus grand, mais aura une variance plus petite. Nous avons considéré les valeur 0.90, 0.95, 0.99 et 1.
 
-L'hyper-paramètre epsilon controle (........_). Nous avons considéré les valeurs de 0.1,0.01 et.001. 
+L'hyper-paramètre epsilon controle. Nous avons considéré les valeurs de 0.1,0.01 et.001. 
 
 
 \subsection{Ajustement des modèles complexes}
