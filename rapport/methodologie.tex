@@ -1,10 +1,8 @@
 \section{Méthodologie}
 
 \subsection{Présentation du jeu de données}
-
 Le jeu de données utilisé dans ce travail est composés de différentes statistiques sur les match officiels de l'association des professionnels de tennis (ATP) depuis 1968. Les données sont distribuées par Jeff Sackmann via \textbf{GitHub} et accessible sous ce \href{https://github.com/JeffSackmann/tennis_atp}{lien}.\\
-
-Le jeu de données comprend entres autres la surface sur laquelle un match de tennis a été joué. C'est cette variable que la machine apprenante devra prédire. Il s'agit d'une variable catégorielle pouvant prendre 3 valeurs soit: \textit{clay} (terre battue), \textit{hard} (dur) et \textit{grass} (gazon). Il y a environ 50 autres variables qui sont utilisées pour tenter d'expliquer la variable à prédire. Ces valeurs représentent des caractéristiques se rapportant à 3 catégories:
+Le jeu de données comprend entres autres la surface sur laquelle un match de tennis a été joué. C'est cette variable que la machine apprenante devra prédire. Il s'agit d'une variable catégorielle pouvant prendre 3 valeurs soit: terre battue (\textit{clay}), dur (\textit{hard}) et gazon (\textit{grass}). Il y a environ 50 autres variables qui sont utilisées pour tenter d'expliquer la variable à prédire. Ces valeurs représentent des caractéristiques se rapportant à 3 catégories:
 
 \begin{enumerate}
   \item informations sur le match
@@ -28,80 +26,76 @@ Le jeu de données comprend entres autres la surface sur laquelle un match de te
     \end{enumerate}
 \end{enumerate}
 
-
-\subsection{Prétraîtement des données}
-
+\subsection{Prétraitement des données}
 L'information contenue dans le jeu de données était très clairsemée. Le fléau de la dimensionnalité rend l'apprentissage beaucoup plus difficile dans un tel contexte. L'entraînement de modèles basé sur de telles données augmente donc les chances d'obtenir des modèles non optimal ou peu fiables. Afin de palier à ce problème, nous avons décidé d'améliorer la qualité du jeu de données. Les différentes étapes ont été de nettoyer les données, d'identifier le traitement des valeurs manquantes, d"intégrer et transformer certaines variables et enfin de réduire la dimensionnalité.\\
 
-\textbf{Nettoyage des données}\\
-Afin d'obtenir des données pouvant être utilisées par nos algorithmes, nous avons effectuée quelques transformation du jeu de données de base. Premièrement, nous avons enlevée toutes les parties ayant comme surface "carpet" car il n'y avait en avait pas suffisament. Les données dépendantes de la surface du jeu ont aussi été enlevée. En effet, dans le cas où ces données auraient été conservées, la machine apprenante aurait pu tout simplement utiliser ces variables et le classification aurait été triviale. Finalement, les variables considérées non informatives (telles le nom du joueur, la date du match, le numéro du match) ont été enlevée.
+\subsubsection{Nettoyage des données}
+Afin d'obtenir des données pouvant être utilisées par nos algorithmes, nous avons effectué quelques transformations sur le jeu de données initial. Premièrement, nous avons enlevé tous les matchs ayant comme surface tapis (\textit{carpet}), car il n'y avait en avait pas suffisament et cela rendait la tâche de classification multi-classes beaucoup plus complexe. Les données dépendantes de la surface du jeu ont aussi été enlevées. En effet, dans le cas où ces données auraient été conservées, la machine apprenante aurait pu tout simplement utiliser ces variables et le classification aurait été triviale. Par exemple, le tournoi de Winbledon est toujours joué sur gazon, cela devient donc équivalent à laisser la variable réponse. Finalement, les variables considérées non informatives (telles le nom du joueur, la grandeur et le poids du joueur, etc) ont été enlevées.
 
-- intégration et transformation des variables (\textit{Feature engineering}) 
-Cette étape est cruciale car elle permet de créer d'autres variables non linairement dépendantes aux autre permettant d'avoir des information additionnelle qui n'existaient pas à priori dans le jeu de données. Le choix de ces variables est basé sur l'expérience et l'intuition du domaine et du jeu de données.
-Les variables qui ont été créees sont des ratios entre différents éléments du jeu de données.
+\subsubsection{Intégration et transformation des variables (\textit{Feature engineering})}
+Cette étape est cruciale dans un problème de modélisation, car elle permet de créer d'autres variables non linairement dépendantes aux autres permettant d'avoir des informations additionnelles qui n'étaient pas données en entré au modèle dans la structure initiale des données. Il s'agit donc d'aider le modèle en lui donnant certains inidices. Le choix de ces variables est généralement basé sur l'expérience et l'intuition du domaine et du jeu de données. Les variables qui ont été créées sont essentiellement des ratios entre différents éléments du jeu de données ou des déclencheurs lorsque certains évènements se sont produits lors du match.
 
-- Traitement des valeurs manquantes
-Il n'y avait pas réellement de valeur manquante dans le jeu de données initial. Nous avons cependant imputé des valeurs de 0 pour les ratios conçus précedemment pour lesquels la valeur etait infini (par une division par zero)
+\subsubsection{Traitement des valeurs manquantes}
+Il n'y avait pas réellement de données manquantes dans le jeu de données après avoir fait le premier prétraitement. Ainsi, nous avons utilisé l'analyse des cas complets étant donné qu'un pourcentage très minime des données étaient manquantes (environ 3\%). Nous avons cependant imputé des valeurs de 0 pour les ratios conçus précédemment pour lesquels il y avait une division par zéro.
 
-- Réduction de la dimensionalité
-Tel que mentionné ci-dessus, le jeu de données comprennait environ une cinquantaine de variables explicatives servant à entrainer un modèle. Ceci peut causer une problème si certaines de ces variables sont non-informatives ou redondantes. Il a été choisi de faire une analyse par composantes principales (PCA) du jeu de données. Celle-ci permet d'obtenir une représentation réduite conservant une grande partie de l'information, produisant les mêmes (ou presque) résultats analytiques. L'ACP a réduit le nombre des variables utilisées à 7, tout en maintenant une quatité de variance expliquée de 80 \%. 
+\subsubsection{Réduction de la dimensionalité}
+Tel que mentionné un peu plus tôt, le jeu de données comprend environ une cinquantaine de variables explicatives servant à entraîner un modèle. Ceci peut causer une problème si certaines de ces variables sont non-informatives ou redondantes. Nous avons donc considéré l'approche de faire une analyse en composantes principales (\textit{PCA}) sur le jeu de données et comparer les résultats ceux obtenus sur le jeu de données non réduit. Les projections construitres par l'ACP permet d'obtenir une représentation réduite conservant une grande partie de l'information, produisant les mêmes (ou presque) résultats analytiques. L'ACP a réduit le nombre des variables utilisées à 6, tout en conservant une variance totale supérieure à 80 \%.
 
 \subsection{Classifieurs utilisés}
+Les algorithmes d'apprentissage automatique utilisés pour le projet varient en complexité. Nous désirions tester différents niveaux de complexité afin de déterminer si une augmentation de la complexité était justifiée relativement à la qualité des prédictions. Nous avons librement sous-divisé les algorithme utilisés en 3 catégories distinctes.
 
-Les algorithmes d'apprentissage automatique utilisés pour le projets varient en complexité. Nous désirions tester différents niveaux de complexité afin de déterminer si une augmentation de la complexité était justifiée relativement à la qualité des prédictions. Nous avons librement sous divisés les algorithme en 3 catégories distinctes. 
+\subsubsection{Algorithmes simples}
+La première catégorie est composée d'algoritmes simples et ne demandant qu'une compréhension générale du modèle afin de les utiliser. Les modèles sont:
 
-La première catégorie d'algoritme les plus simple ne demande qu'une compréhension du modèle afin de l'utiliser. Les modèles comme 
-- le classifieur de naïf de Bayes, 
-- le classifieur régression logistique, 
-- l'analyse discriminante linéaire et 
-- l'analyse discriminante quadratique 
+\begin{enumerate}
+  \item le classifieur de naïf de Bayes
+  \item le classifieur régression logistique
+  \item l'analyse discriminante linéaire
+  \item l'analyse discriminante quadratique 
+\end{enumerate}
 
-font partie de cette première catégorie. Nous considérons qu'ils sont simple car ils sont utilisables directement avec une fonction R. 
+Nous considérons qu'ils sont simples, car ils sont utilisables directement avec une fonction R et ne demandent généralement pas de sélection d'hyperparamèetres complexes.
 
-La deuxième catégorie d'algoritmes sont un peu plus complexes et demandent un ajustement de leur hyper-paramètres. Les modèles comme 
-- le classifieur par arbre, 
-- le classifieur forêt aléatoire et 
-- le classifieur SVM 
+\subsubsection{Algorithmes intermédiaires}
+La deuxième catégorie est composée d'algoritmes un peu plus complexes et demandant un ajustement spécifique de leur hyperparamètres. Les modèles sont:
 
-font parti de cette deuxième catégories. La méthodologie de la sélection des hyper-paramètres est présentée dans une section ultérieure.
+\begin{enumerate}
+  \item le classifieur par arbre
+  \item le classifieur par forêt aléatoire
+  \item le classifieur SVM 
+\end{enumerate}
 
-Finalement, la troisième catégorie d'algoritme sont les plus complexe et demandent l'utilisation de l'expérience et l'intuition du statisticien. Les modèles comme 
-- les réseaux de neuronnes et 
-- le modèle par emsemble 
+La méthodologie entourant la sélection des hyperparamètres est présentée dans une section ultérieure.
 
-font parti de cette troisième catégorie. L'utilisation et l'architecture de ces modèles seront présentés dans une section ultérieure
+\subsubsection{Algorithmes complexes}
+Finalement, la troisième catégorie est composée d'algoritmes plus complexes et demandant l'utilisation de l'expérience et l'intuition du statisticien. Les modèles sont:
 
-\subsection{Ajustement des hyper-paramètres}
+\begin{enumerate}
+  \item les réseaux de neuronnes
+  \item le modèle par emsemble
+\end{enumerate}
 
-L'ajustement des hyper-paramètre a été faite par une recherche exhaustive. La technique de recherche par quadrillage (grid-search). Afin de ne pas surajuster les modèles lors de cette recherche, nous avons utilisés la validation croisée avec 10 plis.
+L'utilisation et l'architecture de ces modèles seront présentées dans une section ultérieure.
 
-La recherche par quadrillage est une technique permettant de trouver les meilleurs hyper-paramètres en essayant plusieurs combinaisons entre les différentes valeurs de chacun des hyper-paramètres. Comme notre connaissance du jeu de données était plutôt limité, nous avons décidés de considérer une large gamme de valeurs et de faire une recherche exhaustive pour chacune des combinaison d'hyper-parametre possibles.
+\subsection{Ajustement des hyperparamètres}
+L'ajustement des hypersparamètres a été faite par une recherche exhaustive. La technique de recherche par quadrillage (\textit{grid-search}). Afin de ne pas surajuster les modèles lors de cette recherche, nous avons utilisés la validation croisée avec 10 plis.\\
+La recherche par quadrillage est une technique permettant de trouver les meilleurs hyperparamètres en essayant toutes combinaisons entre les différentes valeurs prédéfinies de chacun de ces hyperparamètres. Comme notre connaissance du jeu de données était plutôt limitée, nous avons décidés de considérer une large gamme de valeurs et de faire une recherche exhaustive pour chacune des combinaison d'hyperparametres possibles.
 
+\subsubsection{Hyperparamètres du modèle par arbre}
+Pour le modèle par arbre, les hyperparamètres utilisés sont maxdepth et minsplit. \\
+L'hyperparamètre maxdepth controle la profondeur maximale de l'arbre. La profondeur maximale de l'arbre est en quelque sorte le nombre de divisions pouvant être réalisées dans le jeu de données. En termes du compromis biais-variance, une grande profondeur augmente la variance et réduit le biais. Nous avons considéré les valeurs 1, 3, 5 et 10.\\
+L'hyperparamètre minsplit controle le nombre de points de données minimum dans un noeud pour qu'il soit divisé. Ainsi plus ce paramètre est grand, plus l'arbre aura des feuille fournies. En termes du compromis biais-variance, un paramètre minsplit élevé donnera à l'arbre une variance faible mais un biais élevé. Nous avons considéré les valeurs de 2, 5, 8, 10, 15 et 20.
 
-\subsubsection{Hyper-paramètres du modèle par arbre}
-Pour le modèle par arbre, les hyper-paramètre utilisés sont maxdepth et minsplit. 
+\subsubsection{Hyperparamètres du modèle de forêt aléatoire}
+Pour le modèle de forêt aléatoire, les hyperparamètres utilisés sont mtry et ntree.\\
+L'hyperparamètre mtry contrôle le nombre de variables explicatives sélectionnées aléatoirement lors de la création d'un noeud. En termes du compromis biais-variance, l'augmentation de mtry causera un biais plus petit, mais aura une variance plus grande.  Nous avons considéré les valeurs 4, 8, 12 et 16.\\
+L'hyperparamètre ntree contrôle le nombre d'arbres générés aléatoirement pour créer le classifieur. Il est important d'avoir un nombre suffisamment grand afin de faire baisser la variance et ainsi se rapprocher d'une valeur optimale au niveau du compromis biais-variance. Nous avons considéré les valeurs de 700, 1000 et 2000.
 
-L'hyper-paramètre maxdepth controle la profondeur maximale de l'arbre. La profondeur maximale de l'arbre est en quelque sorte le nombre de divisions pouvant être faites dans le jeu de données. En terme du compromis biais variance, une grande profondeur augmente la variance et réduit le biais. Nous avons considéré les valeur 1, 3, 5 et 10
+\subsubsection{Hyperparamètres du modèle SVM}
+Pour le modèle SVM, les hyperparamètres utilisés sont cost et epsilon.\\
+L'hyperparamètre cost contrôle la fréquence et la sévérité des violations par rapport à la marge. En termes du compromis biais-variance, l'augmentation de cost causera un biais plus grand, mais aura une variance plus petite. Nous avons considéré les valeur 0.90, 0.95, 0.99 et 1.\\
 
-L'hyper-paramètre minsplit controle le nombre de point de données minimum dans un noeud pour qu'il soit divisé. Ainsi plus ce paramètre est grand, plus l'arbre aura des feuille fournies. En terme du compromis biais variance, un paramètre minsplit élevé donnera à l'arbre une variance faible mais un biais élevé. Nous avons considéré les valeurs de 2, 5, 8, 10, 15 et 20
-
-
-\subsubsection{Hyper-paramètres du modèle de forêt aléatoire}
-Pour le modèle de forêt aléatoire, les hyper-paramètres utilisés sont mtry et ntree. 
-
-L'hyper-paramètre mtry controle le nombre de variable explicative sélectionnées aléatoirement lors de la création d'un noeud.  En terme du compromis biais variance, l'augmentation de mtry causera un biais plus petit, mais aura une variance plus grande.  Nous avons considéré les valeur 4, 8, 12 et 16.
-
-L'hyper-paramètre ntree controle le nombre d'arbre générés aléatoirement pour créer le classificateur. Il est important d'avoir un nombre suffisament grand afin de faire baisser la variance et ainsi atteindre le compromis biais variance optimal. Nous avons considéré les valeurs de 700, 1000 et 2000. 
-
-
-
-\subsubsection{Hyper-paramètres du modèle SVM}
-Pour le modèle de forêt aléatoire, les hyper-paramètres utilisés sont cost et epsilon. 
-
-L'hyper-paramètre cost controle le la fréquence et la sévérité des violation de la marge.  En terme du compromis biais variance, l'augmentation de cost causera un biais plus grand, mais aura une variance plus petite. Nous avons considéré les valeur 0.90, 0.95, 0.99 et 1.
-
-L'hyper-paramètre epsilon controle. Nous avons considéré les valeurs de 0.1,0.01 et.001. 
-
+L'hyperparamètre epsilon contrôle .... Nous avons considéré les valeurs de 0.1,0.01 et.001. 
 
 \subsection{Ajustement des modèles complexes}
 
