@@ -104,7 +104,5 @@ if (length(input_model_ensemble) != 0) {
   train_model_ensemble(predict_matrix, true_response, "accuracy", "data/predictions/", index_train, index_test)
 }
 
-test <- list(index_train = index_train, index_test = index_test, index_validation, index_validation)
-
 predict_models_rapport(models = model_inputs, list_index = list(index_train = index_train, index_test = index_test, index_validation, index_validation), path_rapport ="" , path_preds="data/predictions/")
 
