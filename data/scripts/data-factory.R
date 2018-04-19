@@ -21,8 +21,6 @@ library(tidyr)
 year_from <- 2005
 year_to <- 2017
 
-set.seed(666) # Number of the beast
-
 # Split data for each player in classical methods
 # TRUE: Stats for each winner and loser
 # FALSE: Stats summarized (summed up) for the winner and loser
