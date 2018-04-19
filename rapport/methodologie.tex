@@ -54,10 +54,10 @@ La première catégorie est composée d'algoritmes simples et ne demandant qu'un
   \item l'analyse discriminante quadratique 
 \end{enumerate}
 
-Nous considérons qu'ils sont simples, car ils sont utilisables directement avec une fonction R et ne demandent généralement pas de sélection d'hyperparamèetres complexes.
+Nous considérons qu'ils sont simples, car ils sont utilisables directement avec une fonction R et ne demandent généralement pas de sélection d'hyperparamèetres complexes. De plus, ce sont des modèles paramétriques qui font l'hypothèse qu'il est possible de modéliser les données ** je suis pas clair ici **. 
 
 \subsubsection{Algorithmes intermédiaires}
-La deuxième catégorie est composée d'algoritmes un peu plus complexes et demandant un ajustement spécifique de leur hyperparamètres. Les modèles sont:
+La deuxième catégorie est composée d'algoritmes un peu plus complexes et demandant un ajustement spécifique de leur hyperparamètres. Ces modèles sont discriminants, c'est à dire qu'ils ne font pas d'hypothèse sur la distribution des données. Les modèles sont:
 
 \begin{enumerate}
   \item le classifieur par arbre
@@ -68,7 +68,7 @@ La deuxième catégorie est composée d'algoritmes un peu plus complexes et dema
 La méthodologie entourant la sélection des hyperparamètres est présentée dans une section ultérieure.
 
 \subsubsection{Algorithmes complexes}
-Finalement, la troisième catégorie est composée d'algoritmes plus complexes et demandant l'utilisation de l'expérience et l'intuition du statisticien. Les modèles sont:
+Finalement, la troisième catégorie est composée d'algoritmes plus complexes et demandant l'utilisation de l'expérience et l'intuition du statisticien. Ce sont des modèles qui n'ont pas été étudiés dans le cours STT-7330 mais qui ont été explorés car ils sont généralement très performants dans les tâches de classification . Les modèles sont:
 
 \begin{enumerate}
   \item les réseaux de neuronnes
@@ -92,18 +92,34 @@ L'hyperparamètre mtry contrôle le nombre de variables explicatives sélectionn
 L'hyperparamètre ntree contrôle le nombre d'arbres générés aléatoirement pour créer le classifieur. Il est important d'avoir un nombre suffisamment grand afin de faire baisser la variance et ainsi se rapprocher d'une valeur optimale au niveau du compromis biais-variance. Nous avons considéré les valeurs de 700, 1000 et 2000.
 
 \subsubsection{Hyperparamètres du modèle SVM}
-Pour le modèle SVM, les hyperparamètres utilisés sont cost et epsilon.\\
+Pour le modèle SVM, les hyperparamètres utilisés sont cost et epsilon ($C$ et $ICITTE$ dans la notation utilisée dans le cours).\\
 L'hyperparamètre cost contrôle la fréquence et la sévérité des violations par rapport à la marge. En termes du compromis biais-variance, l'augmentation de cost causera un biais plus grand, mais aura une variance plus petite. Nous avons considéré les valeur 0.90, 0.95, 0.99 et 1.\\
 
-L'hyperparamètre epsilon contrôle .... Nous avons considéré les valeurs de 0.1,0.01 et.001. 
+Alors que le modèle SVM maximise la marge entre deux classes, le paramètre $\xi$ contrôle l'erreur relative à la marge que le classifieur peut 
+
+
+Nous avons considéré les valeurs de 0.1,0.01 et.001. 
 
 \subsection{Ajustement des modèles complexes}
-
-\subsubsection{Modèles par ensembles}
 
 \subsubsection{Réseau de neuronnes}
 
 Finalement, nous avons fait la classification en entraînant un réseau de neurones profonds. Étant donné que le but premier de ce projet n'est pas de construire un réseau de neurones en soi, nous avons choisi une architecture relativement simple. Nous avons donc choisi un réseau à propagation avant avec 2 couches cachées et une couche de sortie à 3 neurones (un pour chacune des réponses). Puisque c'est un problème de classification à multiple classes, nous avons choisi comme mesure de perte la \textit{categorical-crossentropy} et comme métrique à optimiser la précision. La librairie utilisée est celle de \texttt{keras}.
 
 Considérant la nature de ce type de méthode, il est important de mentionner le fait que nous n'avons pas structuré les données de la même façon pour ce type de modèle. En effet, celui-ci est mieux adapté pour trouver des interactions et faire une sélection de variables. Ainsi, nous n'avons pas construit de variables précises (comme dans la méthode classiques), nous avons plutôt donné en entrée les données brutes au modèle.
+
+
+\subsubsection{Modèles par ensembles}
+
+Les modèles par ensemble sont inspirés du proverbe \guillemotleft . Par exemple, si il y a trois classifieurs indépendants qui ont une exactitude de 0.65 et qu'on utilise un modèle de vote majoritaire, la probabilité que la majorité se trompe est 
+
+$$$$
+
+
+
+
+
+
+
+
 
