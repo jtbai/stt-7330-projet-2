@@ -31,7 +31,7 @@ source("modeling/train-models.R")
 source("modeling/output_predict.R")
 source("modeling/create-predictions-matrix.R")
 source("modeling/train-model-ensemble.R")
-
+source("modeling/preds_rapport.R")
 
 # Define global configuration ---------------------------------------------
 
@@ -99,8 +99,10 @@ predict_models(model_inputs_classical, new_data = data_test, path_models = "mode
 predict_matrix <- create_predictions_matrix("data/predictions/", model_inputs_classical)
 
 # Run ensemble model
+true_response <- import_data_modeling("data/data_modeling_classical_methods.csv", selected_group = c(train_groups, test_groups, validation_groups))$surface
 if (length(input_model_ensemble) != 0) {
-  true_response <- import_data_modeling("data/data_modeling_classical_methods.csv", selected_group = c(train_groups, test_groups, validation_groups))$surface
   train_model_ensemble(predict_matrix, true_response, "accuracy", "data/predictions/", index_train, index_test)
 }
+
+predict_models_rapport(models = model_inputs, true_response=true_response, list_index = list(index_train = index_train, index_test = index_test, index_validation, index_validation), path_rapport ="" , path_preds="data/predictions/")
 
