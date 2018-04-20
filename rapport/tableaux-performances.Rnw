@@ -71,26 +71,26 @@ colnames(performance_validation_pca) <- c("modeles", as.character(get_performanc
 setkey(performance_train, modeles)
 setkey(performance_train_pca, modeles)
 performance_train_tot <- merge(performance_train, performance_train_pca, all.x = TRUE)
-performance_train_tot$modeles <- c("Bayes", "Ensemble", "LDA", "Multinomial", "Réseau de neurones", "QDA", "Forêt aléatoire", "SVM Gaussien", "Arbre de décision")
+performance_train_tot$modeles <- c("Bayes", "Ensemble", "LDA", "Multinomial", "Réseau de neurones", "QDA", "Forêt aléatoire", "SVM Gaussien", "SVM Polynomial de degré 3", "Arbre de décision")
 performance_train_tot <- performance_train_tot[order(-average_accuracy.x)]
 
 setkey(performance_test, modeles)
 setkey(performance_test_pca, modeles)
 performance_test_tot <- merge(performance_test, performance_test_pca, all.x = TRUE)
-performance_test_tot$modeles <- c("Bayes", "Ensemble", "LDA", "Multinomial", "Réseau de neurones", "QDA", "Forêt aléatoire", "SVM Gaussien", "Arbre de décision")
+performance_test_tot$modeles <- c("Bayes", "Ensemble", "LDA", "Multinomial", "Réseau de neurones", "QDA", "Forêt aléatoire", "SVM Gaussien", "SVM Polynomial de degré 3", "Arbre de décision")
 performance_test_tot <- performance_test_tot[order(-average_accuracy.x)]
 
 @
 
 <<performances, echo=FALSE, results=tex>>=
-kable(performance_train_tot, format = "latex", digits = 2, row.names = FALSE, col.names = c("Modèles", "Exactitude", "F-Score", "Exactitude avec PCA", "F-Score avec PCA"), align = c("l", rep("c", length(ncol(performance_train) - 1))), booktabs = T, caption = "Performances des différents modèles sur le jeu de données d'entraînement selon les différentes mesures de performance.") %>% kable_styling(latex_options = c("striped", "scale_down"))
+kable(performance_train_tot, format = "latex", digits = 4, row.names = FALSE, col.names = c("Modèles", "Exactitude", "F-Score", "Exactitude avec PCA", "F-Score avec PCA"), align = c("l", rep("c", length(ncol(performance_train) - 1))), booktabs = T, caption = "Performances des différents modèles sur le jeu de données d'entraînement selon les différentes mesures de performance.") %>% kable_styling(latex_options = c("striped", "scale_down"))
 
-kable(performance_test_tot, format = "latex", digits = 2, row.names = FALSE, col.names = c("Modèles", "Exactitude", "F-Score", "Exactitude avec PCA", "F-Score avec PCA"), align = c("l", rep("c", length(ncol(performance_test) - 1))), booktabs = T, caption = "Performances des différents modèles sur le jeu de données de test selon les différentes mesures de performance.") %>% kable_styling(latex_options = c("striped", "scale_down"))
+kable(performance_test_tot, format = "latex", digits = 4, row.names = FALSE, col.names = c("Modèles", "Exactitude", "F-Score", "Exactitude avec PCA", "F-Score avec PCA"), align = c("l", rep("c", length(ncol(performance_test) - 1))), booktabs = T, caption = "Performances des différents modèles sur le jeu de données de test selon les différentes mesures de performance.") %>% kable_styling(latex_options = c("striped", "scale_down"))
 
 @
 
 <<confusion_matrix, echo=FALSE, results=tex>>=
-chosen_model <- "neural_net.preds"
+chosen_model <- "multinomial.preds"
 confusion_matrix <- function(preds, true_response) {
   
   nb_classes <- length(unique(preds))
@@ -103,7 +103,7 @@ confusion_matrix <- function(preds, true_response) {
   confusion_matrix
 }
 
-confusion_matrix <- confusion_matrix(preds = prediction[[chosen_model]], true_response = prediction[["true_response"]])
+confusion_matrix <- confusion_matrix(preds = unlist(prediction[split == "validation", (chosen_model), with = F]), true_response = unlist(prediction[split == "validation", true_response]))
 colnames(confusion_matrix) <- c("Hard", "Clay", "Grass")
 rownames(confusion_matrix) <- c("Hard", "Clay", "Grass")
 

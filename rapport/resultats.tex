@@ -35,12 +35,12 @@ Dans le cadre de ce problème, nous utiliserons les métriques de type micro car
 
 Dans le tableau \ref{tab:perfo_test}, nous présenterons l'exactitude et le score F pour chacun des classifieurs pour le jeu de données complet et à dimensionnalité réduite. Le choix du modèle final sera fait en considérant ces deux statistiques. \\
 
-Comme le Score F agrège les concepts de précision et rappel, il a été choisi de ne pas présenter ces deux dernières. En effet, le but de notre classification est de donner la meilleure prédiction, peu importe la classe, et il n'y a pas d'erreur plus grave qu'une autre. L'exactitude ou le Score F1 sont deux métriques appropriées pour l'évaluation de notre classifieur. Dans le cas où il y aurait une très grande différence entre le Score F1 et l'exactitude, il pourrait être intéressant de bien comprendre d'où vient cet écart en analysant les ratios intermédiaires de précision et de rappel.
+Comme le F-Score agrège les concepts de précision et rappel, il a été choisi de ne pas présenter ces deux dernières. En effet, le but de notre classification est de donner la meilleure prédiction, peu importe la classe, et il n'y a pas d'erreur plus grave qu'une autre. L'exactitude ou le Score F1 sont deux métriques appropriées pour l'évaluation de notre classifieur. Dans le cas où il y aurait une très grande différence entre le Score F1 et l'exactitude, il pourrait être intéressant de bien comprendre d'où vient cet écart en analysant les ratios intermédiaires de précision et de rappel.
 
 \rowcolors{2}{white}{white}\rowcolors{2}{gray!6}{white}
 \begin{table}[H]
 	
-\caption{\label{tab:}Performances des différents modèles sur le jeu de données de test selon les différentes mesures de performance.}
+\caption{\label{tab:perfo_test}Performances des différents modèles sur le jeu de données de test selon les différentes mesures de performance.}
 \centering
 \resizebox{\linewidth}{!}{\begin{tabular}[t]{lclcl}
 		\hiderowcolors
@@ -48,24 +48,24 @@ Comme le Score F agrège les concepts de précision et rappel, il a été choisi
 		Modèles & Exactitude & F-Score & Exactitude avec PCA & F-Score avec PCA\\
 		\midrule
 		\showrowcolors
-		Réseau de neurones & 0.7843 & 0.8382 & s/o & s/o\\
-		Ensemble & 0.7614 & 0.8210 & 0.75 & 0.81 \\
-		Multinomial & 0.7614 & 0.8210 & 0.75 & 0.81\\
-		LDA & 0.7571 & 0.8178 & 0.75 & 0.81 \\
-		Forêt aléatoire & 0.7555 & 0.8166 & s/o & s/o\\
-		Arbre de décision & 0.7553 & 0.8165 & s/o & s/o\\
-		Bayes & 0.7465 & 0.8099 & 0.74 & 0.80\\
-		QDA & 0.7224 & 0.7918 & 0.74 & 0.80 \\
-		SVM Gaussien & 0.7018 & 0.7763 & s/o & s/o\\
+		Réseau de neurones & 0.7843 & 0.8382 & NA & NA\\
+    Ensemble & 0.7614 & 0.8210 & 0.7528 & 0.8146\\
+    Multinomial & 0.7614 & 0.8210 & 0.7499 & 0.8124\\
+    LDA & 0.7571 & 0.8178 & 0.7481 & 0.8111\\
+    Forêt aléatoire & 0.7553 & 0.8165 & s/o & s/o\\
+    SVM Polynomial de degré 3 & 0.7553 & 0.8165 & s/o & s/o\\
+    Arbre de décision & 0.7465 & 0.8099 & 0.7398 & 0.8048\\
+    QDA & 0.7224 & 0.7918 & 0.7357 & 0.8018\\
+    Bayes & 0.7114 & 0.7836 & 0.7431 & 0.8074\\
+    SVM Gaussien & 0.7018 & 0.7763 & s/o & s/o\\
 		\bottomrule
 \end{tabular}}
 
 \end{table}
 
-En analysant les résultats ci-dessus, on remarque que le meilleur modèle est le réseau de neurones suivi de très près par des modèles beaucoup plus simple. Seulement 2\% séparent les deux métriques d'intérêt. On remarque aussi que les modèles. On rappelle ici que l'équipe désirait trouver le meilleur modèle en considérant une complexité appropriée au problème. Ainsi, malgré que le réseau de neurone soit un peu plus performant, nous choisirons le modèle multinomial, car il est beaucoup plus simple. De plus, il est possible que la différence notée dans les métriques de qualité soit due au hasard, supportant une fois de plus notre choix de modèle. 
+En analysant les résultats ci-dessus, on remarque que le meilleur modèle est le réseau de neurones suivi de très près par des modèles beaucoup plus simples. Seulement 2\% séparent les deux métriques d'intérêt. On remarque aussi l'effet de nivellement causé par l'analyse en composantes principales sur les résultats. En gros, on voit le fait de réduire la dimension et de structurer les données de manière non supervisée avant l'entraînement rapproche les performances des différents modèles. Toutefois, les modèles qui étaient les meilleurs ont perdu de la performance, ce qui n'est pas nécéssairement l'effet désiré. Ainsi, nous avons décidé de ne pas allé plus loin en termes de réduction de dimensionnalité, mais il aurait pu être possible de tester différentes avenues comme l'ACP par noyaux où des relations non linéaires peuvent être ajoutées. On rappelle aussi que l'équipe désirait trouver le meilleur modèle en considérant une complexité appropriée au problème. Ainsi, malgré que le réseau de neurone soit un peu plus performant, nous avons choisi le modèle multinomial, car il est beaucoup plus simple et nous avons une meilleure compréhension générale de ce modèle, ce qui rend nous plus confiant dans notre choix. De plus, il est possible que la différence notée dans les métriques de qualité soit due au hasard, supportant une fois de plus notre choix de modèle. 
  
 \subsection{Présentation du modèle final}
-
 Le modèle que nous avons choisi pour prédire les surfaces sur lesquelles les matchs de tennis ont été joués est le modèle multinomial. En utilisant un jeu de données qui avait été gardé secret tout au long du projet, ce modèle à une exactitude de 75.3\% et un score F1 de 81.5\%. La distribution des erreurs qu'il fait est présentée dans la matrice de confusion ci-dessous.
 
 \rowcolors{2}{white}{white}
