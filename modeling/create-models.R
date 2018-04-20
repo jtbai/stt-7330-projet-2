@@ -104,5 +104,5 @@ if (length(input_model_ensemble) != 0) {
   train_model_ensemble(predict_matrix, true_response, "accuracy", "data/predictions/", index_train, index_test)
 }
 
-predict_models_rapport(models = model_inputs, true_response=true_response, list_index = list(index_train = index_train, index_test = index_test, index_validation, index_validation), path_rapport ="" , path_preds="data/predictions/")
+predict_models_rapport(models = model_inputs, true_response=true_response, list_index = list(index_train = index_train, index_test = index_test, index_validation = index_validation), path_rapport ="rapport/data/" , path_preds="data/predictions/")
 
