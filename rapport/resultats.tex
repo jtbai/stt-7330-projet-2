@@ -5,13 +5,13 @@ Maintenant que les différents modèles à entraîner ainsi que leurs hyperparam
 \subsection{Évaluation des performances}
 Dans le but d'orienter notre choix de modèle, nous devons définir des mesures de performances qui permettront de comparer les modèles entres eux. \\
 
-Dans les tâches de classification, les métriques que nous utilisons mettent l'emphase sur différents objectifs de classification. On pourrait vouloir par exemple mesurer la capacité du classifieur à prédire une bonne classe, la capacité de ne pas faire de fausses prédictions et/ou de ne jamais manquer de cas positifs. Ces mesures sont utilisées dans le cas binaire, où le classifier doit choisir une classe ou l'autre. Dans le cas du problème actuel, l'utilisation de 3 classes impose qu'une transformation vers plusieurs problèmes binaires soit faite afin de pouvoir calculer ces métriques. \\
+Dans les tâches de classification, les métriques que nous utilisons mettent l'emphase sur différents objectifs de classification. On pourrait vouloir par exemple mesurer la capacité du classifieur à prédire une bonne classe, la capacité de ne pas faire de fausses prédictions et/ou de ne jamais manquer de cas positifs. Ces mesures sont utilisées dans le cas binaire, où le classifier doit choisir soit une classe ou l'autre. Dans le  problème actuel, l'utilisation de 3 classes impose qu'une transformation vers plusieurs problèmes binaires soit faite afin de pouvoir calculer ces métriques. \\
 
-Afin de transformer le problème de classification multiclasse en classification binaire, chaque classe sera prise indépendamment et sera confrontée aux 2 autres agrégées ensemble (méthode tous contre un). Cela revient à faire 3 classifications binaires. Afin de n'avoir qu'une seule métrique, une stratégie d'aggrégation doit être mise en place. \\ Une stratégie serait d'attribuer un poids identique à chacunes des métriques générées par les 3 classifieurs binaires. Ce sont les métrique de type macro qu'on utilise lorsqu'une classe minoritaire doit être considérée aussi importante que les autres classes. \\ Une autre stratégie serait d'attribuer des poids proportionnels à la quantité de données appartenant à chacune des classes aux métriques générées par les 3 classifieurs binaires. Ce sont les métriques de type micro qu'on utilise lorsque qu'aucune classe n'a plus d'importance qu'une autre - ou qu'il n'y a pas d'incitatif à prédire une classe plus qu'une autre. \\
+Afin de transformer le problème de classification multiclasse en classification binaire, chaque classe sera prise indépendamment et sera confrontée aux 2 autres agrégées ensemble (méthode tous contre un). Cela revient à faire 3 classifications binaires. Une stratégie d'aggrégation doit être mise en place pour sommariser les statistiques des 3 classifiers. \\ Une stratégie serait d'attribuer un poids identique à chacunes des métriques générées par les 3 classifieurs binaires. Ce sont les métrique de type macro qu'on utilise lorsqu'une classe minoritaire doit être considérée aussi importante que les autres classes. \\ Une autre stratégie serait d'attribuer des poids proportionnels à la quantité de données appartenant à chacune des classes aux métriques générées par les 3 classifieurs binaires. Ce sont les métriques de type micro qu'on utilise lorsque qu'aucune classe n'a plus d'importance qu'une autre - ou qu'il n'y a pas d'incitatif à prédire une classe plus qu'une autre. \\
 
 Dans le cadre de ce problème, nous utiliserons les métrique de type micro car il n'y a pas de classe ayant besoin d'une attention accrue. Formellement, pour chaque classe $l$, les métriques utilisées sont: \\
 
-- Exactitude (Taux de bonnes détections): l'exactitude est le pouvoir du classificateur à prédire la bonne classe pour une observation donnée.\\
+- Exactitude (Taux de bonnes détections): l'exactitude est le pouvoirédu classificateur à prédire la bonne classe pour une observation donnée.\\
 \begin{center}
 	$\textrm{Exactitude} = \frac{\sum_{i=1}^{l} \frac{tp_i +tn_i}{tp_i + fn_i + fp_i+ tn_i}}{l}$
 \end{center}
@@ -31,66 +31,43 @@ Dans le cadre de ce problème, nous utiliserons les métrique de type micro car 
 	$\textrm{Rappel} = \frac{\sum_{i=1}^{l} tp_i}{\sum_{i=1}^{l} (tp_i + fn_i)}$
 \end{center}
 
-- Score F: le score F est la moyenne harmonique du précision et du rappel. Elle sert de mesure agrégée sur laquelle prendre une décision.\\
+- Score F: le score F est la moyenne harmonique du précision et du rappel. Elle sert de mesure agrégée sur laquelle prendre une décision. classe.\\	
 \begin{center}
-	$\textrm{Score F} = \frac{2 * \textrm{Précision} * \textrm{Rappel}}{\textrm{Précision} + \textrm{Rappel}}$
+	$\textrm{Score F} = \frac{2 * \textrm{Précision} * \textrm{Rappel}}{\textrm{Précision} + \textrm{Rappel}}$ 
 \end{center}
 
-Dans les tableaux suivants, nous présenteront l'exactitude et le score F pour chacun des classifieurs. Comme le Score F agrégège les concepts de précision et rappel, il a été choisi de ne pas présenter ces deux dernières. En effet, le but de notre classification est de donner la meilleure prédiction, peut importe la classe et il n'y a pas d'erreur plus grave qu'une autre. L'exactitude ou le Score F1 sont deux métriques appropriées pour l'évaluation de notre classifieur. Dans le cas où il y aurait une grande différence entre le Score F1 et l'exactitude, il pourrait être intéressant de bien comprendre d'ou vient cet écart en regardant les ratios intermédiaire de précision et de rappel.
-
-Le tableau \ref{tab:perfo_train} présente les résultats des différents modèles sur le jeu de données d'entraînement selon les mesures de performance définies plus tôt, alors que le tableau \ref{tab:perfo_test} présente les résultats sur le jeu de données test.
-
-\rowcolors{2}{gray!6}{white}
-\begin{table}
-
-\caption{\label{tab:perfo_train}Performances des différents modèles sur le jeu de données d'entraînement selon les différentes mesures de performance.}
-\centering
-\resizebox{\linewidth}{!}{\begin{tabular}[t]{lcccccccccc}
-\hiderowcolors
-\toprule
-Mesure & bayes & lda & qda & tree\_based & random\_forest & svm\_gaussien & svm\_ploy3 & multinomial & neural\_net & ensemble\\
-\midrule
-\showrowcolors
-average\_accuracy & 0.70 & 0.75 & 0.72 & 0.74 & 1.00 & 0.69 & 0.75 & 0.75 & 0.65 & 0.75\\
-error\_rate & 0.30 & 0.25 & 0.28 & 0.26 & 0.00 & 0.31 & 0.25 & 0.25 & 0.35 & 0.25\\
-precision\_u & 0.78 & 0.81 & 0.79 & 0.81 & 1.00 & 0.77 & 0.81 & 0.81 & 0.73 & 0.81\\
-recall\_u & 0.78 & 0.81 & 0.79 & 0.81 & 1.00 & 0.77 & 0.81 & 0.81 & 0.73 & 0.81\\
-Fscore\_u & 0.78 & 0.81 & 0.79 & 0.81 & 1.00 & 0.77 & 0.81 & 0.81 & 0.73 & 0.81\\
-\addlinespace
-precision\_m & 0.26 & 0.27 & 0.26 & 0.27 & 0.33 & 0.26 & 0.27 & 0.27 & 0.24 & 0.27\\
-recall\_m & 0.26 & 0.27 & 0.26 & 0.27 & 0.33 & 0.26 & 0.27 & 0.27 & 0.24 & 0.27\\
-Fscore\_m & 0.26 & 0.27 & 0.26 & 0.27 & 0.33 & 0.26 & 0.27 & 0.27 & 0.24 & 0.27\\
-\bottomrule
-\end{tabular}}
-\end{table}
-\rowcolors{2}{white}{white}\rowcolors{2}{gray!6}{white}
-\begin{table}
-
-\caption{\label{tab:perfo_test}Performances des différents modèles sur le jeu de données test selon les différentes mesures de performance.}
-\centering
-\resizebox{\linewidth}{!}{\begin{tabular}[t]{lcccccccccc}
-\hiderowcolors
-\toprule
-Mesure & bayes & lda & qda & tree\_based & random\_forest & svm\_gaussien & svm\_ploy3 & multinomial & neural\_net & ensemble\\
-\midrule
-\showrowcolors
-average\_accuracy & 0.71 & 0.76 & 0.72 & 0.75 & 0.75 & 0.70 & 0.76 & 0.76 & 0.65 & 0.76\\
-error\_rate & 0.29 & 0.24 & 0.28 & 0.25 & 0.25 & 0.30 & 0.24 & 0.24 & 0.35 & 0.24\\
-precision\_u & 0.78 & 0.82 & 0.79 & 0.81 & 0.81 & 0.78 & 0.82 & 0.82 & 0.73 & 0.82\\
-recall\_u & 0.78 & 0.82 & 0.79 & 0.81 & 0.81 & 0.78 & 0.82 & 0.82 & 0.73 & 0.82\\
-Fscore\_u & 0.78 & 0.82 & 0.79 & 0.81 & 0.81 & 0.78 & 0.82 & 0.82 & 0.73 & 0.82\\
-\addlinespace
-precision\_m & 0.26 & 0.27 & 0.26 & 0.27 & 0.27 & 0.26 & 0.27 & 0.27 & 0.24 & 0.27\\
-recall\_m & 0.26 & 0.27 & 0.26 & 0.27 & 0.27 & 0.26 & 0.27 & 0.27 & 0.24 & 0.27\\
-Fscore\_m & 0.26 & 0.27 & 0.26 & 0.27 & 0.27 & 0.26 & 0.27 & 0.27 & 0.24 & 0.27\\
-\bottomrule
-\end{tabular}}
-\end{table}
-\rowcolors{2}{white}{white}
-
-
 \subsection{Choix du modèle}
-Note: Ici on pourrait evident comparer les performances plus haut mais aussi parler de l'interpretation et voir si le trade-off en vaut la peine ...
+
+Dans le tableau \ref{tab:perfo_test}, nous présenterons l'exactitude et le score F pour chacun des classifieurs pour le jeu de données complet et à dimentionnalité réduite. Le choix du modèle final sera fait en considérant ces deux statistiques. \\
+
+Comme le Score F agrégège les concepts de précision et rappel, il a été choisi de ne pas présenter ces deux dernières. En effet, le but de notre classification est de donner la meilleure prédiction, peut importe la classe et il n'y a pas d'erreur plus grave qu'une autre. L'exactitude ou le Score F1 sont deux métriques appropriées pour l'évaluation de notre classifieur. Dans le cas où il y aurait une grande différence entre le Score F1 et l'exactitude, il pourrait être intéressant de bien comprendre d'ou vient cet écart en analyant les ratios intermédiaires de précision et de rappel.
+
+\rowcolors{2}{white}{white}\rowcolors{2}{gray!6}{white}
+\begin{table}[H]
+	
+	\caption{\label{tab:perfo_test}Performances des différents modèles sur le jeu de données de test selon les différentes mesures de performance.}
+	\centering
+	\resizebox{\linewidth}{!}{\begin{tabular}[t]{lclcl}
+			\hiderowcolors
+			\toprule
+			Modèles & Exactitude & F-Score & Exactitude avec PCA & F-Score avec PCA\\
+			\midrule
+			\showrowcolors
+			Réseau de neurones & 0.78 & 0.84 & NA & NA\\
+			Ensemble & 0.76 & 0.82 & 0.75 & 0.81\\
+			Multinomial & 0.76 & 0.82 & 0.75 & 0.81\\
+			LDA & 0.76 & 0.82 & 0.75 & 0.81\\
+			Forêt aléatoire & 0.76 & 0.82 & NA & NA\\
+			\addlinespace
+			Arbre de décision & 0.76 & 0.82 & NA & NA\\
+			Bayes & 0.75 & 0.81 & 0.74 & 0.80\\
+			QDA & 0.72 & 0.79 & 0.74 & 0.80\\
+			Bayes & 0.71 & 0.78 & 0.74 & 0.81\\
+			SVM Gaussien & 0.70 & 0.78 & NA & NA\\
+			\bottomrule
+	\end{tabular}}
+\end{table}
+
 
 \subsection{Présentation du modèle final}
 
@@ -98,20 +75,20 @@ Note: Ici on roule le modele sur les donnees de validation (split group = 3), on
 
 \rowcolors{2}{white}{white}
 \rowcolors{2}{gray!6}{white}
-\begin{table}
-\caption{\label{tab:}Matrice de confusion pour le modèle final.}
-\centering
-\begin{tabular}[t]{llcc}
-\hiderowcolors
-\toprule
-  & Hard & Clay & Grass\\
-\midrule
-\showrowcolors
-Hard & 15043 & 5540 & 3012\\
-Clay & 3017 & 5375 & 319\\
-Grass & 193 & 66 & 320\\
-\bottomrule
-\end{tabular}
+\begin{table}[H]
+	
+	\caption{\label{tab:matrice_confusion}Matrice de confusion pour le modèle final.}
+	\centering
+	\begin{tabular}[t]{llcc}
+		\hiderowcolors
+		\toprule
+		& Hard & Clay & Grass\\
+		\midrule
+		\showrowcolors
+		Hard & 16566 & 5468 & 2738\\
+		Clay & 1389 & 5375 & 173\\
+		Grass & 298 & 138 & 740\\
+		\bottomrule
+	\end{tabular}
 \end{table}
-\rowcolors{2}{white}{white}
 
