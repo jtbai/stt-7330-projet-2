@@ -136,7 +136,7 @@ Considérant la nature de ce type de méthode, il est important de mentionner le
 
 \subsubsection{Modèles par ensembles}
 
-Les modèles par ensemble sont inspirés du proverbe de la sagesse des foules. Par exemple, si il y a trois classifieurs indépendants qui ont une précision de 0.65 et qu'on utilise un modèle de vote majoritaire, la précision du voteur est 
+Les modèles par ensemble sont inspirés du proverbe de la sagesse des foules. Par exemple, s'il y a trois classifieurs indépendants qui ont une précision de 0.65 et qu'on utilise un modèle de vote majoritaire, la précision du voteur est 
 $$1 - \binom{3}{1}0.65^1\times 0.35^2 + \binom{3}{0}0.65^0\times 0.35^3 = 0.71825.$$
 Bien sur, les modèles ne sont pas indépendants car ils utilisent les mêmes données (et parfois des hypothèses similaires). On s'attend quand même à une augmentation de la performance. Ce type de modèle est similaire au modèles AdaBoost et forêt aléatoire qui aggrègent plusieurs apprendants faibles, mais dans notre cas ce sont des apprenants forts.\\
 

@@ -40,7 +40,7 @@ Dans le cadre de ce problème, nous utiliserons les métrique de type micro car 
 
 Dans le tableau \ref{tab:perfo_test}, nous présenterons l'exactitude et le score F pour chacun des classifieurs pour le jeu de données complet et à dimentionnalité réduite. Le choix du modèle final sera fait en considérant ces deux statistiques. \\
 
-Comme le Score F agrégège les concepts de précision et rappel, il a été choisi de ne pas présenter ces deux dernières. En effet, le but de notre classification est de donner la meilleure prédiction, peut importe la classe et il n'y a pas d'erreur plus grave qu'une autre. L'exactitude ou le Score F1 sont deux métriques appropriées pour l'évaluation de notre classifieur. Dans le cas où il y aurait une grande différence entre le Score F1 et l'exactitude, il pourrait être intéressant de bien comprendre d'ou vient cet écart en analyant les ratios intermédiaires de précision et de rappel.
+Comme le Score F agrégège les concepts de précision et rappel, il a été choisi de ne pas présenter ces deux dernières. En effet, le but de notre classification est de donner la meilleure prédiction, peut importe la classe et il n'y a pas d'erreur plus grave qu'une autre. L'exactitude ou le Score F1 sont deux métriques appropriées pour l'évaluation de notre classifieur. Dans le cas où il y aurait une très grande différence entre le Score F1 et l'exactitude, il pourrait être intéressant de bien comprendre d'ou vient cet écart en analyant les ratios intermédiaires de précision et de rappel.
 
 \rowcolors{2}{white}{white}\rowcolors{2}{gray!6}{white}
 \begin{table}[H]
@@ -53,14 +53,14 @@ Comme le Score F agrégège les concepts de précision et rappel, il a été cho
 			Modèles & Exactitude & F-Score & Exactitude avec PCA & F-Score avec PCA\\
 			\midrule
 			\showrowcolors
-			Réseau de neurones & 0.78 & 0.84 & NA & NA\\
+			Réseau de neurones & 0.79 & 0.84 & NA & NA\\
 			Ensemble & 0.76 & 0.82 & 0.75 & 0.81\\
 			Multinomial & 0.76 & 0.82 & 0.75 & 0.81\\
 			LDA & 0.76 & 0.82 & 0.75 & 0.81\\
-			Forêt aléatoire & 0.76 & 0.82 & NA & NA\\
+			Forêt aléatoire & 0.75 & 0.81 & NA & NA\\
 			\addlinespace
 			Arbre de décision & 0.76 & 0.82 & NA & NA\\
-			Bayes & 0.75 & 0.81 & 0.74 & 0.80\\
+			Bayes & 0.71 & 0.78 & 0.74 & 0.80\\
 			QDA & 0.72 & 0.79 & 0.74 & 0.80\\
 			Bayes & 0.71 & 0.78 & 0.74 & 0.81\\
 			SVM Gaussien & 0.70 & 0.78 & NA & NA\\
@@ -68,10 +68,11 @@ Comme le Score F agrégège les concepts de précision et rappel, il a été cho
 	\end{tabular}}
 \end{table}
 
-
+En analysant les résultats ci-dessus, on remarque que le meilleur modèle est le réseau de neuronnes suivi de très près par des modèles beaucoup plus simple. Seulement 2\% séparent les deux métriques d'intérêt. On remarque aussi que les modèles  On rappelle ici que l'équipe désirait trouver le meilleur modèle en considérant une complexité appropriée au problème. Ainsi, malgré que le réseau de neuronne soit un peu plus performant, nous choisirons le modèle multinomial car il est beaucoup plus simple. De plus, il est possible que la différence notée dans les métriques de qualité soient dues au hasard, supportant une fois de plus notre choix de modèle. 
+ 
 \subsection{Présentation du modèle final}
 
-Note: Ici on roule le modele sur les donnees de validation (split group = 3), on fait le lien avec le classifieur au hasard pour avoir une idée de la performance (benchmark) et on pourrait tenter de faire une genre d'interpreation (quelles vairables parlent, quelles parlent pas, ...)
+Le modèle que nous avons choisi pour prédire les surfaces sur lesquelles les matchs de tennis ont été joués est le modèle multinomial. En utilisant un jeu de données qui avait été gardé secret tout au long du projet, , ce modèle à une exactitude de XXX\% et un score F1 de XXX\%. La distribution des erreurs qu'il fait sont présentées dans la matrice de confusion ci-dessous
 
 \rowcolors{2}{white}{white}
 \rowcolors{2}{gray!6}{white}
@@ -85,10 +86,11 @@ Note: Ici on roule le modele sur les donnees de validation (split group = 3), on
 		& Hard & Clay & Grass\\
 		\midrule
 		\showrowcolors
-		Hard & 16566 & 5468 & 2738\\
-		Clay & 1389 & 5375 & 173\\
-		Grass & 298 & 138 & 740\\
+		Hard & x & x & x\\
+		Clay & x & x & x\\
+		Grass & x & x & x\\
 		\bottomrule
 	\end{tabular}
 \end{table}
 
+Comparativement à une attribution au hasard, ayant une exactitude de XXX\% et un score F1 de XXX\%, il est possible d'affirmer qu'un apprentissage statistique a bel et bien eu lieu. 
