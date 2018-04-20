@@ -55,7 +55,7 @@ if (length(input_neural_net) != 0) {
   data_test_nn <- import_data_modeling("data/data_modeling_neural_net.csv", selected_group = c(train_groups, test_groups, validation_groups))
   if (ind_train_model) {
     source("modeling/train-neural-net.R")
-    train_and_predict_neural_net(model_inputs[[input_neural_net]], data_train_nn, "modeling/models//")
+    train_and_predict_neural_net(model_inputs[[input_neural_net]], data_train_nn, "modeling/models/")
   }
   source("modeling/predict-neural-net.R")
   predict_neural_net(model_inputs[[input_neural_net]], data_test_nn, "modeling/models/",  "data/predictions/")
