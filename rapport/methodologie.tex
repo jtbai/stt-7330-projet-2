@@ -33,7 +33,7 @@ L'information contenue dans le jeu de données était très clairsemée. Le flé
 \subsubsection{Nettoyage des données}
 Afin d'obtenir des données pouvant être utilisées par nos algorithmes, nous avons effectué quelques transformations sur le jeu de données initial. Premièrement, nous avons enlevé tous les matchs ayant comme surface tapis (\textit{carpet}), car il n'y avait en avait pas suffisamment et cela rendait la tâche de classification multiclasses beaucoup plus complexe. \\
 
- Les données dépendantes de la surface du jeu ont aussi été enlevées. En effet, dans le cas où ces données auraient été conservées, la machine apprenante aurait pu tout simplement utiliser ces variables et la classification aurait été triviale. Par exemple, le tournoi de Winbledon est toujours joué sur gazon, cela devient donc équivalent à laisser la variable réponse. Finalement, les variables considérées non informatives (tels le nom du joueur, la grandeur et le poids du joueur, etc.) ont été enlevées.
+Les données dépendantes de la surface du jeu ont aussi été enlevées. En effet, dans le cas où ces données auraient été conservées, la machine apprenante aurait pu tout simplement utiliser ces variables et la classification aurait été triviale. Par exemple, le tournoi de Winbledon est toujours joué sur gazon, cela devient donc équivalent à laisser la variable réponse. Finalement, les variables considérées non informatives (tels le nom du joueur, la grandeur et le poids du joueur, etc.) ont été enlevées.
 
 \subsubsection{Intégration et transformation des variables (\textit{Feature engineering})}
 Cette étape est cruciale dans un problème de modélisation, car elle permet de créer d'autres variables non linéairement dépendantes des autres. Cela permet d'avoir des informations additionnelles qui n'étaient pas données en entrée au modèle dans la structure initiale des données. Il s'agit donc d'aider le modèle en lui donnant certains indices par la connaissance du problème a priori. Le choix de ces variables est généralement basé sur l'expérience et l'intuition du domaine et du jeu de données. Les variables qui ont été créées sont essentiellement des ratios entre différents éléments du jeu de données ou des déclencheurs lorsque certains évènements se sont produits lors du match.\\
@@ -62,7 +62,7 @@ On remarque une corrélation positive entre la variable de surface et les variab
 
 On observe que la distribution de \texttt{ace\_by\_svpt} est de queue moins lourde pour la surface terre battue.\\
 
-Les autres statistiques ne sont pas très intéressantes pour l'analyse. On ne s'attend pas à ce qu'une seule variable soit plus importante pour les autres pour faire la classification des types de sols.
+Les autres statistiques ne sont pas très intéressantes pour l'analyse. On ne s'attend pas à ce qu'une seule variable soit plus importante pour les autres pour faire la classification des types de surface.
 
 \subsubsection{Traitement des valeurs manquantes}
 Il n'y avait pas réellement de données manquantes dans le jeu de données après avoir fait le premier prétraitement. Ainsi, nous avons utilisé l'analyse des cas complets étant donné qu'un pourcentage très minime des données étaient manquant (environ 3\%). Nous avons cependant imputé des valeurs de 0 pour les ratios conçus précédemment pour lesquels il y avait une division par zéro.
@@ -78,10 +78,10 @@ En apprentissage automatique, il y a un compromis à faire entre les connaissanc
 La première catégorie est composée d'algorithmes simples et ne demandant qu'une compréhension générale du modèle afin de les utiliser. Les modèles sont:
 
 \begin{enumerate}
-  \item le classifieur de naïf de Bayes, du paquetage e1071 \cite{packagee1071}
-  \item le classifieur régression logistique, du paquetage nnet \cite{packagennet} 
-  \item l'analyse discriminante linéaire, du paquetage MASS \cite{packageMASS}
-  \item l'analyse discriminante quadratique, du paquetage MASS  \cite{packageMASS}
+  \item le classifieur de naïf de Bayes, du paquetage \texttt{e1071} \cite{packagee1071}
+  \item le classifieur régression logistique, du paquetage \texttt{nnet} \cite{packagennet} 
+  \item l'analyse discriminante linéaire, du paquetage \texttt{MASS} \cite{packageMASS}
+  \item l'analyse discriminante quadratique, du paquetage \texttt{MASS}  \cite{packageMASS}
 \end{enumerate}
 
 Nous considérons qu'ils sont simples, car ils sont utilisables directement avec une fonction R et ne demandent généralement pas de sélection d'hyperparamètres complexes.
@@ -90,9 +90,9 @@ Nous considérons qu'ils sont simples, car ils sont utilisables directement avec
 La deuxième catégorie est composée d'algorithmes un peu plus complexes et demandant un ajustement spécifique de leurs hyperparamètres. Ces modèles sont discriminants, c'est-à-dire qu'ils ne font pas d'hypothèse sur la distribution des données. Les modèles sont:
 
 \begin{enumerate}
-  \item le classifieur par arbre, du paquetage rpart \cite{packagerpart}
-  \item le classifieur par forêt aléatoire, du paquetage randomForest \cite{packagerandomForest}
-  \item le classifieur SVM, du paquetage e1071 \cite{packagee1071}
+  \item le classifieur par arbre, du paquetage \texttt{rpart} \cite{packagerpart}
+  \item le classifieur par forêt aléatoire, du paquetage \texttt{randomForest} \cite{packagerandomForest}
+  \item le classifieur SVM, du paquetage \texttt{e1071} \cite{packagee1071}
 \end{enumerate}
 
 La méthodologie entourant la sélection des hyperparamètres est présentée dans une section ultérieure.
@@ -101,15 +101,15 @@ La méthodologie entourant la sélection des hyperparamètres est présentée da
 Finalement, la troisième catégorie est composée d'algorithmes plus complexes et demandant l'utilisation de l'expérience et l'intuition du statisticien. Ce sont des modèles qui n'ont pas été étudiés dans le cours STT-7330 mais qui ont été explorés, car ils sont généralement très performants dans les tâches de classification . Les modèles sont:
 
 \begin{enumerate}
-  \item les réseaux de neurones, du paquetage Keras \cite{packagekeras}
+  \item les réseaux de neurones, du paquetage \texttt{keras} \cite{packagekeras}
   \item le modèle par ensemble, développé dans le cadre du projet
 \end{enumerate}
 
 L'utilisation et l'architecture de ces modèles seront présentées dans une section ultérieure.
 
 \subsection{Ajustement des hyperparamètres}
-L'ajustement des hypersparamètres a été fait par une recherche exhaustive. La technique de recherche par quadrillage (\textit{grid-search}). Afin de ne pas surajuster les modèles lors de cette recherche, nous avons utilisé la validation croisée avec 10 plis.\\ \\ 
-La recherche par quadrillage est une technique permettant de trouver les meilleurs hyperparamètres en essayant toutes combinaisons entre les différentes valeurs prédéfinies de chacun de ces hyperparamètres. Comme notre connaissance du jeu de données était plutôt limitée, nous avons décidé de considérer une large gamme de valeurs et de faire une recherche exhaustive pour chacune des combinaisons d'hyperparametres possibles.
+L'ajustement des hyperparamètres a été fait par une recherche exhaustive. La technique de recherche par quadrillage (\textit{grid-search}). Afin de ne pas surajuster les modèles lors de cette recherche, nous avons utilisé la validation croisée avec 10 plis.\\ \\ 
+La recherche par quadrillage est une technique permettant de trouver les meilleurs hyperparamètres en essayant toutes combinaisons entre les différentes valeurs prédéfinies de chacun de ces hyperparamètres. Comme notre connaissance du jeu de données était plutôt limitée, nous avons décidé de considérer une large gamme de valeurs et de faire une recherche exhaustive pour chacune des combinaisons d'hyperparamètres possibles.
 
 \subsubsection{Hyperparamètres du modèle par arbre}
 Pour le modèle par arbre, les hyperparamètres utilisés sont maxdepth et minsplit. \\\\ 
@@ -134,7 +134,7 @@ Finalement, nous avons fait la classification en entraînant un réseau de neuro
 
 Considérant la nature de ce type de méthode, il est important de mentionner le fait que nous n'avons pas structuré les données de la même façon pour ce type de modèle. En effet, celui-ci est mieux adapté pour trouver des interactions dans les variables et il n'est pas nécessaire de travailler en basse dimension. Ainsi, nous n'avons pas construit de variables précises (comme dans la méthode classique), nous avons plutôt donné en entrée les données brutes au modèle. De plus, les pays d'origine des joueurs sont utilisés (une fois dichotomisés, les pays d'origine des joueurs représentent 156 variables). Un total de 193 variables sont utilisées pour construire le modèle de réseau de neurones.
 
-\subsubsection{Modèles par ensembles}
+\subsubsection{Modèles par ensemble}
 
 Les modèles par ensemble sont inspirés du proverbe de la sagesse des foules. Par exemple, s'il y a trois classifieurs indépendants qui ont une précision de 0.65 et qu'on utilise un modèle de vote majoritaire, la précision du voteur (de l'électeur) est 
 $$1 - \binom{3}{1}0.65^1\times 0.35^2 + \binom{3}{0}0.65^0\times 0.35^3 = 0.71825.$$
@@ -142,4 +142,4 @@ Bien sûr, les modèles ne sont pas indépendants, car ils utilisent les mêmes 
 
 Le vote utilisé est pondéré par la précision du modèle, i.e. un modèle avec une meilleure performance en classification reçoit plus de poids. À partir du jeu de données test, on compare chaque combinaison des voteurs (chaque permutation des 1, 2, \dots, 9 voteurs) et on sélectionne la combinaison qui permet de minimiser l'erreur sur le jeu de données de test.\\
 
-La sortie du modèle est une prédiction basée sur une combinaison de modèles, alors beaucoup d'interprétabilité des résultats sont perdus.
+La sortie du modèle est une prédiction basée sur une combinaison de modèles, alors beaucoup d'interprétabilité des résultats est perdue.
