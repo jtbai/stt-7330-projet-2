@@ -1,79 +1,47 @@
-
-
-\documentclass{article}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage[french]{babel}
-\usepackage{multicol}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{enumitem}
-\numberwithin{equation}{section}
-\usepackage{algorithm}
-\usepackage{algorithmic}
-\usepackage{graphicx}
-\usepackage{float}
-\usepackage{moreverb}
-\usepackage{url}
-\usepackage{subcaption}
-\setlength\parindent{0pt}
-\usepackage{bbm}
-
-\usepackage{hyperref}
-\hypersetup{
-	colorlinks=true,
-	linkcolor=blue,
-	filecolor=magenta,      
-	urlcolor=cyan,
-}
-
-\urlstyle{same}
-
-\begin{document}
-\input{titre}
 \section{Résultats}
+Maintenant que nous avons définit les différents modèles à entraîner ainsi que leurs hyperparamètres respectifs, il ne reste plus qu'à évaluer leur performance et choisir le modèle final. Une fois que nous aurons déterminé quel sera ce modèle final, il ne restera plus qu'à faire une brève analyse de celui-ci avec une dernière évaluation de sa performance sur les données de validation, qui n'ont toujours pas été vues par le modèle.  
+
 
 Vu qu'on est en présence des classifieurs à multiple classes (l=3, leur performance peut être calculer par différentes mesures,
 
 - \textit{Average accuracy:} la moyenne de l'éfficacité par classe c'est à dire son pouvoir moyen d'accorder l'observation à la bonne classe. \\\\
 \begin{center}
-$\frac{\sum_{i=1}^{l} \frac{tp_i +tn_i}{tp_i + fn_i + fp_i+ tn_i}}{l}$
+	$\frac{\sum_{i=1}^{l} \frac{tp_i +tn_i}{tp_i + fn_i + fp_i+ tn_i}}{l}$
 \end{center}
 
 - \textit{Error rate:} la moyenne de l'erreur du classifieur (le fait de se tromper de classes) par classe.\\ \\
 \begin{center}
-$\frac{\sum_{i=1}^{l} \frac{fp_i +fn_i}{tp_i + fn_i + fp_i+ tn_i}}{l}$
+	$\frac{\sum_{i=1}^{l} \frac{fp_i +fn_i}{tp_i + fn_i + fp_i+ tn_i}}{l}$
 \end{center}
 
 - $Précision_{\mu}$ : l'accord entre les classes intiales avec celle obtenues par le classifieur. \\\\
 \begin{center}
-$\frac{\sum_{i=1}^{l} tp_i}{\sum_{i=1}^{l} (tp_i + fp_i)}$
+	$\frac{\sum_{i=1}^{l} tp_i}{\sum_{i=1}^{l} (tp_i + fp_i)}$
 \end{center}
 
 - \textit{$Recall_{\mu}$ (sensibilité):} l'efficacité du classifieur à identifier la vrai classe.\\\\
 \begin{center}
-$\frac{\sum_{i=1}^{l} tp_i}{\sum_{i=1}^{l} (tp_i + fn_i)}$
+	$\frac{\sum_{i=1}^{l} tp_i}{\sum_{i=1}^{l} (tp_i + fn_i)}$
 \end{center}
 
 - \textit{$F score_{\mu}$:} cette mesure est une combinaison des mesure de précision et de \textit{recall}, permet de calculer la précision du (c'est à dire combien d'observation sont bien classé) ainsi la robustesse (autrement dit combien de fois il affecte la mauvaise classe).\\\\
 \begin{center}
-$\frac{2 * précision_{\mu} Recall_{\mu}}{précision_{\mu} + Recall_{\mu}}$
+	$\frac{2 * précision_{\mu} Recall_{\mu}}{précision_{\mu} + Recall_{\mu}}$
 \end{center}
 
 - $Précision_{M}$ la moyenne de l'accord entre la classe prédit et la la classe réelle calculé pour chaque classe.\\\\
 \begin{center}
-$\frac{\sum_{i=1}^{l} \frac{tp_i}{(tp_i + fp_i)}}{l}$
+	$\frac{\sum_{i=1}^{l} \frac{tp_i}{(tp_i + fp_i)}}{l}$
 \end{center}
 
 - \textit{$Recall_{M}$: } la moyenne de l'efficacité du classifieur à identifier la vrai classe calculée pour chaque classe.\\
 \begin{center}
-$\frac{\sum_{i=1}^{l} \frac{tp_i}{(tp_i + fn_i)}}{l}$
+	$\frac{\sum_{i=1}^{l} \frac{tp_i}{(tp_i + fn_i)}}{l}$
 \end{center}
 
 - \textit{$Fscore_{M}$}: la moyenne de F score calculé pour chaque classe.\\\\
 \begin{center}
-$\frac{2 * Précision_{M} * Recall_{M}}{Précision_{M} + Recall_{M}}$
+	$\frac{2 * Précision_{M} * Recall_{M}}{Précision_{M} + Recall_{M}}$
 \end{center}
 
 
@@ -85,5 +53,83 @@ En fait, l'évaluation se fait pour chaque classe i (1, 2, 3) en calculant:  vra
 
 
 
-\end{document}
+\subsection{Évaluation des performances}
+Dans le but d'orienter notre choix de modèle, nous devons définir des mesures de performances qui permettront de comparer les modèles entres eux.
+
+Le tableau \ref{tab:perfo_train} présente les résultats des différents modèles sur le jeu de données d'entraînement selon les mesures de performance définies plus tôt, alors que le tableau \ref{tab:perfo_test} présente les résultats sur le jeu de données test.
+
+\rowcolors{2}{gray!6}{white}
+\begin{table}
+
+\caption{\label{tab:perfo_train}Performances des différents modèles sur le jeu de données d'entraînement selon les différentes mesures de performance.}
+\centering
+\resizebox{\linewidth}{!}{\begin{tabular}[t]{lcccccccccc}
+\hiderowcolors
+\toprule
+Mesure & bayes & lda & qda & tree\_based & random\_forest & svm\_gaussien & svm\_ploy3 & multinomial & neural\_net & ensemble\\
+\midrule
+\showrowcolors
+average\_accuracy & 0.70 & 0.75 & 0.72 & 0.74 & 1.00 & 0.69 & 0.75 & 0.75 & 0.65 & 0.75\\
+error\_rate & 0.30 & 0.25 & 0.28 & 0.26 & 0.00 & 0.31 & 0.25 & 0.25 & 0.35 & 0.25\\
+precision\_u & 0.78 & 0.81 & 0.79 & 0.81 & 1.00 & 0.77 & 0.81 & 0.81 & 0.73 & 0.81\\
+recall\_u & 0.78 & 0.81 & 0.79 & 0.81 & 1.00 & 0.77 & 0.81 & 0.81 & 0.73 & 0.81\\
+Fscore\_u & 0.78 & 0.81 & 0.79 & 0.81 & 1.00 & 0.77 & 0.81 & 0.81 & 0.73 & 0.81\\
+\addlinespace
+precision\_m & 0.26 & 0.27 & 0.26 & 0.27 & 0.33 & 0.26 & 0.27 & 0.27 & 0.24 & 0.27\\
+recall\_m & 0.26 & 0.27 & 0.26 & 0.27 & 0.33 & 0.26 & 0.27 & 0.27 & 0.24 & 0.27\\
+Fscore\_m & 0.26 & 0.27 & 0.26 & 0.27 & 0.33 & 0.26 & 0.27 & 0.27 & 0.24 & 0.27\\
+\bottomrule
+\end{tabular}}
+\end{table}
+\rowcolors{2}{white}{white}\rowcolors{2}{gray!6}{white}
+\begin{table}
+
+\caption{\label{tab:perfo_test}Performances des différents modèles sur le jeu de données test selon les différentes mesures de performance.}
+\centering
+\resizebox{\linewidth}{!}{\begin{tabular}[t]{lcccccccccc}
+\hiderowcolors
+\toprule
+Mesure & bayes & lda & qda & tree\_based & random\_forest & svm\_gaussien & svm\_ploy3 & multinomial & neural\_net & ensemble\\
+\midrule
+\showrowcolors
+average\_accuracy & 0.71 & 0.76 & 0.72 & 0.75 & 0.75 & 0.70 & 0.76 & 0.76 & 0.65 & 0.76\\
+error\_rate & 0.29 & 0.24 & 0.28 & 0.25 & 0.25 & 0.30 & 0.24 & 0.24 & 0.35 & 0.24\\
+precision\_u & 0.78 & 0.82 & 0.79 & 0.81 & 0.81 & 0.78 & 0.82 & 0.82 & 0.73 & 0.82\\
+recall\_u & 0.78 & 0.82 & 0.79 & 0.81 & 0.81 & 0.78 & 0.82 & 0.82 & 0.73 & 0.82\\
+Fscore\_u & 0.78 & 0.82 & 0.79 & 0.81 & 0.81 & 0.78 & 0.82 & 0.82 & 0.73 & 0.82\\
+\addlinespace
+precision\_m & 0.26 & 0.27 & 0.26 & 0.27 & 0.27 & 0.26 & 0.27 & 0.27 & 0.24 & 0.27\\
+recall\_m & 0.26 & 0.27 & 0.26 & 0.27 & 0.27 & 0.26 & 0.27 & 0.27 & 0.24 & 0.27\\
+Fscore\_m & 0.26 & 0.27 & 0.26 & 0.27 & 0.27 & 0.26 & 0.27 & 0.27 & 0.24 & 0.27\\
+\bottomrule
+\end{tabular}}
+\end{table}
+\rowcolors{2}{white}{white}
+
+
+\subsection{Choix du modèle}
+Note: Ici on pourrait evident comparer les performances plus haut mais aussi parler de l'interpretation et voir si le trade-off en vaut la peine ...
+
+\subsection{Présentation du modèle final}
+
+Note: Ici on roule le modele sur les donnees de validation (split group = 3), on fait le lien avec le classifieur au hasard pour avoir une idée de la performance (benchmark) et on pourrait tenter de faire une genre d'interpreation (quelles vairables parlent, quelles parlent pas, ...)
+
+\rowcolors{2}{white}{white}
+\rowcolors{2}{gray!6}{white}
+\begin{table}
+\caption{\label{tab:}Matrice de confusion pour le modèle final.}
+\centering
+\begin{tabular}[t]{llcc}
+\hiderowcolors
+\toprule
+  & Hard & Clay & Grass\\
+\midrule
+\showrowcolors
+Hard & 15043 & 5540 & 3012\\
+Clay & 3017 & 5375 & 319\\
+Grass & 193 & 66 & 320\\
+\bottomrule
+\end{tabular}
+\end{table}
+\rowcolors{2}{white}{white}
 

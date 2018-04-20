@@ -1,0 +1,88 @@
+\documentclass{article}
+
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage[utf8]{inputenc}
+\usepackage[table]{xcolor}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage[french]{babel}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+<<echo = FALSE>>=
+# Load packages
+library(data.table)
+library(jsonlite)
+library(knitr)
+library(kableExtra)
+
+# Import functions
+source("performance_measures.R")
+
+# Import model inputs
+model_inputs <- fromJSON("../modeling/inputs/input_models.json")
+
+# Import data
+prediction <- fread("data/prediction_rapport.csv")
+models <- colnames(prediction[, -(c("split", "true_response")), with = FALSE])
+model_name <- gsub(".preds", "", models)
+
+performance_train <- data.table(get_performance(models[1], prediction)$measures_names, do.call(cbind, lapply(models, function(model){
+  get_performance(model.preds = model, prediction_matrix = prediction[split == "train"])$measures_performance
+})))
+performance_test <- data.table(get_performance(models[1], prediction)$measures_names, do.call(cbind, lapply(models, function(model){
+  get_performance(model.preds = model, prediction_matrix = prediction[split == "test"])$measures_performance
+})))
+performance_validation <- data.table(get_performance(models[1], prediction)$measures_names, do.call(cbind, lapply(models, function(model){
+  get_performance(model.preds = model, prediction_matrix = prediction[split == "validation"])$measures_performance
+})))
+
+colnames(performance_train) <- c("measure_name", model_name)
+colnames(performance_test) <- c("measure_name", model_name)
+colnames(performance_validation) <- c("measure_name", model_name)
+
+@
+
+<<performances, echo=FALSE, results=tex>>=
+kable(performance_train, format = "latex", digits = 2, row.names = FALSE, col.names = c("Mesure", model_name), align = c("l", rep("c", length(model_name))), booktabs = T, caption = "Performances des différents modèles sur le jeu de données d'entraînement selon les différentes mesures de performance.") %>% kable_styling(latex_options = c("striped", "scale_down"))
+
+kable(performance_test, format = "latex", digits = 2, row.names = FALSE, col.names = c("Mesure", model_name), align = c("l", rep("c", length(model_name))), booktabs = T, caption = "Performances des différents modèles sur le jeu de données test selon les différentes mesures de performance.") %>% kable_styling(latex_options = c("striped", "scale_down"))
+@
+
+<<confusion_matrix, echo=FALSE, results=tex>>=
+chosen_model <- "multinomial.preds"
+confusion_matrix <- function(preds, true_response) {
+  
+  nb_classes <- length(unique(preds))
+  confusion_matrix <- matrix(NA, nb_classes, nb_classes)
+  for (i in 1:nb_classes) {
+    for (j in 1:nb_classes) {
+      confusion_matrix[i, j] <- sum((preds == i) & (true_response == j))
+    }
+  }
+  confusion_matrix
+}
+
+confusion_matrix <- confusion_matrix(preds = prediction[[chosen_model]], true_response = prediction[["true_response"]])
+colnames(confusion_matrix) <- c("Hard", "Clay", "Grass")
+rownames(confusion_matrix) <- c("Hard", "Clay", "Grass")
+
+
+kable(confusion_matrix, format = "latex", align = c("l", rep("c", length(model_name))), booktabs = T, caption = "Matrice de confusion pour le modèle final.") %>% kable_styling(latex_options = c("striped"))
+@
+
+
+
+
+\end{document}
