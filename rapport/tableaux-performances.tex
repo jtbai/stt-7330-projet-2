@@ -1,14 +1,94 @@
 \documentclass{article}
 
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage[utf8]{inputenc}
+\usepackage[table]{xcolor}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage[french]{babel}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+
 \usepackage{Sweave}
 \begin{document}
 \input{tableaux-performances-concordance}
 
-\begin{Schunk}
-\begin{Sinput}
-> x = 2
-\end{Sinput}
-\end{Schunk}
+
+\rowcolors{2}{gray!6}{white}
+\begin{table}
+
+\caption{\label{tab:}Performances des différents modèles sur le jeu de données d'entraînement selon les différentes mesures de performance.}
+\centering
+\resizebox{\linewidth}{!}{\begin{tabular}[t]{lclcl}
+\hiderowcolors
+\toprule
+Modèles & Exactitude & F-Score & Exactitude avec PCA & F-Score avec PCA\\
+\midrule
+\showrowcolors
+Forêt aléatoire & 1.00 & 1.00 & NA & NA\\
+Ensemble & 0.83 & 0.88 & 0.75 & 0.81\\
+Réseau de neurones & 0.79 & 0.85 & NA & NA\\
+Multinomial & 0.75 & 0.81 & 0.75 & 0.81\\
+LDA & 0.75 & 0.81 & 0.75 & 0.81\\
+\addlinespace
+Arbre de décision & 0.74 & 0.81 & 0.74 & 0.81\\
+QDA & 0.72 & 0.79 & 0.72 & 0.79\\
+Bayes & 0.70 & 0.78 & 0.70 & 0.78\\
+SVM Gaussien & 0.69 & 0.77 & NA & NA\\
+\bottomrule
+\end{tabular}}
+\end{table}
+\rowcolors{2}{white}{white}\rowcolors{2}{gray!6}{white}
+\begin{table}
+
+\caption{\label{tab:}Performances des différents modèles sur le jeu de données d'entraînement selon les différentes mesures de performance.}
+\centering
+\resizebox{\linewidth}{!}{\begin{tabular}[t]{lclcl}
+\hiderowcolors
+\toprule
+Modèles & Exactitude & F-Score & Exactitude avec PCA & F-Score avec PCA\\
+\midrule
+\showrowcolors
+Réseau de neurones & 0.78 & 0.84 & NA & NA\\
+Ensemble & 0.76 & 0.82 & 0.76 & 0.82\\
+Multinomial & 0.76 & 0.82 & 0.76 & 0.82\\
+LDA & 0.76 & 0.82 & 0.76 & 0.82\\
+Forêt aléatoire & 0.75 & 0.82 & NA & NA\\
+\addlinespace
+Arbre de décision & 0.75 & 0.81 & 0.75 & 0.81\\
+QDA & 0.72 & 0.79 & 0.72 & 0.79\\
+Bayes & 0.71 & 0.78 & 0.71 & 0.78\\
+SVM Gaussien & 0.70 & 0.78 & NA & NA\\
+\bottomrule
+\end{tabular}}
+\end{table}
+\rowcolors{2}{white}{white}
+\rowcolors{2}{gray!6}{white}
+\begin{table}
+
+\caption{\label{tab:}Matrice de confusion pour le modèle final.}
+\centering
+\begin{tabular}[t]{llcc}
+\hiderowcolors
+\toprule
+  & Hard & Clay & Grass\\
+\midrule
+\showrowcolors
+Hard & 16566 & 5468 & 2738\\
+Clay & 1389 & 5375 & 173\\
+Grass & 298 & 138 & 740\\
+\bottomrule
+\end{tabular}
+\end{table}
+\rowcolors{2}{white}{white}
 
 
 

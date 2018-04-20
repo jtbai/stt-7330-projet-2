@@ -38,14 +38,6 @@
       "cost"  : [1, 10, 100, 1000, 10000]
     }
   },
-  "svm_ploy3" : {
-    "model"  : "svm_poly3",
-    "ind_grid_search"  : true,
-    "grid_search_params"    : {
-      "epsilon"  : [1e-4, 1e-3, 1e-2, 1e-1, 1e0, 1e1, 1e2, 1e3, 1e4],
-      "cost"  : [1, 10, 100, 1000, 10000]
-    }
-  },
   "multinomial" : {
     "model"  : "multinomial",
     "ind_grid_search"  : false,
