@@ -50,10 +50,10 @@ Les algorithmes d'apprentissage automatique utilisés pour le projet varient en 
 La première catégorie est composée d'algoritmes simples et ne demandant qu'une compréhension générale du modèle afin de les utiliser. Les modèles sont:
 
 \begin{enumerate}
-  \item le classifieur de naïf de Bayes
-  \item le classifieur régression logistique
-  \item l'analyse discriminante linéaire
-  \item l'analyse discriminante quadratique 
+  \item le classifieur de naïf de Bayes \cite{packagee1071}
+  \item le classifieur régression logistique \cite{packagennet} 
+  \item l'analyse discriminante linéaire \cite{packageMASS}
+  \item l'analyse discriminante quadratique  \cite{packageMASS}
 \end{enumerate}
 
 Nous considérons qu'ils sont simples, car ils sont utilisables directement avec une fonction R et ne demandent généralement pas de sélection d'hyperparamèetres complexes. De plus, ce sont des modèles paramétriques qui font l'hypothèse qu'il est possible de modéliser les données ** je suis pas clair ici **. 
@@ -63,8 +63,8 @@ La deuxième catégorie est composée d'algoritmes un peu plus complexes et dema
 
 \begin{enumerate}
   \item le classifieur par arbre \cite{packagerpart}
-  \item le classifieur par forêt aléatoire
-  \item le classifieur SVM 
+  \item le classifieur par forêt aléatoire \cite{packagerandomForest}
+  \item le classifieur SVM \cite{packagee1071}
 \end{enumerate}
 
 La méthodologie entourant la sélection des hyperparamètres est présentée dans une section ultérieure.
@@ -73,8 +73,8 @@ La méthodologie entourant la sélection des hyperparamètres est présentée da
 Finalement, la troisième catégorie est composée d'algoritmes plus complexes et demandant l'utilisation de l'expérience et l'intuition du statisticien. Ce sont des modèles qui n'ont pas été étudiés dans le cours STT-7330 mais qui ont été explorés car ils sont généralement très performants dans les tâches de classification . Les modèles sont:
 
 \begin{enumerate}
-  \item les réseaux de neuronnes
-  \item le modèle par emsemble
+  \item les réseaux de neuronnes \cite{packagekeras}
+  \item le modèle par ensemble 
 \end{enumerate}
 
 L'utilisation et l'architecture de ces modèles seront présentées dans une section ultérieure.
