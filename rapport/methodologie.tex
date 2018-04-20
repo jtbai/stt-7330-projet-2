@@ -44,6 +44,8 @@ Tel que mentionné un peu plus tôt, le jeu de données comprend environ une cin
 \subsection{Classifieurs utilisés}
 Les algorithmes d'apprentissage automatique utilisés pour le projet varient en complexité. Nous désirions tester différents niveaux de complexité afin de déterminer si une augmentation de la complexité était justifiée relativement à la qualité des prédictions. Nous avons librement sous-divisé les algorithme utilisés en 3 catégories distinctes.
 
+\textit{En apprentissage machine, il existe un compromis données vs connaissance a priori. Si le statisticien connait bien les données, il peut les modéliser selon une certaine distribution (opinion d'expert) avec peu de données, comme c'est le cas dans les méthodes paramétriques simples présentés plus loin. En revanche, si le statisticien ne connait pas la distribution des données, il doit utiliser des modèles plus complexes non paramétriques, comme des réseaux de neurones. Dans le milieu de ce compromis, on retrouve des modèles tels que le SVM qui requiert de la connaissance sur le noyau et seulement les paramètres $c$ et $\gamma$ doivent être déterminés.}
+
 \subsubsection{Algorithmes simples}
 La première catégorie est composée d'algoritmes simples et ne demandant qu'une compréhension générale du modèle afin de les utiliser. Les modèles sont:
 
@@ -92,34 +94,23 @@ L'hyperparamètre mtry contrôle le nombre de variables explicatives sélectionn
 L'hyperparamètre ntree contrôle le nombre d'arbres générés aléatoirement pour créer le classifieur. Il est important d'avoir un nombre suffisamment grand afin de faire baisser la variance et ainsi se rapprocher d'une valeur optimale au niveau du compromis biais-variance. Nous avons considéré les valeurs de 700, 1000 et 2000.
 
 \subsubsection{Hyperparamètres du modèle SVM}
-Pour le modèle SVM, les hyperparamètres utilisés sont cost et epsilon ($C$ et $ICITTE$ dans la notation utilisée dans le cours).\\
-L'hyperparamètre cost contrôle la fréquence et la sévérité des violations par rapport à la marge. En termes du compromis biais-variance, l'augmentation de cost causera un biais plus grand, mais aura une variance plus petite. Nous avons considéré les valeur 0.90, 0.95, 0.99 et 1.\\
-
-Alors que le modèle SVM maximise la marge entre deux classes, le paramètre $\xi$ contrôle l'erreur relative à la marge que le classifieur peut 
-
-
-Nous avons considéré les valeurs de 0.1,0.01 et.001. 
+Pour le modèle SVM, les hyperparamètres utilisés sont cost et gamma ($c$ et $\gamma$ dans la notation utilisée dans le cours).\\
+L'hyperparamètre cost contrôle la fréquence et la sévérité des violations par rapport à la marge. En termes du compromis biais-variance, l'augmentation de cost causera un biais plus grand, mais aura une variance plus petite. Nous avons considéré les valeurs 1, 10, 100 et 1000. L'hyperparamètre gamma est un paramètre de noyau. Nous avons considéré les valeurs 0.001, 0.01, 0.1, 1).\\
 
 \subsection{Ajustement des modèles complexes}
 
 \subsubsection{Réseau de neuronnes}
 
-Finalement, nous avons fait la classification en entraînant un réseau de neurones profonds. Étant donné que le but premier de ce projet n'est pas de construire un réseau de neurones en soi, nous avons choisi une architecture relativement simple. Nous avons donc choisi un réseau à propagation avant avec 2 couches cachées et une couche de sortie à 3 neurones (un pour chacune des réponses). Puisque c'est un problème de classification à multiple classes, nous avons choisi comme mesure de perte la \textit{categorical-crossentropy} et comme métrique à optimiser la précision. La librairie utilisée est celle de \texttt{keras}.
+Finalement, nous avons fait la classification en entraînant un réseau de neurones profond. Les réseaux de neurones sont des modèles très flexibles, mais le choix d'une bonne architecture important. Ces choix sont souvent basés sur beaucoup d'expérience du scientifique des données. Étant donné que le but premier de ce projet n'est pas de construire un réseau de neurones et trouver l'architecture idéale en soi, nous avons choisi une architecture relativement simple. Nous avons donc choisi un réseau à propagation avant avec 2 couches cachées et une couche de sortie à 3 neurones (un pour chacune des catégories possibles) avec du \textit{dropout}. Puisque c'est un problème de classification à multiple classes, nous avons choisi comme mesure de perte la \textit{categorical-crossentropy} et comme métrique à optimiser la précision. La librairie utilisée est celle de \texttt{keras}.\\
 
-Considérant la nature de ce type de méthode, il est important de mentionner le fait que nous n'avons pas structuré les données de la même façon pour ce type de modèle. En effet, celui-ci est mieux adapté pour trouver des interactions et faire une sélection de variables. Ainsi, nous n'avons pas construit de variables précises (comme dans la méthode classiques), nous avons plutôt donné en entrée les données brutes au modèle.
-
+Considérant la nature de ce type de méthode, il est important de mentionner le fait que nous n'avons pas structuré les données de la même façon pour ce type de modèle. En effet, celui-ci est mieux adapté pour trouver des interactions dans les variables et il n'est pas nécessaire de travailler en basse dimension. Ainsi, nous n'avons pas construit de variables précises (comme dans la méthode classiques), nous avons plutôt donné en entrée les données brutes au modèle. De plus, les pays d'origine des joueurs sont utilisés (une fois dichotomisés, les pays d'origine des joueurs représentent 156 variables). Un total de 193 variables sont utilisés pour construire le modèle de réseau de neurones.
 
 \subsubsection{Modèles par ensembles}
 
-Les modèles par ensemble sont inspirés du proverbe \guillemotleft . Par exemple, si il y a trois classifieurs indépendants qui ont une exactitude de 0.65 et qu'on utilise un modèle de vote majoritaire, la probabilité que la majorité se trompe est 
+Les modèles par ensemble sont inspirés du proverbe \guillemotleft deux têtes en valent mieux qu'une \guillemotright. Par exemple, si il y a trois classifieurs indépendants qui ont une précision de 0.65 et qu'on utilise un modèle de vote majoritaire, la précision du voteur est 
+$$1 - \binom{2}{3}0.650.35^2 + \binom{3}{3}0.65^00.35^3 = 0.71825.$$
+Bien sur, les modèles ne sont pas indépendants car ils utilisent les mêmes données (et parfois des hypothèses similaires). On s'attend quand même à une augmentation de la performance. Ce type de modèle est similaire au modèles AdaBoost et forêt aléatoire qui aggrègent plusieurs apprendants faibles, mais dans notre cas ce sont des apprenants forts.\\
 
-$$$$
+Le vote utilisé est pondéré par la précision du modèle, i.e. un modèle avec une meilleure performance en classification reçoit plus de poids. À partir du jeu de données test, on compare chaque combinaison des voteurs (chaque permutation des 1, 2, \dots, 9 voteurs) et on sélectionne la combinaison qui permet de minimiser l'erreur sur le jeu de données de test.\\
 
-
-
-
-
-
-
-
-
+La sortie du modèle est une prédiction basé sur une combinaison de modèles, alors beaucoup d'interprétabilité des résultats est perdu.
