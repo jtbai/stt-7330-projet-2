@@ -36,11 +36,14 @@ get_performance <- function(model.preds, prediction_matrix){
   recall_m <- (sum(proportion[,2])/ sum(proportion[,2] + proportion[,3]))/3
   Fscore_m <- 2*(precision_m * recall_m)/ (precision_m + recall_m)
   
-  measures_names <- c("average_accuracy", "error_rate", "precision_u","recall_u","Fscore_u","precision_m","recall_m","Fscore_m")
-  measures_performance <- c(average_accuracy, error_rate, precision_u,recall_u,Fscore_u,precision_m,recall_m,Fscore_m)
-  performance <- data.frame(measures_names,measures_performance)
+  measures_names <- c("average_accuracy", "Fscore")
+  measures_performance <- c(average_accuracy,Fscore_u)
   
-  return(performance)
+  data.frame(
+    measures_names = measures_names,
+    measures_performance = measures_performance
+  )
+  
   }
 
 
