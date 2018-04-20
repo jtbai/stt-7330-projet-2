@@ -1,60 +1,42 @@
 \section{Résultats}
-Maintenant que nous avons définit les différents modèles à entraîner ainsi que leurs hyperparamètres respectifs, il ne reste plus qu'à évaluer leur performance et choisir le modèle final. Une fois que nous aurons déterminé quel sera ce modèle final, il ne restera plus qu'à faire une brève analyse de celui-ci avec une dernière évaluation de sa performance sur les données de validation, qui n'ont toujours pas été vues par le modèle.  
-
-
-Vu qu'on est en présence des classifieurs à multiple classes (l=3, leur performance peut être calculer par différentes mesures,
-
-- \textit{Average accuracy:} la moyenne de l'éfficacité par classe c'est à dire son pouvoir moyen d'accorder l'observation à la bonne classe. \\\\
-\begin{center}
-	$\frac{\sum_{i=1}^{l} \frac{tp_i +tn_i}{tp_i + fn_i + fp_i+ tn_i}}{l}$
-\end{center}
-
-- \textit{Error rate:} la moyenne de l'erreur du classifieur (le fait de se tromper de classes) par classe.\\ \\
-\begin{center}
-	$\frac{\sum_{i=1}^{l} \frac{fp_i +fn_i}{tp_i + fn_i + fp_i+ tn_i}}{l}$
-\end{center}
-
-- $Précision_{\mu}$ : l'accord entre les classes intiales avec celle obtenues par le classifieur. \\\\
-\begin{center}
-	$\frac{\sum_{i=1}^{l} tp_i}{\sum_{i=1}^{l} (tp_i + fp_i)}$
-\end{center}
-
-- \textit{$Recall_{\mu}$ (sensibilité):} l'efficacité du classifieur à identifier la vrai classe.\\\\
-\begin{center}
-	$\frac{\sum_{i=1}^{l} tp_i}{\sum_{i=1}^{l} (tp_i + fn_i)}$
-\end{center}
-
-- \textit{$F score_{\mu}$:} cette mesure est une combinaison des mesure de précision et de \textit{recall}, permet de calculer la précision du (c'est à dire combien d'observation sont bien classé) ainsi la robustesse (autrement dit combien de fois il affecte la mauvaise classe).\\\\
-\begin{center}
-	$\frac{2 * précision_{\mu} Recall_{\mu}}{précision_{\mu} + Recall_{\mu}}$
-\end{center}
-
-- $Précision_{M}$ la moyenne de l'accord entre la classe prédit et la la classe réelle calculé pour chaque classe.\\\\
-\begin{center}
-	$\frac{\sum_{i=1}^{l} \frac{tp_i}{(tp_i + fp_i)}}{l}$
-\end{center}
-
-- \textit{$Recall_{M}$: } la moyenne de l'efficacité du classifieur à identifier la vrai classe calculée pour chaque classe.\\
-\begin{center}
-	$\frac{\sum_{i=1}^{l} \frac{tp_i}{(tp_i + fn_i)}}{l}$
-\end{center}
-
-- \textit{$Fscore_{M}$}: la moyenne de F score calculé pour chaque classe.\\\\
-\begin{center}
-	$\frac{2 * Précision_{M} * Recall_{M}}{Précision_{M} + Recall_{M}}$
-\end{center}
-
-
-En fait, l'évaluation se fait pour chaque classe i (1, 2, 3) en calculant:  vrai positif ($tp_i$), vrai négatif ($tn_i$), faux positif ($fp_i$), faux negatif ($fn_i$), \textit{$accuracy_i$}, précision, \textit{$recall_i$}, et la qualité globale de la classification se fait en deux façon: soit en calculant la moyenne des mesures calculées  pour chaque classe i (appelée macro-moyenne avec un indice M), soit calculer la somme cumulative  des tp, fn, tn, fp de toutes les classes et après calculer les mesures de performances (ce qu'on appelle micro-moyenne $\mu$).
-
-
-
-
-
+Maintenant que les différents modèles à entraîner ainsi que leurs hyperparamètres respectifs sont défini, il ne reste plus qu'à évaluer leur performance et choisir le modèle final. Une fois le modèle final déterminé, il ne restera plus qu'à faire une brève analyse de celui-ci avec une dernière évaluation de sa performance sur les données de validation, qui n'ont toujours pas été vues par le modèle.  
 
 
 \subsection{Évaluation des performances}
-Dans le but d'orienter notre choix de modèle, nous devons définir des mesures de performances qui permettront de comparer les modèles entres eux.
+Dans le but d'orienter notre choix de modèle, nous devons définir des mesures de performances qui permettront de comparer les modèles entres eux. \\
+
+Dans les tâches de classification, les métriques que nous utilisons mettent l'emphase sur différent objectifs de classification. On pourrait vouloir par exemple mesurer la capacité du classificateur à prédire une bonne classe, la capacité de ne pas faire de fausses prédiction et/ou de ne jamais manquer des cas positifs. Ces mesures sont utilisées dans le cas binaire, où c'est soit une classe ou l'autre. Dans le cas du problème actuel, l'utilisation de 3 classes impose qu'une transformation vers plusieurs problèmes binaires soit faite afin d'obtenir ces métriques. \\
+
+Afin de transformer le problème de classification multiclasse en classification binaire, chaque des classe sera prise indépendamment et sera confrontée aux 2 autres agrégées ensemble (méthode tous contre un). Cela revient à faire 3 classifications binaires. Afin de n'avoir qu'une seule métrique, une stratégie d'aggrégation doit être mise en place. \\ Une stratégie serait d'attribuer un poids identique à chacunes des métriques générées par les 3 classificateurs binaires. Ce sont les métrique de type macro qu'on utilise lorsqu'une classe minoritaire doit être considérée aussi importante que les autres classes. \\ Une autre stratégie serait d'attribuer des poids proportionnels à la quantité de données appartenant à chacune des classes aux métriques des classificateurs binaires. Ce sont les métriques de type micro qu'on utilise lorsque qu'aucune classe n'a plus d'importance qu'une autre - ou qu'il n'y a pas d'incitatif à prédire une classe plus qu'une autre. \\
+
+Dans le cadre de ce problème, nous utiliserons les métrique de type micro. Formellement, pour chaque classe $l$, les métriques utilisées sont: \\
+
+
+- Exactitude (Taux de bonnes détections): l'exactitude est le pouvoir du classificateur à prédire la bonne classe pour une observation donnée.\\
+\begin{center}
+	$\textrm{Exactitude} = \frac{\sum_{i=1}^{l} \frac{tp_i +tn_i}{tp_i + fn_i + fp_i+ tn_i}}{l}$
+\end{center}
+	
+- Taux d'erreur: le taux d'erreur est le taux auquel le classificateur ne prédit pas la bonne classe pour une observation données.\\ 
+\begin{center}
+	$\textrm{Taux d'erreur} = \frac{\sum_{i=1}^{l} \frac{fp_i +fn_i}{tp_i + fn_i + fp_i+ tn_i}}{l}$
+\end{center}
+
+- Précision : la précision la capacité d'un classificateur à ne trouver que les données d'une classe en particulier. (Minimise les faux positifs) \\
+\begin{center}
+	$\textrm{Précision} = \frac{\sum_{i=1}^{l} tp_i}{\sum_{i=1}^{l} (tp_i + fp_i)}$
+\end{center}
+
+- Rappel: le rappel est la capacité du classificateur à bien trouver toutes les données d'une classe en particulier. (Maximise les vrai positifs)\\
+\begin{center}
+	$\textrm{Rappel} = \frac{\sum_{i=1}^{l} tp_i}{\sum_{i=1}^{l} (tp_i + fn_i)}$
+\end{center}
+
+- Score F: le score F est la moyenne harmonique du précision et du rappel. Elle sert de mesure agrégée sur laquelle prendre une décision.\\
+\begin{center}
+	$\textrm{Score F} = \frac{2 * \textrm{Précision} * \textrm{Rappel}}{\textrm{Précision} + \textrm{Rappel}}$
+\end{center}
+
 
 Le tableau \ref{tab:perfo_train} présente les résultats des différents modèles sur le jeu de données d'entraînement selon les mesures de performance définies plus tôt, alors que le tableau \ref{tab:perfo_test} présente les résultats sur le jeu de données test.
 
