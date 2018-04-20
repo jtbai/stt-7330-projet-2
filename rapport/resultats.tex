@@ -1,1 +1,89 @@
+
+
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[french]{babel}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\numberwithin{equation}{section}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{moreverb}
+\usepackage{url}
+\usepackage{subcaption}
+\setlength\parindent{0pt}
+\usepackage{bbm}
+
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,      
+	urlcolor=cyan,
+}
+
+\urlstyle{same}
+
+\begin{document}
+\input{titre}
 \section{Résultats}
+
+Vu qu'on est en présence des classifieurs à multiple classes (l=3, leur performance peut être calculer par différentes mesures,
+
+- \textit{Average accuracy:} la moyenne de l'éfficacité par classe c'est à dire son pouvoir moyen d'accorder l'observation à la bonne classe. \\\\
+\begin{center}
+$\frac{\sum_{i=1}^{l} \frac{tp_i +tn_i}{tp_i + fn_i + fp_i+ tn_i}}{l}$
+\end{center}
+
+- \textit{Error rate:} la moyenne de l'erreur du classifieur (le fait de se tromper de classes) par classe.\\ \\
+\begin{center}
+$\frac{\sum_{i=1}^{l} \frac{fp_i +fn_i}{tp_i + fn_i + fp_i+ tn_i}}{l}$
+\end{center}
+
+- $Précision_{\mu}$ : l'accord entre les classes intiales avec celle obtenues par le classifieur. \\\\
+\begin{center}
+$\frac{\sum_{i=1}^{l} tp_i}{\sum_{i=1}^{l} (tp_i + fp_i)}$
+\end{center}
+
+- \textit{$Recall_{\mu}$ (sensibilité):} l'efficacité du classifieur à identifier la vrai classe.\\\\
+\begin{center}
+$\frac{\sum_{i=1}^{l} tp_i}{\sum_{i=1}^{l} (tp_i + fn_i)}$
+\end{center}
+
+- \textit{$F score_{\mu}$:} cette mesure est une combinaison des mesure de précision et de \textit{recall}, permet de calculer la précision du (c'est à dire combien d'observation sont bien classé) ainsi la robustesse (autrement dit combien de fois il affecte la mauvaise classe).\\\\
+\begin{center}
+$\frac{2 * précision_{\mu} Recall_{\mu}}{précision_{\mu} + Recall_{\mu}}$
+\end{center}
+
+- $Précision_{M}$ la moyenne de l'accord entre la classe prédit et la la classe réelle calculé pour chaque classe.\\\\
+\begin{center}
+$\frac{\sum_{i=1}^{l} \frac{tp_i}{(tp_i + fp_i)}}{l}$
+\end{center}
+
+- \textit{$Recall_{M}$: } la moyenne de l'efficacité du classifieur à identifier la vrai classe calculée pour chaque classe.\\
+\begin{center}
+$\frac{\sum_{i=1}^{l} \frac{tp_i}{(tp_i + fn_i)}}{l}$
+\end{center}
+
+- \textit{$Fscore_{M}$}: la moyenne de F score calculé pour chaque classe.\\\\
+\begin{center}
+$\frac{2 * Précision_{M} * Recall_{M}}{Précision_{M} + Recall_{M}}$
+\end{center}
+
+
+En fait, l'évaluation se fait pour chaque classe i (1, 2, 3) en calculant:  vrai positif ($tp_i$), vrai négatif ($tn_i$), faux positif ($fp_i$), faux negatif ($fn_i$), \textit{$accuracy_i$}, précision, \textit{$recall_i$}, et la qualité globale de la classification se fait en deux façon: soit en calculant la moyenne des mesures calculées  pour chaque classe i (appelée macro-moyenne avec un indice M), soit calculer la somme cumulative  des tp, fn, tn, fp de toutes les classes et après calculer les mesures de performances (ce qu'on appelle micro-moyenne $\mu$).
+
+
+
+
+
+
+
+\end{document}
+
