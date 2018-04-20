@@ -36,10 +36,10 @@ source("modeling/preds_rapport.R")
 # Define global configuration ---------------------------------------------
 
 # Import models inputs
-model_inputs <- fromJSON("modeling/inputs/input_models.json")
+model_inputs <- fromJSON("modeling/inputs/input_models2.json")
 
 # Do grid search or not
-ind_train_model <- FALSE
+ind_train_model <- TRUE
 
 train_groups <- 1L
 test_groups <- 2L

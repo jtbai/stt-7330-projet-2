@@ -28,7 +28,7 @@ year_to <- 2017
 ind_split_variables <- FALSE
 
 # Whether to do or nor the PCA on the classical data
-ind_do_pca <- FALSE
+ind_do_pca <- TRUE
 
 
 # Source the functions needed for the pipeline ----------------------------

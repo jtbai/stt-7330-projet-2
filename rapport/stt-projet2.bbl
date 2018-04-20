@@ -1,0 +1,8 @@
+\begin{thebibliography}{}
+
+\bibitem[Therneau et~al., 2017]{packagerpart}
+Therneau, T., Atkinson, B., and Ripley, B. (2017).
+\newblock {\em rpart: Recursive Partitioning and Regression Trees}.
+\newblock R package version 4.1-11.
+
+\end{thebibliography}

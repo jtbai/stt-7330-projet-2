@@ -1,0 +1,25 @@
+\select@language {french}
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}
+\contentsline {section}{\numberline {2}M\IeC {\'e}thodologie}{2}{section.2}
+\contentsline {subsection}{\numberline {2.1}Pr\IeC {\'e}sentation du jeu de donn\IeC {\'e}es}{2}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Pr\IeC {\'e}traitement des donn\IeC {\'e}es}{3}{subsection.2.2}
+\contentsline {subsubsection}{\numberline {2.2.1}Nettoyage des donn\IeC {\'e}es}{3}{subsubsection.2.2.1}
+\contentsline {subsubsection}{\numberline {2.2.2}Int\IeC {\'e}gration et transformation des variables (\textit {Feature engineering})}{3}{subsubsection.2.2.2}
+\contentsline {subsubsection}{\numberline {2.2.3}Traitement des valeurs manquantes}{3}{subsubsection.2.2.3}
+\contentsline {subsubsection}{\numberline {2.2.4}R\IeC {\'e}duction de la dimensionalit\IeC {\'e}}{4}{subsubsection.2.2.4}
+\contentsline {subsection}{\numberline {2.3}Classifieurs utilis\IeC {\'e}s}{4}{subsection.2.3}
+\contentsline {subsubsection}{\numberline {2.3.1}Algorithmes simples}{4}{subsubsection.2.3.1}
+\contentsline {subsubsection}{\numberline {2.3.2}Algorithmes interm\IeC {\'e}diaires}{5}{subsubsection.2.3.2}
+\contentsline {subsubsection}{\numberline {2.3.3}Algorithmes complexes}{5}{subsubsection.2.3.3}
+\contentsline {subsection}{\numberline {2.4}Ajustement des hyperparam\IeC {\`e}tres}{5}{subsection.2.4}
+\contentsline {subsubsection}{\numberline {2.4.1}Hyperparam\IeC {\`e}tres du mod\IeC {\`e}le par arbre}{5}{subsubsection.2.4.1}
+\contentsline {subsubsection}{\numberline {2.4.2}Hyperparam\IeC {\`e}tres du mod\IeC {\`e}le de for\IeC {\^e}t al\IeC {\'e}atoire}{6}{subsubsection.2.4.2}
+\contentsline {subsubsection}{\numberline {2.4.3}Hyperparam\IeC {\`e}tres du mod\IeC {\`e}le SVM}{6}{subsubsection.2.4.3}
+\contentsline {subsection}{\numberline {2.5}Ajustement des mod\IeC {\`e}les complexes}{6}{subsection.2.5}
+\contentsline {subsubsection}{\numberline {2.5.1}R\IeC {\'e}seau de neurones}{6}{subsubsection.2.5.1}
+\contentsline {subsubsection}{\numberline {2.5.2}Mod\IeC {\`e}les par ensembles}{7}{subsubsection.2.5.2}
+\contentsline {section}{\numberline {3}R\IeC {\'e}sultats}{7}{section.3}
+\contentsline {subsection}{\numberline {3.1}\IeC {\'E}valuation des performances}{8}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Choix du mod\IeC {\`e}le}{8}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Pr\IeC {\'e}sentation du mod\IeC {\`e}le final}{8}{subsection.3.3}
+\contentsline {section}{\numberline {4}Conclusion}{9}{section.4}
