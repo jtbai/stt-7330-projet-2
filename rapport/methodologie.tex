@@ -28,17 +28,17 @@ Le jeu de données comprend entres autres la surface sur laquelle un match de te
 \end{enumerate}
 
 \subsection{Prétraitement des données}
-L'information contenue dans le jeu de données était très clairsemée. Le fléau de la dimensionnalité rend l'apprentissage beaucoup plus difficile dans un tel contexte. L'entraînement de modèles basé sur de telles données augmente donc les chances d'obtenir des modèles non optimaux ou peu fiables. Afin de pallier ce problème, nous avons décidé d'améliorer la qualité du jeu de données. Les différentes étapes ont été de nettoyer les données, d'identifier le traitement des valeurs manquantes, d'intégrer et transformer certaines variables et enfin de réduire la dimensionnalité.
+L'information contenue dans le jeu de données était très clairsemée. Le fléau de la dimensionnalité rend l'apprentissage beaucoup plus difficile dans un tel contexte. L'entraînement de modèles basé sur de telles données augmente donc les chances d'obtenir des modèles non optimaux ou peu fiables. Afin de pallier ce problème, nous avons décidé d'améliorer la qualité du jeu de données. Les différentes étapes ont été de nettoyer les données, d'identifier et traiter les valeurs manquantes, d'intégrer et transformer certaines variables et enfin de réduire la dimensionnalité.
 
 \subsubsection{Nettoyage des données}
-Afin d'obtenir des données pouvant être utilisées par nos algorithmes, nous avons effectué quelques transformations sur le jeu de données initial. Premièrement, nous avons enlevé tous les matchs ayant comme surface tapis (\textit{carpet}), car il n'y avait en avait pas suffisamment et cela rendait la tâche de classification multi classes beaucoup plus complexes. \\
+Afin d'obtenir des données pouvant être utilisées par nos algorithmes, nous avons effectué quelques transformations sur le jeu de données initial. Premièrement, nous avons enlevé tous les matchs ayant comme surface tapis (\textit{carpet}), car il n'y avait en avait pas suffisamment et cela rendait la tâche de classification multiclasses beaucoup plus complexe. \\
 
  Les données dépendantes de la surface du jeu ont aussi été enlevées. En effet, dans le cas où ces données auraient été conservées, la machine apprenante aurait pu tout simplement utiliser ces variables et la classification aurait été triviale. Par exemple, le tournoi de Winbledon est toujours joué sur gazon, cela devient donc équivalent à laisser la variable réponse. Finalement, les variables considérées non informatives (tels le nom du joueur, la grandeur et le poids du joueur, etc.) ont été enlevées.
 
 \subsubsection{Intégration et transformation des variables (\textit{Feature engineering})}
-Cette étape est cruciale dans un problème de modélisation, car elle permet de créer d'autres variables non linéairement dépendantes des autres. Cela permet d'avoir des informations additionnelles qui n'étaient pas données en entrée au modèle dans la structure initiale des données. Il s'agit donc d'aider le modèle en lui donnant certains indices. Le choix de ces variables est généralement basé sur l'expérience et l'intuition du domaine et du jeu de données. Les variables qui ont été créées sont essentiellement des ratios entre différents éléments du jeu de données ou des déclencheurs lorsque certains évènements se sont produits lors du match.\\
+Cette étape est cruciale dans un problème de modélisation, car elle permet de créer d'autres variables non linéairement dépendantes des autres. Cela permet d'avoir des informations additionnelles qui n'étaient pas données en entrée au modèle dans la structure initiale des données. Il s'agit donc d'aider le modèle en lui donnant certains indices par la connaissance du problème a priori. Le choix de ces variables est généralement basé sur l'expérience et l'intuition du domaine et du jeu de données. Les variables qui ont été créées sont essentiellement des ratios entre différents éléments du jeu de données ou des déclencheurs lorsque certains évènements se sont produits lors du match.\\
 
-Dans les variables retenues, on présente dans la figure \ref{fig:corrplot}.
+Dans les variables retenues, on présente dans la figure \ref{fig:corrplot} la matrice des corrélations.
 
 \begin{figure}[H]
 	\caption{Matrice de corrélation visuelle des variables}
