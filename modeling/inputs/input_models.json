@@ -38,7 +38,7 @@
       "cost"  : [1, 10, 100, 1000, 10000]
     }
   },
-  "svm_ploy3" : {
+  "svm_poly3" : {
     "model"  : "svm_poly3",
     "ind_grid_search"  : true,
     "grid_search_params"    : {
