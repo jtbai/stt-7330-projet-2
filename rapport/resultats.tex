@@ -11,17 +11,17 @@ Afin de transformer le problème de classification multiclasse en classification
 
 Dans le cadre de ce problème, nous utiliserons les métriques de type micro car il n'y a pas de classe ayant besoin d'une attention accrue. Formellement, pour chaque classe $l$, les métriques utilisées sont: \\
 
-- Exactitude (Taux de bonnes détections): l'exactitude est le pouvoir du classificateur à prédire la bonne classe pour une observation donnée.  Lors d'une classification, l'optimisation de cette métrique maximise le taux de bonne détection.\\
+- Exactitude (Taux de bonnes détections): l'exactitude est le pouvoir du classifieur à prédire la bonne classe pour une observation donnée.  Lors d'une classification, l'optimisation de cette métrique maximise le taux de bonne détection.\\
 \begin{center}
 	$\textrm{Exactitude} = \frac{\sum_{i=1}^{l} \frac{tp_i +tn_i}{tp_i + fn_i + fp_i+ tn_i}}{l}$
 \end{center}
 
-- Précision : la précision est la capacité d'un classificateur à ne trouver que les données d'une classe en particulier. Lors d'une classification, l'optimisation de cette métrique minimise les faux positifs.\\
+- Précision : la précision est la capacité d'un classifieur à ne trouver que les données d'une classe en particulier. Lors d'une classification, l'optimisation de cette métrique minimise les faux positifs.\\
 \begin{center}
 	$\textrm{Précision} = \frac{\sum_{i=1}^{l} tp_i}{\sum_{i=1}^{l} (tp_i + fp_i)}$
 \end{center}
 
-- Rappel (sensibilité): le rappel est la capacité du classificateur à bien trouver toutes les données d'une classe en particulier. Lors d'une classification, l'optimisation de cette métrique maximise les vrais positifs.\\
+- Rappel (sensibilité): le rappel est la capacité du classifieur à bien trouver toutes les données d'une classe en particulier. Lors d'une classification, l'optimisation de cette métrique maximise les vrais positifs.\\
 \begin{center}
 	$\textrm{Rappel} = \frac{\sum_{i=1}^{l} tp_i}{\sum_{i=1}^{l} (tp_i + fn_i)}$
 \end{center}
