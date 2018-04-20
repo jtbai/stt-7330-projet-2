@@ -5,12 +5,11 @@ Maintenant que les différents modèles à entraîner ainsi que leurs hyperparam
 \subsection{Évaluation des performances}
 Dans le but d'orienter notre choix de modèle, nous devons définir des mesures de performances qui permettront de comparer les modèles entres eux. \\
 
-Dans les tâches de classification, les métriques que nous utilisons mettent l'emphase sur différent objectifs de classification. On pourrait vouloir par exemple mesurer la capacité du classificateur à prédire une bonne classe, la capacité de ne pas faire de fausses prédiction et/ou de ne jamais manquer des cas positifs. Ces mesures sont utilisées dans le cas binaire, où c'est soit une classe ou l'autre. Dans le cas du problème actuel, l'utilisation de 3 classes impose qu'une transformation vers plusieurs problèmes binaires soit faite afin d'obtenir ces métriques. \\
+Dans les tâches de classification, les métriques que nous utilisons mettent l'emphase sur différents objectifs de classification. On pourrait vouloir par exemple mesurer la capacité du classifieur à prédire une bonne classe, la capacité de ne pas faire de fausses prédictions et/ou de ne jamais manquer de cas positifs. Ces mesures sont utilisées dans le cas binaire, où le classifier doit choisir une classe ou l'autre. Dans le cas du problème actuel, l'utilisation de 3 classes impose qu'une transformation vers plusieurs problèmes binaires soit faite afin de pouvoir calculer ces métriques. \\
 
-Afin de transformer le problème de classification multiclasse en classification binaire, chaque des classe sera prise indépendamment et sera confrontée aux 2 autres agrégées ensemble (méthode tous contre un). Cela revient à faire 3 classifications binaires. Afin de n'avoir qu'une seule métrique, une stratégie d'aggrégation doit être mise en place. \\ Une stratégie serait d'attribuer un poids identique à chacunes des métriques générées par les 3 classificateurs binaires. Ce sont les métrique de type macro qu'on utilise lorsqu'une classe minoritaire doit être considérée aussi importante que les autres classes. \\ Une autre stratégie serait d'attribuer des poids proportionnels à la quantité de données appartenant à chacune des classes aux métriques des classificateurs binaires. Ce sont les métriques de type micro qu'on utilise lorsque qu'aucune classe n'a plus d'importance qu'une autre - ou qu'il n'y a pas d'incitatif à prédire une classe plus qu'une autre. \\
+Afin de transformer le problème de classification multiclasse en classification binaire, chaque classe sera prise indépendamment et sera confrontée aux 2 autres agrégées ensemble (méthode tous contre un). Cela revient à faire 3 classifications binaires. Afin de n'avoir qu'une seule métrique, une stratégie d'aggrégation doit être mise en place. \\ Une stratégie serait d'attribuer un poids identique à chacunes des métriques générées par les 3 classifieurs binaires. Ce sont les métrique de type macro qu'on utilise lorsqu'une classe minoritaire doit être considérée aussi importante que les autres classes. \\ Une autre stratégie serait d'attribuer des poids proportionnels à la quantité de données appartenant à chacune des classes aux métriques générées par les 3 classifieurs binaires. Ce sont les métriques de type micro qu'on utilise lorsque qu'aucune classe n'a plus d'importance qu'une autre - ou qu'il n'y a pas d'incitatif à prédire une classe plus qu'une autre. \\
 
-Dans le cadre de ce problème, nous utiliserons les métrique de type micro. Formellement, pour chaque classe $l$, les métriques utilisées sont: \\
-
+Dans le cadre de ce problème, nous utiliserons les métrique de type micro car il n'y a pas de classe ayant besoin d'une attention accrue. Formellement, pour chaque classe $l$, les métriques utilisées sont: \\
 
 - Exactitude (Taux de bonnes détections): l'exactitude est le pouvoir du classificateur à prédire la bonne classe pour une observation donnée.\\
 \begin{center}
@@ -27,7 +26,7 @@ Dans le cadre de ce problème, nous utiliserons les métrique de type micro. For
 	$\textrm{Précision} = \frac{\sum_{i=1}^{l} tp_i}{\sum_{i=1}^{l} (tp_i + fp_i)}$
 \end{center}
 
-- Rappel: le rappel est la capacité du classificateur à bien trouver toutes les données d'une classe en particulier. (Maximise les vrai positifs)\\
+- Rappel (sensibilité): le rappel est la capacité du classificateur à bien trouver toutes les données d'une classe en particulier. (Maximise les vrai positifs)\\
 \begin{center}
 	$\textrm{Rappel} = \frac{\sum_{i=1}^{l} tp_i}{\sum_{i=1}^{l} (tp_i + fn_i)}$
 \end{center}
@@ -37,6 +36,7 @@ Dans le cadre de ce problème, nous utiliserons les métrique de type micro. For
 	$\textrm{Score F} = \frac{2 * \textrm{Précision} * \textrm{Rappel}}{\textrm{Précision} + \textrm{Rappel}}$
 \end{center}
 
+Dans les tableaux suivants, nous présenteront l'exactitude et le score F pour chacun des classifieurs. Comme le Score F agrégège les concepts de précision et rappel, il a été choisi de ne pas présenter ces deux dernières. En effet, le but de notre classification est de donner la meilleure prédiction, peut importe la classe et il n'y a pas d'erreur plus grave qu'une autre. L'exactitude ou le Score F1 sont deux métriques appropriées pour l'évaluation de notre classifieur. Dans le cas où il y aurait une grande différence entre le Score F1 et l'exactitude, il pourrait être intéressant de bien comprendre d'ou vient cet écart en regardant les ratios intermédiaire de précision et de rappel.
 
 Le tableau \ref{tab:perfo_train} présente les résultats des différents modèles sur le jeu de données d'entraînement selon les mesures de performance définies plus tôt, alors que le tableau \ref{tab:perfo_test} présente les résultats sur le jeu de données test.
 
