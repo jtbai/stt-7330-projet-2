@@ -85,7 +85,7 @@ performance_test_tot <- performance_test_tot[order(-average_accuracy.x)]
 <<performances, echo=FALSE, results=tex>>=
 kable(performance_train_tot, format = "latex", digits = 2, row.names = FALSE, col.names = c("Modèles", "Exactitude", "F-Score", "Exactitude avec PCA", "F-Score avec PCA"), align = c("l", rep("c", length(ncol(performance_train) - 1))), booktabs = T, caption = "Performances des différents modèles sur le jeu de données d'entraînement selon les différentes mesures de performance.") %>% kable_styling(latex_options = c("striped", "scale_down"))
 
-kable(performance_test_tot, format = "latex", digits = 2, row.names = FALSE, col.names = c("Modèles", "Exactitude", "F-Score", "Exactitude avec PCA", "F-Score avec PCA"), align = c("l", rep("c", length(ncol(performance_test) - 1))), booktabs = T, caption = "Performances des différents modèles sur le jeu de données d'entraînement selon les différentes mesures de performance.") %>% kable_styling(latex_options = c("striped", "scale_down"))
+kable(performance_test_tot, format = "latex", digits = 2, row.names = FALSE, col.names = c("Modèles", "Exactitude", "F-Score", "Exactitude avec PCA", "F-Score avec PCA"), align = c("l", rep("c", length(ncol(performance_test) - 1))), booktabs = T, caption = "Performances des différents modèles sur le jeu de données de test selon les différentes mesures de performance.") %>% kable_styling(latex_options = c("striped", "scale_down"))
 
 @
 
