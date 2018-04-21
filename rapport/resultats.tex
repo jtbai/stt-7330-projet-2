@@ -5,41 +5,41 @@ Maintenant que les différents modèles à entraîner ainsi que leurs hyperparam
 \subsection{Évaluation des performances}
 Dans le but d'orienter notre choix de modèle, nous devons définir des mesures de performances qui permettront de comparer les modèles entre eux. \\
 
-Dans les tâches de classification, les métriques que nous utilisons mettent l'emphase sur différents objectifs de classification. On pourrait vouloir par exemple mesurer la capacité du classifieur à prédire une bonne classe, la capacité de ne pas faire de fausses prédictions et/ou de ne jamais manquer de cas positifs. Ces mesures sont utilisées dans le cas binaire, où le classifier doit choisir soit une classe ou l'autre. Dans le  problème actuel, l'utilisation de 3 classes impose qu'une transformation vers plusieurs problèmes binaires soit faite afin de pouvoir calculer ces métriques. \\
+Dans les tâches de classification, les métriques que nous utilisons mettent l'emphase sur différents objectifs de classification. On pourrait vouloir par exemple mesurer la capacité du classifieur à prédire une bonne classe, la capacité de ne pas faire de fausses prédictions et/ou de ne jamais mal classifier une certaine classe. Ces mesures sont utilisées dans le cas binaire, où le classifier doit choisir soit une classe ou l'autre. Dans le  problème actuel, l'utilisation de 3 classes impose qu'une transformation vers plusieurs problèmes binaires soit faite afin de pouvoir calculer ces métriques. \\
 
 Afin de transformer le problème de classification multi-classe en classification binaire, chaque classe sera prise indépendamment et sera confrontée aux 2 autres agrégées ensemble (méthode tous contre un). Cela revient à faire 3 classifications binaires. Une stratégie d'agrégation doit être mise en place pour faire un sommaire des statistiques des 3 classifieurs. \\ Une stratégie serait d'attribuer un poids identique à chacune des métriques générées par les 3 classifieurs binaires. Ce sont les métriques de type macro qu'on utilise lorsqu'une classe minoritaire doit être considérée aussi importante que les autres classes. \\ Une autre stratégie serait d'attribuer des poids proportionnels à la quantité de données appartenant à chacune des classes aux métriques générées par les 3 classifieurs binaires. Ce sont les métriques de type micro qu'on utilise lorsqu'aucune classe n'a plus d'importance qu'une autre - ou qu'il n'y a pas d'incitatif à prédire une classe plus qu'une autre. \\
 
-Dans le cadre de ce problème, nous utiliserons les métriques de type micro car il n'y a pas de classe ayant besoin d'une attention accrue. Formellement, pour chaque classe $l$, les métriques utilisées sont: \\
+Dans le cadre de ce problème, nous utiliserons les métriques de type micro car il n'y a pas de classe ayant besoin d'une attention accrue. Formellement, pour $tp_i = vrai~positifs, fp_i = faux~positifs, tn_i = vrai~négatifs$ et $fn_i = faux~négatifs$ dans la classe $i$, pour $i = 1, 2, 3$, les métriques utilisées sont présentés ci-dessous.\\
 
-\textbf{L'exactitude (Taux de bonnes détections)}\\
-L'exactitude est le pouvoir du classifieur à prédire la bonne classe pour une observation donnée.  Lors d'une classification, l'optimisation de cette métrique maximise le taux de bonne détection.\\
+\textbf{L'exactitude (taux de bonnes détections)}\\
+L'exactitude est le pouvoir du classifieur à prédire la bonne classe pour une observation donnée. Lors d'une classification, l'optimisation de cette métrique maximise le taux de bonne détection.\\
 \begin{center}
-	$\textrm{Exactitude} = \frac{\sum_{i=1}^{l} \frac{tp_i +tn_i}{tp_i + fn_i + fp_i+ tn_i}}{l}$
+	$\textrm{Exactitude} = \frac{\sum_{i=1}^{3} \frac{tp_i +tn_i}{tp_i + fn_i + fp_i+ tn_i}}{3}$
 \end{center}
 
 \textbf{La précision}\\
 La précision est la capacité d'un classifieur à ne trouver que les données d'une classe en particulier. Lors d'une classification, l'optimisation de cette métrique minimise les faux positifs.\\
 \begin{center}
-	$\textrm{Précision} = \frac{\sum_{i=1}^{l} tp_i}{\sum_{i=1}^{l} (tp_i + fp_i)}$
+	$\textrm{Précision} = \frac{\sum_{i=1}^{3} tp_i}{\sum_{i=1}^{3} (tp_i + fp_i)}$
 \end{center}
 
 \textbf{Rappel (sensibilité)}\\
 Le rappel est la capacité du classifieur à bien trouver toutes les données d'une classe en particulier. Lors d'une classification, l'optimisation de cette métrique maximise les vrais positifs.\\
 \begin{center}
-	$\textrm{Rappel} = \frac{\sum_{i=1}^{l} tp_i}{\sum_{i=1}^{l} (tp_i + fn_i)}$
+	$\textrm{Rappel} = \frac{\sum_{i=1}^{3} tp_i}{\sum_{i=1}^{3} (tp_i + fn_i)}$
 \end{center}
 
 \textbf{F1-score}\\
 Le F1-score est la moyenne harmonique de la précision et du rappel. Elle sert de mesure agrégée sur laquelle prendre une décision sur une classe.\\	
 \begin{center}
-	$\textrm{F1-score} = \frac{2 * \textrm{Précision} * \textrm{Rappel}}{\textrm{Précision} + \textrm{Rappel}}$ 
+	$\textrm{F1-score} = \frac{2 \times \textrm{Précision} \times \textrm{Rappel}}{\textrm{Précision} + \textrm{Rappel}}$ 
 \end{center}
 
 \subsection{Choix du modèle}
 
-Dans le tableau \ref{tab:perfo_test}, nous présenterons l'exactitude et le F1-score pour chacun des classifieurs pour le jeu de données complet et à dimensionnalité réduite. Le choix du modèle final sera fait en considérant ces deux statistiques. \\
+Dans le tableau \ref{tab:perfo_test}, nous présenterons l'exactitude et le F1-score pour chacun des classifieurs pour le jeu de données test et à dimensionnalité réduite pour les échantillons test. Le choix du modèle final sera fait en considérant ces deux statistiques. \\
 
-Comme le F1-score combine les concepts de précision et de rappel, il a été choisi de ne pas présenter ces deux dernières. En effet, le but de notre classification est de donner la meilleure prévision, peu importe la classe en particulier, c'est-à-dire qu'il n'y a pas d'erreur plus grave qu'une autre. L'exactitude et le F1-score sont donc deux métriques appropriées pour l'évaluation de notre classifieur. Dans le cas où il y aurait une très grande différence entre le F1-score et l'exactitude, il pourrait être intéressant de bien comprendre d'où vient cet écart en analysant les ratios intermédiaires de précision et de rappel.
+Comme le F1-score combine les concepts de précision et de rappel, il n'a pas été jugé pertinent de les présenter. En effet, le but de notre classification est de donner la meilleure prévision, peu importe la classe en particulier, c'est-à-dire qu'il n'y a pas d'erreur plus grave qu'une autre. L'exactitude et le F1-score sont donc deux métriques appropriées pour l'évaluation de notre classifieur. Dans le cas où il y aurait une très grande différence entre le F1-score et l'exactitude, il pourrait être intéressant de bien comprendre d'où vient cet écart en analysant les ratios intermédiaires de précision et de rappel.
 
 \rowcolors{2}{white}{white}\rowcolors{2}{gray!6}{white}
 \begin{table}[H]
@@ -67,10 +67,10 @@ Comme le F1-score combine les concepts de précision et de rappel, il a été ch
 
 \end{table}
 
-En analysant les résultats ci-dessus, on remarque que le modèle le plus performant est le réseau de neurones, suivi de très près par des modèles beaucoup plus simples. Seulement 2\% séparent les deux métriques d'intérêt. On remarque aussi l'effet de nivellement causé par l'analyse en composantes principales sur les résultats. En gros, on voit le fait de réduire la dimension et de structurer les données de manière non supervisée avant l'entraînement rapproche les performances des différents modèles. Toutefois, les modèles qui étaient les meilleurs ont perdu de la performance, ce qui n'est pas nécessairement l'effet désiré. Ainsi, nous avons décidé de ne pas allé plus loin en termes de réduction de dimensionnalité, mais il aurait pu être possible de tester différentes avenues comme l'ACP par noyaux où des relations non linéaires peuvent être ajoutées. On rappelle aussi que l'équipe désirait trouver le meilleur modèle en considérant une complexité appropriée au problème. Ainsi, malgré que le réseau de neurone soit un peu plus performant, nous avons choisi le modèle multinomial, car il est beaucoup plus simple et nous avons une meilleure compréhension générale de ce modèle, ce qui rend nous plus confiant dans notre choix. De plus, il est possible que la différence notée dans les métriques de qualité soit due au hasard, supportant une fois de plus notre choix de modèle. 
+En analysant les résultats ci-dessus, on remarque que le modèle le plus performant est le réseau de neurones, suivi de très près par des modèles beaucoup plus simples. Seulement 2\% séparent les deux métriques d'intérêt. On remarque aussi l'effet de nivellement causé par l'analyse en composantes principales sur les résultats. On remarque que réduire la dimension par l'ACP produit des résultats plus semblables entre les modèles. Toutefois, les performances des meilleurs modèles sans ACP ont diminué, ce qui n'est pas nécessairement l'effet désiré. Ainsi, nous avons décidé de ne pas conserver l'ACP pour le classifieur optimal, mais il aurait pu être possible de vérifier différentes avenues comme l'ACP par noyaux où des relations non linéaires peuvent être ajoutées. On rappelle aussi que l'équipe désirait trouver le meilleur modèle en considérant une complexité appropriée au problème. Ainsi, malgré que le réseau de neurone soit légèrement plus performant, nous avons choisi le modèle multinomial, car il est beaucoup plus simple et nous avons une meilleure compréhension générale de ce modèle. De plus, il est possible que la différence notée dans les métriques de qualité soit due au hasard, supportant une fois de plus notre choix de modèle. 
  
 \subsection{Présentation du modèle final}
-Le modèle que nous avons choisi pour prédire les surfaces sur lesquelles les matchs de tennis ont été joués est le modèle multinomial. En utilisant un jeu de données qui avait été gardé secret tout au long du projet, ce modèle à une exactitude de 63.1\%. La distribution des erreurs qu'il fait est présentée dans la matrice de confusion ci-dessous.
+Le modèle que nous avons choisi pour prédire les surfaces sur lesquelles les parties de tennis ont été jouées est le modèle multinomial. En utilisant un jeu de données qui avait été gardé secret tout au long du projet (validation), l'exactitude du modèle est 63.1\%. La distribution des erreurs du modèle est présentée dans la matrice de confusion ci-dessous.
 
 \rowcolors{2}{white}{white}
 \rowcolors{2}{gray!6}{white}
@@ -92,4 +92,4 @@ Le modèle que nous avons choisi pour prédire les surfaces sur lesquelles les m
 \end{table}
 
 
-En guise de comparaison, une attribution au hasard donne une exactitude de 57.2\%. On peut donc conclure qu'une certaine apprentissage a eu lieu, mais que le problème n'est pas simple à modéliser. Cela peut d'ailleurs se voir dans la matrice de corrélation \ref{fig:corrplot} présentée plus tôt. Toutefois, étant donné que nous avons tranché en faveur d'un modèle nous donnant un certain niveau d'interprétabilité, il ne faut pas seulement prendre en compte la capacité du modèle à prédire. Un modèle plus complexe comme le réseau de neurones aurait probablement donné de meilleures performances en termes de prévisions, mais nous avons choisi d'opter pour un certain compromis. Une option envisageable aurait été de tenter d'obtenir davantage de données pour ainsi bâtir d'autres prédicteurs pertinents pour le modèle.
+En guise de comparaison, une attribution au hasard donne une exactitude de 57.2\%. On peut donc conclure qu'un certain apprentissage a eu lieu, mais que le problème n'est pas simple à modéliser. Cela peut d'ailleurs se voir dans la matrice de corrélation \ref{fig:corrplot} présentée plus tôt. Toutefois, étant donné que nous avons tranché en faveur d'un modèle nous donnant un certain niveau d'interprétabilité, il ne faut pas seulement prendre en compte la capacité du modèle à prédire. Un modèle plus complexe comme le réseau de neurones aurait probablement donné de meilleures performances en termes de prévisions, mais nous avons choisi d'opter pour un certain compromis. Une option envisageable aurait été de tenter d'obtenir davantage de données pour ainsi bâtir d'autres prédicteurs pertinents pour le modèle.
