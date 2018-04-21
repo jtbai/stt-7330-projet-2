@@ -27,14 +27,15 @@
     "ind_grid_search"  : true,
     "grid_search_params"    : {
       "mtry"  : [4, 8, 12, 16],
-      "ntree"  : [700, 1000, 2000]
+      "ntree"  : [700, 1000, 2000],
+      "nodesize" : [100, 500]
     }
   },
   "svm_gaussien" : {
     "model"  : "svm_gaussien",
     "ind_grid_search"  : true,
     "grid_search_params"    : {
-      "epsilon"  : [1e-4, 1e-3, 1e-2, 1e-1, 1e0, 1e1, 1e2, 1e3, 1e4],
+      "gamma"  : [1e-4, 1e-3, 1e-2, 1e-1, 1e0, 1e1, 1e2, 1e3, 1e4],
       "cost"  : [1, 10, 100, 1000, 10000]
     }
   },
@@ -42,7 +43,7 @@
     "model"  : "svm_poly3",
     "ind_grid_search"  : true,
     "grid_search_params"    : {
-      "epsilon"  : [1e-4, 1e-3, 1e-2, 1e-1, 1e0, 1e1, 1e2, 1e3, 1e4],
+      "gamma"  : [1e-4, 1e-3, 1e-2, 1e-1, 1e0, 1e1, 1e2, 1e3, 1e4],
       "cost"  : [1, 10, 100, 1000, 10000]
     }
   },
